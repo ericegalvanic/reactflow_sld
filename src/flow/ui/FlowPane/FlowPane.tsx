@@ -1,15 +1,16 @@
-import { RFEdge, RFNode } from '@/common/entities';
-import ReactFlow from '@/common/ui/ReactFlow';
+import Background from '@/common/ui/Background';
+import Minimap from '@/common/ui/Minimap';
+import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 
-export type FlowPaneProps = {
-  nodes?: RFNode[];
-  edges?: RFEdge[];
-};
+export type FlowPaneProps = ReactFlowProps;
 
-const FlowPane: React.FC<FlowPaneProps> = ({ nodes, edges }) => {
+const FlowPane: React.FC<FlowPaneProps> = ({ ...rfProps }) => {
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <ReactFlow nodes={nodes} edges={edges} />
+      <ReactFlow {...rfProps}>
+        <Background />
+        <Minimap />
+      </ReactFlow>
     </div>
   );
 };

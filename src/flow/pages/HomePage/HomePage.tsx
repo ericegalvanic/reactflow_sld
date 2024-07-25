@@ -1,27 +1,13 @@
-import { RFEdge, RFNode } from '@/common/entities';
 import FlowPane, { FlowPaneProps } from '../../ui/FlowPane';
 import { useNodesState, useEdgesState } from '@/flow/hooks';
 import { useCallback } from 'react';
 import { addEdge } from '@xyflow/react';
-
-const initialNodes: RFNode[] = [
-  {
-    id: '1',
-    position: { x: 0, y: 0 },
-    data: { label: 'Node 1' },
-  },
-  {
-    id: '2',
-    position: { x: 0, y: 100 },
-    data: { label: 'Node 2' },
-    style: { background: 'magenta' },
-  },
-];
-
-const initialEdges: RFEdge[] = [{ id: 'e1-2', source: '1', target: '2' }];
+import { nodeTypeMap } from '@/flow/entities';
+import { initialEdges, initialNodes } from './HomePage.nodes';
+import { node } from '@/common/utils';
 
 const HomePage: React.FC = () => {
-  const [appNodes, , onAppNodesChange] = useNodesState(initialNodes);
+  const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
   const [appEdges, setEdges, onAppEdgesChange] = useEdgesState(initialEdges);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -33,6 +19,14 @@ const HomePage: React.FC = () => {
     []
   );
 
+  const handleContextMenu: FlowPaneProps['onContextMenu'] = (event) => {
+    event.preventDefault();
+    setNodes((nodes) => [
+      ...nodes,
+      node({ position: { x: event.clientX, y: event.clientY } }),
+    ]);
+  };
+
   return (
     <FlowPane
       nodes={appNodes}
@@ -40,6 +34,8 @@ const HomePage: React.FC = () => {
       onNodesChange={onAppNodesChange}
       onEdgesChange={onAppEdgesChange}
       onConnect={onAppEdgesConnect}
+      nodeTypes={nodeTypeMap}
+      onContextMenu={handleContextMenu}
     />
   );
 };

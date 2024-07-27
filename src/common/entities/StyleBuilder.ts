@@ -1,1 +1,3 @@
-export type StyleBuilder = (css?: React.CSSProperties) => React.CSSProperties;
+import { CSS } from './CSS';
+
+export type StyleBuilder = (css?: CSS) => CSS;

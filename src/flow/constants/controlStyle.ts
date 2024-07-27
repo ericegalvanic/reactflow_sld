@@ -1,4 +1,6 @@
+import { CSS } from '@/common/entities';
+
 export const defaultControlStyle = {
   background: 'transparent',
   border: 'none',
-} satisfies React.CSSProperties;
+} satisfies CSS;

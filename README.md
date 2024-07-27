@@ -7,7 +7,9 @@ pnpm dev
 ```
 
 # Implemented features:
-+ Node dragging
-+ Node connection
-+ Node resizing
-+ Node creation 
+
+- Node dragging
+- Node connection
+- Node resizing
+- Pane context menu
+- Node creation

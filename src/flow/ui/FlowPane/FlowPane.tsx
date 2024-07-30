@@ -2,18 +2,20 @@ import { Nullable, SetState } from '@/common/types';
 import Background from '@/common/ui/Background';
 import Minimap from '@/common/ui/Minimap';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
-import { ContextMenu } from '@/flow/entities';
+import { NodeContextMenu, PaneContextMenu as PaneContextMenuType } from '@/flow/entities';
 import { ElementRef, ForwardedRef, forwardRef } from 'react';
 import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
 
 export type FlowPaneProps = {
-  paneMenu: Nullable<ContextMenu>;
+  paneMenu: Nullable<PaneContextMenuType>;
+  nodeMenu: Nullable<NodeContextMenu>;
   nodes: RFNode[];
   edges: RFEdge[];
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
+  onNodeDelete?: () => void;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(

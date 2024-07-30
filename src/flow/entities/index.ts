@@ -1,2 +1,3 @@
 export * from './nodeType';
-export * from './ContextMenu';
+export * from './PaneContextMenu';
+export * from './NodeContextMenu';

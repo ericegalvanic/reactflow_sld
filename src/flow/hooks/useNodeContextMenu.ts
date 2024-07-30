@@ -1,23 +1,24 @@
 import { Nullable, SetState } from '@/common/types';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import { ElementRef, RefObject, useCallback } from 'react';
-import { PaneContextMenu } from '../entities';
+import { NodeContextMenu } from '../entities';
 import { getMenuPositionFromEventAndDom, getNodePositionFromEvent } from '../utils';
 
-type OnContextMenuParams = Parameters<
-  NonNullable<ReactFlowProps['onContextMenu']>
+type OnNodeContextMenuParams = Parameters<
+  NonNullable<ReactFlowProps['onNodeContextMenu']>
 >;
 
-export const usePaneContextMenu = (
+export const useNodeContextMenu = (
   flowRef: RefObject<ElementRef<typeof ReactFlow>>,
-  setMenu: SetState<Nullable<PaneContextMenu>>
+  setMenu: SetState<Nullable<NodeContextMenu>>
 ) => {
   const openMenu = useCallback(
-    (event: OnContextMenuParams[0]) => {
+    (event: OnNodeContextMenuParams[0], node: OnNodeContextMenuParams[1]) => {
       event.preventDefault();
 
       const pane = flowRef!.current!.getBoundingClientRect();
       setMenu({
+        id: node.id,
         ...getMenuPositionFromEventAndDom(event, pane),
         position: getNodePositionFromEvent(event),
       });

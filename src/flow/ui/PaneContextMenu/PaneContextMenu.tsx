@@ -1,12 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import IconMenu, { IconMenuProps } from '@/common/ui/IconMenu';
-import { ContextMenu } from '@/flow/entities';
+import { PaneContextMenu } from '@/flow/entities';
 import { useMemo } from 'react';
 
 export type PaneContextMenuProps = {
   onNodeCreate?: () => void;
   iconMenuProps?: Omit<IconMenuProps, 'items' | 'itemsAfterDivider'>;
-} & ContextMenu;
+} & PaneContextMenu;
 
 const PaneContextMenu: React.FC<PaneContextMenuProps> = ({
   iconMenuProps,

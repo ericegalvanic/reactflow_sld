@@ -4,17 +4,19 @@ import {
   useEdgesState,
   usePaneContextMenu,
   useAddNode,
+  useNodeContextMenu,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
-import { ContextMenu, nodeTypeMap } from '@/flow/entities';
+import { NodeContextMenu, PaneContextMenu, nodeTypeMap } from '@/flow/entities';
 import { initialEdges, initialNodes } from './HomePage.nodes';
 import { Nullable } from '@/common/types';
 
 const HomePage: React.FC = () => {
   const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
   const [appEdges, setEdges, onAppEdgesChange] = useEdgesState(initialEdges);
-  const [paneMenu, setPaneMenu] = useState<Nullable<ContextMenu>>(null);
+  const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
+  const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
 
   const paneRef = useRef<ElementRef<typeof FlowPane>>(null);
 
@@ -27,14 +29,24 @@ const HomePage: React.FC = () => {
     []
   );
 
-  const { openMenu, closeMenu } = usePaneContextMenu(paneRef, setPaneMenu);
+  const { openMenu: openPaneMenu, closeMenu: closePaneMenu } =
+    usePaneContextMenu(paneRef, setPaneMenu);
+
+  const { openMenu: openNodeMenu, closeMenu: closeNodeMenu } =
+    useNodeContextMenu(paneRef, setNodeMenu);
 
   const createNode = useAddNode(setNodes);
 
   const handleNodeCreate = () => {
     if (paneMenu) {
       createNode(paneMenu.position);
-      closeMenu();
+      closePaneMenu();
+    }
+  };
+
+  const handleNodeDelete = () => {
+    if (nodeMenu) {
+      closeNodeMenu();
     }
   };
 
@@ -49,10 +61,13 @@ const HomePage: React.FC = () => {
       onEdgesChange={onAppEdgesChange}
       onConnect={onAppEdgesConnect}
       nodeTypes={nodeTypeMap}
-      onContextMenu={openMenu as unknown as FlowPaneProps['onContextMenu']}
-      onPaneClick={closeMenu}
+      onContextMenu={openPaneMenu}
+      onNodeContextMenu={openNodeMenu}
+      onPaneClick={closePaneMenu}
       paneMenu={paneMenu}
+      nodeMenu={nodeMenu}
       onNodeCreate={handleNodeCreate}
+      onNodeDelete={handleNodeDelete}
     />
   );
 };

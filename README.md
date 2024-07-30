@@ -3,7 +3,7 @@
 To launch a dev server, run
 
 ```bash
-pnpm dev
+pnpm install && pnpm dev
 ```
 
 # Implemented features:

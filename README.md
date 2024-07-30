@@ -13,3 +13,5 @@ pnpm dev
 - Node resizing
 - Pane context menu
 - Node creation
+- Node context menu
+- Node deletion

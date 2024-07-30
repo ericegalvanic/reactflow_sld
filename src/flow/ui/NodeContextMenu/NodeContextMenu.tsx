@@ -1,28 +1,29 @@
-import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconMenu, { IconMenuProps } from '@/common/ui/IconMenu';
-import { PaneContextMenu as PaneContextMenuType } from '@/flow/entities';
+import { NodeContextMenu as NodeContextMenuType } from '@/flow/entities';
 import { useMemo } from 'react';
 import { contextMenuZIndex } from '@/flow/constants';
 
 export type PaneContextMenuProps = {
-  onNodeCreate?: () => void;
+  onNodeDelete?: (nodeId: string) => void;
   iconMenuProps?: Omit<IconMenuProps, 'items' | 'itemsAfterDivider'>;
-} & PaneContextMenuType;
+} & NodeContextMenuType;
 
-const PaneContextMenu: React.FC<PaneContextMenuProps> = ({
+const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
   iconMenuProps,
-  onNodeCreate,
+  onNodeDelete,
   ...contextMenuProps
 }) => {
   const items = useMemo(
     (): IconMenuProps['items'] => [
       {
-        text: 'Create Asset',
-        icon: <AddIcon />,
-        onClick: onNodeCreate,
+        text: 'Delete Asset',
+        icon: <DeleteForeverIcon />,
+        onClick: () => onNodeDelete?.(contextMenuProps.id),
+        color: 'error.main',
       },
     ],
-    [onNodeCreate]
+    [contextMenuProps, onNodeDelete]
   );
 
   return (
@@ -41,4 +42,4 @@ const PaneContextMenu: React.FC<PaneContextMenuProps> = ({
   );
 };
 
-export default PaneContextMenu;
+export default NodeContextMenu;

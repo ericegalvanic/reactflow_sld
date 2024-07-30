@@ -2,25 +2,35 @@ import { Nullable, SetState } from '@/common/types';
 import Background from '@/common/ui/Background';
 import Minimap from '@/common/ui/Minimap';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
-import { NodeContextMenu, PaneContextMenu as PaneContextMenuType } from '@/flow/entities';
+import {
+  NodeContextMenu as NodeContextMenuType,
+  PaneContextMenu as PaneContextMenuType,
+} from '@/flow/entities';
 import { ElementRef, ForwardedRef, forwardRef } from 'react';
 import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
+import NodeContextMenu from '../NodeContextMenu';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
-  nodeMenu: Nullable<NodeContextMenu>;
+  nodeMenu: Nullable<NodeContextMenuType>;
   nodes: RFNode[];
   edges: RFEdge[];
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
-  onNodeDelete?: () => void;
+  onNodeDelete?: (nodeId: string) => void;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
   (
-    { paneMenu, onNodeCreate, ...rfProps }: FlowPaneProps,
+    {
+      paneMenu,
+      onNodeCreate,
+      nodeMenu,
+      onNodeDelete,
+      ...rfProps
+    }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
   ) => {
     return (
@@ -30,6 +40,9 @@ const FlowPane = forwardRef(
           <Minimap />
           {paneMenu && (
             <PaneContextMenu onNodeCreate={onNodeCreate} {...paneMenu} />
+          )}
+          {nodeMenu && (
+            <NodeContextMenu onNodeDelete={onNodeDelete} {...nodeMenu} />
           )}
         </ReactFlow>
       </div>

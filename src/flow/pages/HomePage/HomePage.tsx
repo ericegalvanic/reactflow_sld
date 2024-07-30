@@ -5,6 +5,7 @@ import {
   usePaneContextMenu,
   useAddNode,
   useNodeContextMenu,
+  useDeleteNode,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
@@ -36,6 +37,7 @@ const HomePage: React.FC = () => {
     useNodeContextMenu(paneRef, setNodeMenu);
 
   const createNode = useAddNode(setNodes);
+  const deleteNode = useDeleteNode(setNodes);
 
   const handleNodeCreate = () => {
     if (paneMenu) {
@@ -44,10 +46,34 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleNodeDelete = () => {
+  const handleNodeDelete = (nodeId: string) => {
+    if (nodeMenu) {
+      deleteNode(nodeId);
+      closeNodeMenu();
+    }
+  };
+
+  const handlePaneClick = () => {
+    if (paneMenu) {
+      closePaneMenu();
+    }
     if (nodeMenu) {
       closeNodeMenu();
     }
+  };
+
+  const handleNodeContextMenu: typeof openNodeMenu = (event, node) => {
+    if (paneMenu) {
+      closePaneMenu();
+    }
+    openNodeMenu(event, node);
+  };
+
+  const handlePaneContextMenu: typeof openPaneMenu = (event) => {
+    if (nodeMenu) {
+      closeNodeMenu();
+    }
+    openPaneMenu(event);
   };
 
   return (
@@ -61,9 +87,9 @@ const HomePage: React.FC = () => {
       onEdgesChange={onAppEdgesChange}
       onConnect={onAppEdgesConnect}
       nodeTypes={nodeTypeMap}
-      onContextMenu={openPaneMenu}
-      onNodeContextMenu={openNodeMenu}
-      onPaneClick={closePaneMenu}
+      onContextMenu={handlePaneContextMenu}
+      onNodeContextMenu={handleNodeContextMenu}
+      onPaneClick={handlePaneClick}
       paneMenu={paneMenu}
       nodeMenu={nodeMenu}
       onNodeCreate={handleNodeCreate}

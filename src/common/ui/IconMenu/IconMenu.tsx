@@ -13,6 +13,7 @@ export type IconMenuItem = {
   text: string;
   onClick?: React.MouseEventHandler<HTMLLIElement>;
   command?: string;
+  color?: string;
 };
 
 export type IconMenuProps = {
@@ -31,10 +32,13 @@ const IconMenu: React.FC<IconMenuProps> = ({
       <MenuList>
         {items?.map((item) => (
           <MenuItem key={item.text} onClick={(event) => item.onClick?.(event)}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText>{item.text}</ListItemText>
+            <ListItemIcon color={item.color}>{item.icon}</ListItemIcon>
+            <ListItemText color={item.color}>{item.text}</ListItemText>
             {item.command && (
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                color={item.color ?? 'text.secondary'}
+              >
                 {item.command}
               </Typography>
             )}

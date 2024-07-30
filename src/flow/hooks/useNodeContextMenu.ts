@@ -15,6 +15,7 @@ export const useNodeContextMenu = (
   const openMenu = useCallback(
     (event: OnNodeContextMenuParams[0], node: OnNodeContextMenuParams[1]) => {
       event.preventDefault();
+      event.stopPropagation();
 
       const pane = flowRef!.current!.getBoundingClientRect();
       setMenu({

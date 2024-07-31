@@ -10,6 +10,7 @@ import { ElementRef, ForwardedRef, forwardRef } from 'react';
 import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
 import NodeContextMenu from '../NodeContextMenu';
+import { snapGrid } from '@/flow/constants';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
@@ -36,7 +37,7 @@ const FlowPane = forwardRef(
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
         <ReactFlow ref={ref} {...rfProps}>
-          <Background />
+          <Background gap={snapGrid} />
           <Minimap />
           {paneMenu && (
             <PaneContextMenu onNodeCreate={onNodeCreate} {...paneMenu} />

@@ -12,6 +12,7 @@ import { addEdge } from '@xyflow/react';
 import { NodeContextMenu, PaneContextMenu, nodeTypeMap } from '@/flow/entities';
 import { initialEdges, initialNodes } from './HomePage.nodes';
 import { Nullable } from '@/common/types';
+import { snapGrid } from '@/flow/constants';
 
 const HomePage: React.FC = () => {
   const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
@@ -94,6 +95,8 @@ const HomePage: React.FC = () => {
       nodeMenu={nodeMenu}
       onNodeCreate={handleNodeCreate}
       onNodeDelete={handleNodeDelete}
+      snapToGrid
+      snapGrid={snapGrid}
     />
   );
 };

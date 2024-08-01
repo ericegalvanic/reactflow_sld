@@ -9,13 +9,7 @@ import {
   useNodeEditDrawer,
   useUpdateNode,
 } from '@/flow/hooks';
-import {
-  ElementRef,
-  MouseEventHandler,
-  useCallback,
-  useRef,
-  useState,
-} from 'react';
+import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
 import { NodeContextMenu, PaneContextMenu, nodeTypeMap } from '@/flow/entities';
 import { initialEdges, initialNodes } from './HomePage.nodes';
@@ -96,16 +90,6 @@ const HomePage: React.FC = () => {
     openPaneMenu(event);
   };
 
-  const handlePaneDrawerClick: MouseEventHandler<HTMLDivElement> = (event) => {
-    if (
-      'classList' in event.target &&
-      event.target.classList instanceof DOMTokenList &&
-      event.target.classList.contains('MuiBackdrop-root')
-    ) {
-      closeDrawer();
-    }
-  };
-
   const handleNodeEditSave: NonNullable<NodeEditFormProps['onSave']> = (
     updatedNode
   ) => {
@@ -135,11 +119,7 @@ const HomePage: React.FC = () => {
         snapToGrid
         snapGrid={snapGrid}
       />
-      <PaneDrawer
-        className="nowheel nodrag nopan"
-        open={drawerOpen}
-        onClick={handlePaneDrawerClick}
-      >
+      <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (
           <NodeEditForm node={nodeToEdit} onSave={handleNodeEditSave} />
         )}

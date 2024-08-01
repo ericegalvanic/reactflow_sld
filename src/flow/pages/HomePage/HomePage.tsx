@@ -97,6 +97,14 @@ const HomePage: React.FC = () => {
     closeDrawer();
   };
 
+  const handleNodeClick: NonNullable<FlowPaneProps['onNodeClick']> = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    event,
+    node
+  ) => {
+    openDrawer(node);
+  };
+
   return (
     <>
       <FlowPane
@@ -111,6 +119,7 @@ const HomePage: React.FC = () => {
         nodeTypes={nodeTypeMap}
         onContextMenu={handlePaneContextMenu}
         onNodeContextMenu={handleNodeContextMenu}
+        onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
         paneMenu={paneMenu}
         nodeMenu={nodeMenu}

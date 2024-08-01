@@ -59,7 +59,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         value={color}
         onChange={handleColorChange}
         size="small"
-        label="Node color"
+        label="Node Color"
       />
       <SaveButtonStyled onClick={handleSave} variant="contained">
         Save

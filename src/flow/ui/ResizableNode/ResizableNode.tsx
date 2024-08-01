@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Handle, Position, NodeResizeControl } from '@xyflow/react';
 import { defaultControlStyle } from '@/flow/constants';
-import { NodeCoreStyled } from './styled';
+import { NodeCoreStyled } from './ResizableNode.styles';
 
 export type ResizableNodeProps = {
   data: {

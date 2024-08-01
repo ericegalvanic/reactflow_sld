@@ -1,5 +1,5 @@
 export type Rename<
-  T extends Record<PropertyKey, unknown>,
+  T,
   TProp extends keyof T,
   TNewName extends number | string | symbol = TProp,
   TNewType = T[TProp],

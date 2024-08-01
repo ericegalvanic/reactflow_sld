@@ -6,7 +6,9 @@ import { node } from '@/common/utils';
 export const useAddNode = (setNodes: SetState<RFNode[]>) => {
   return useCallback(
     (where: Position) => {
-      setNodes((nodes) => [...nodes, node({ position: where })]);
+      const newNode = node({ position: where });
+      setNodes((nodes) => [...nodes, newNode]);
+      return newNode;
     },
     [setNodes]
   );

@@ -15,3 +15,5 @@ pnpm install && pnpm dev
 - Node creation
 - Node context menu
 - Node deletion
+- Snap to grid
+- Edit Node Drawer

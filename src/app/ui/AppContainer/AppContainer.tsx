@@ -1,8 +1,13 @@
 import { CssBaseline, Theme, ThemeProvider } from '@mui/material';
-import { AppConfigProvider, AppServices, AppServicesContext } from '../context';
-import { AppConfig } from '../entities';
+import {
+  AppConfigProvider,
+  AppServices,
+  AppServicesContext,
+} from '../../context';
+import { AppConfig } from '../../entities';
 import { ReactNode } from 'react';
 import { PaneDrawerContextProvider } from '@/flow/context';
+import OverrideStyles from '../OverrideStyles';
 
 export type AppContainerProps = {
   bootstrapped: boolean;
@@ -32,8 +37,10 @@ const AppContainer: React.FC<AppContainerProps> = ({
       <AppServicesContext.Provider value={services}>
         <ThemeProvider theme={theme}>
           <PaneDrawerContextProvider>
-            <CssBaseline />
-            {children}
+            <OverrideStyles>
+              <CssBaseline />
+              {children}
+            </OverrideStyles>
           </PaneDrawerContextProvider>
         </ThemeProvider>
       </AppServicesContext.Provider>

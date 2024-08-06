@@ -1,0 +1,1 @@
+export type CSS = React.CSSProperties;

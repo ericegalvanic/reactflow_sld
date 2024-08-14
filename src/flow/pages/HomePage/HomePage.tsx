@@ -17,6 +17,7 @@ import { Nullable } from '@/common/types';
 import { snapGrid } from '@/flow/constants';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
+import { useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 
 const HomePage: React.FC = () => {
   const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
@@ -29,6 +30,8 @@ const HomePage: React.FC = () => {
     openDrawer,
     nodeToEdit,
   } = useNodeEditDrawer();
+
+  const { invokeModal: invokeEdgeEditModal } = useEdgeEditModal();
 
   const paneRef = useRef<ElementRef<typeof FlowPane>>(null);
 
@@ -105,6 +108,10 @@ const HomePage: React.FC = () => {
     openDrawer(node);
   };
 
+  const handleEdgeClick: NonNullable<FlowPaneProps['onEdgeClick']> = () => {
+    invokeEdgeEditModal({});
+  };
+
   return (
     <>
       <FlowPane
@@ -125,6 +132,7 @@ const HomePage: React.FC = () => {
         nodeMenu={nodeMenu}
         onNodeCreate={handleNodeCreate}
         onNodeDelete={handleNodeDelete}
+        onEdgeClick={handleEdgeClick}
         snapToGrid
         snapGrid={snapGrid}
       />

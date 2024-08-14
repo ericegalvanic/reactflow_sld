@@ -8,6 +8,7 @@ import { AppConfig } from '../../entities';
 import { ReactNode } from 'react';
 import { PaneDrawerContextProvider } from '@/flow/context';
 import OverrideStyles from '../OverrideStyles';
+import { ModalProvider } from '@/common/context';
 
 export type AppContainerProps = {
   bootstrapped: boolean;
@@ -37,10 +38,12 @@ const AppContainer: React.FC<AppContainerProps> = ({
       <AppServicesContext.Provider value={services}>
         <ThemeProvider theme={theme}>
           <PaneDrawerContextProvider>
-            <OverrideStyles>
-              <CssBaseline />
-              {children}
-            </OverrideStyles>
+            <ModalProvider>
+              <OverrideStyles>
+                <CssBaseline />
+                {children}
+              </OverrideStyles>
+            </ModalProvider>
           </PaneDrawerContextProvider>
         </ThemeProvider>
       </AppServicesContext.Provider>

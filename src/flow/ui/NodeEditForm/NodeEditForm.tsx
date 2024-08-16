@@ -1,11 +1,17 @@
 import { RFNode } from '@/common/entities';
 import { FormStyled, SaveButtonStyled } from './NodeEditForm.styles';
-import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  MouseEventHandler,
+  useMemo,
+  useState,
+} from 'react';
 import { NodeEditFormUpdateHandle } from './NodeEditForm.types';
 import TextField from '@/common/ui/TextField';
 import { nodeColor, nodeName } from '@/common/utils';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
 import { node as createNode } from '@/common/utils';
+import { useFlow } from '@/flow/context';
 
 export type NodeEditFormProps = {
   node: RFNode;
@@ -20,15 +26,26 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   onNodeNameChange,
   onNodeColorChange,
 }) => {
+  const { nodes: existingNodes } = useFlow();
   const [name, setName] = useState(nodeName(node) ?? '');
   const [color, setColor] = useState(nodeColor(node) ?? '');
+
+  const nameExistsAlready = useMemo(
+    () =>
+      existingNodes.some(
+        (existingNode) =>
+          nodeName(existingNode)?.trim() === name.trim() &&
+          existingNode.id !== node.id
+      ),
+    [existingNodes, name, node]
+  );
 
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setName(event.target.value);
     onNodeNameChange?.(
       createNode({
         ...node,
-        data: { ...(node.style ?? {}), label: event.target.value },
+        data: { ...(node.style ?? {}), label: event.target.value.trim() },
       })
     );
   };
@@ -47,11 +64,13 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     onSave?.(
       createNode({
         ...node,
-        data: { ...node.data, label: name },
+        data: { ...node.data, label: name.trim() },
         style: { ...(node.style ?? {}), background: color },
       })
     );
   };
+
+  const nameHelperText = nameExistsAlready ? 'This node exists already' : '';
 
   return (
     <FormStyled>
@@ -60,6 +79,8 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         onChange={handleNameChange}
         label="Node Name"
         size="small"
+        error={nameExistsAlready}
+        helperText={nameHelperText}
       />
       <ColorPicker
         value={color}
@@ -67,7 +88,11 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         label="Node Color"
         size="small"
       />
-      <SaveButtonStyled onClick={handleSave} variant="contained">
+      <SaveButtonStyled
+        onClick={handleSave}
+        variant="contained"
+        disabled={nameExistsAlready}
+      >
         Save
       </SaveButtonStyled>
     </FormStyled>

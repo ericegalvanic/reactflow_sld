@@ -97,6 +97,9 @@ const EdgeEditModal: React.FC<EdgeEditModalProps> = (props) => {
 
   const edgeParentsError = sourceNodeId === targetNodeId;
   const saveDisabled = edgeParentsError;
+  const selectHelperText = edgeParentsError
+    ? 'Cannot choose the same node'
+    : '';
 
   return (
     <Modal onClose={handleClose} maxWidth={maxWidth ?? 'sm'} {...restProps}>
@@ -126,6 +129,7 @@ const EdgeEditModal: React.FC<EdgeEditModalProps> = (props) => {
             formControlProps={{ fullWidth: true, error: edgeParentsError }}
             value={sourceNodeId}
             onChange={handleSourceNodeChange}
+            helperText={selectHelperText}
           >
             {nodeDisplayList}
           </Select>
@@ -138,6 +142,7 @@ const EdgeEditModal: React.FC<EdgeEditModalProps> = (props) => {
             formControlProps={{ fullWidth: true, error: edgeParentsError }}
             value={targetNodeId}
             onChange={handleTargetNodeChange}
+            helperText={selectHelperText}
           >
             {nodeDisplayList}
           </Select>

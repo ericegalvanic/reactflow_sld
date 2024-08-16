@@ -7,7 +7,10 @@ export const useAddNode = (setNodes: SetState<RFNode[]>) => {
   return useCallback(
     (where: Position) => {
       const newNode = node({ position: where });
-      setNodes((nodes) => [...nodes, newNode]);
+      setNodes((nodes) => {
+        newNode.data['label'] = `NEW ASSET ${nodes.length + 1}`;
+        return [...nodes, newNode];
+      });
       return newNode;
     },
     [setNodes]

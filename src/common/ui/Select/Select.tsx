@@ -4,12 +4,15 @@ import {
 } from '@mui/material';
 import FormControl, { FormControlProps } from '../FormControl';
 import InputLabel, { InputLabelProps } from '../InputLabel';
+import FormHelperText, { FormHelperTextProps } from '../FormHelperText';
 
 export type SelectProps<V = unknown> = MUISelectProps<V> & {
   formControlProps?: FormControlProps;
   inputLabelProps?: Omit<InputLabelProps, 'children' | 'id'>;
   inputLabel?: InputLabelProps['children'];
   inputLabelId?: InputLabelProps['id'];
+  formHelperTextProps?: Omit<FormHelperTextProps, 'children'>;
+  helperText?: FormHelperTextProps['children'];
 };
 
 const Select = <V,>({
@@ -17,6 +20,8 @@ const Select = <V,>({
   inputLabelProps,
   inputLabel,
   inputLabelId,
+  formHelperTextProps,
+  helperText,
   ...props
 }: SelectProps<V>) => {
   return (
@@ -27,6 +32,9 @@ const Select = <V,>({
         id={inputLabelId}
       />
       <MUISelect {...props} />
+      {helperText && (
+        <FormHelperText {...formHelperTextProps}>{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };

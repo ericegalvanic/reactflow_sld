@@ -6,7 +6,7 @@ import {
 } from '../../context';
 import { AppConfig } from '../../entities';
 import { ReactNode } from 'react';
-import { PaneDrawerContextProvider } from '@/flow/context';
+import { FlowContextProvider, PaneDrawerContextProvider } from '@/flow/context';
 import OverrideStyles from '../OverrideStyles';
 import { ModalProvider } from '@/common/context';
 
@@ -37,14 +37,16 @@ const AppContainer: React.FC<AppContainerProps> = ({
     <AppConfigProvider config={config}>
       <AppServicesContext.Provider value={services}>
         <ThemeProvider theme={theme}>
-          <PaneDrawerContextProvider>
-            <ModalProvider>
-              <OverrideStyles>
-                <CssBaseline />
-                {children}
-              </OverrideStyles>
-            </ModalProvider>
-          </PaneDrawerContextProvider>
+          <FlowContextProvider>
+            <PaneDrawerContextProvider>
+              <ModalProvider>
+                <OverrideStyles>
+                  <CssBaseline />
+                  {children}
+                </OverrideStyles>
+              </ModalProvider>
+            </PaneDrawerContextProvider>
+          </FlowContextProvider>
         </ThemeProvider>
       </AppServicesContext.Provider>
     </AppConfigProvider>

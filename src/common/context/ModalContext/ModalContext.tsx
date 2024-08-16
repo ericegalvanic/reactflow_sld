@@ -11,10 +11,11 @@ import {
   AppModalMap,
   ModalProviderState,
 } from './ModalContext.entities';
-import EdgeEditModal from '@/flow/ui/EdgeEditModal';
+import EdgeEditModal, { EdgeEditModalProps } from '@/flow/ui/EdgeEditModal';
 import { ModalProps } from '@/common/ui/Modal';
 
 export const ModalContext = createContext<ModalContextData>({
+  open: false,
   invokeModal: () => {},
   closeModal: () => {},
 });
@@ -26,9 +27,11 @@ export type ModalProviderProps = {
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [data, setData] = useState<ModalProviderState>({});
   const [id, setId] = useState<ModalId>('NONE');
+  const open = useMemo(() => id !== 'NONE', [id]);
 
   const providerValue = useMemo(
     (): ModalContextData => ({
+      open,
       invokeModal: (id, payload) => {
         setId(id);
 
@@ -41,7 +44,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setData({});
       },
     }),
-    []
+    [open]
   );
 
   const { onClose, ...authorizedData } = useMemo(() => data, [data]);
@@ -61,7 +64,12 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   const modalMap: AppModalMap = {
     NONE: null,
-    EDIT_EDGE: <EdgeEditModal {...delegatedData} {...authorizedData} />,
+    EDIT_EDGE: (
+      <EdgeEditModal
+        {...delegatedData}
+        {...(authorizedData as EdgeEditModalProps)}
+      />
+    ),
   };
 
   return (

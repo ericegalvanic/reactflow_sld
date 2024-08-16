@@ -1,27 +1,32 @@
 import FlowPane, { FlowPaneProps } from '../../ui/FlowPane';
 import {
-  useNodesState,
-  useEdgesState,
   usePaneContextMenu,
   useAddNode,
   useNodeContextMenu,
   useDeleteNode,
   useNodeEditDrawer,
   useUpdateNode,
+  useUpdateEdge,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
 import { NodeContextMenu, PaneContextMenu, nodeTypeMap } from '@/flow/entities';
-import { initialEdges, initialNodes } from './HomePage.nodes';
 import { Nullable } from '@/common/types';
 import { snapGrid } from '@/flow/constants';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
-import { useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
+import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
+import { useFlow } from '@/flow/context';
 
 const HomePage: React.FC = () => {
-  const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
-  const [appEdges, setEdges, onAppEdgesChange] = useEdgesState(initialEdges);
+  const {
+    nodes: appNodes,
+    edges: appEdges,
+    setNodes,
+    setEdges,
+    onNodesChange: onAppNodesChange,
+    onEdgesChange: onAppEdgesChange,
+  } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
   const {
@@ -31,17 +36,16 @@ const HomePage: React.FC = () => {
     nodeToEdit,
   } = useNodeEditDrawer();
 
-  const { invokeModal: invokeEdgeEditModal } = useEdgeEditModal();
+  const { invokeModal: invokeEdgeEditModal, closeModal: closeEdgeEditModal } =
+    useEdgeEditModal();
 
   const paneRef = useRef<ElementRef<typeof FlowPane>>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onAppEdgesConnect = useCallback(
-    ((connection) =>
-      setEdges((edges) =>
-        addEdge(connection, edges)
-      )) satisfies FlowPaneProps['onConnect'],
-    []
+  const onAppEdgesConnect = useCallback<
+    NonNullable<FlowPaneProps['onConnect']>
+  >(
+    (connection) => setEdges((edges) => addEdge(connection, edges)),
+    [setEdges]
   );
 
   const { openMenu: openPaneMenu, closeMenu: closePaneMenu } =
@@ -53,6 +57,7 @@ const HomePage: React.FC = () => {
   const createNode = useAddNode(setNodes);
   const deleteNode = useDeleteNode(setNodes);
   const updateNode = useUpdateNode(setNodes);
+  const updateEdge = useUpdateEdge(setEdges);
 
   const handleNodeCreate = () => {
     if (paneMenu) {
@@ -100,16 +105,23 @@ const HomePage: React.FC = () => {
     closeDrawer();
   };
 
+  const handleEdgeEditSave: EdgeEditModalProps['onSave'] = (edge) => {
+    updateEdge(edge);
+    closeEdgeEditModal();
+  };
+
   const handleNodeClick: NonNullable<FlowPaneProps['onNodeClick']> = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     event,
     node
   ) => {
     openDrawer(node);
   };
 
-  const handleEdgeClick: NonNullable<FlowPaneProps['onEdgeClick']> = () => {
-    invokeEdgeEditModal({});
+  const handleEdgeClick: NonNullable<FlowPaneProps['onEdgeClick']> = (
+    event,
+    edge
+  ) => {
+    invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
   };
 
   return (

@@ -5,7 +5,7 @@ import { NodeEditFormUpdateHandle } from './NodeEditForm.types';
 import TextField from '@/common/ui/TextField';
 import { nodeColor, nodeName } from '@/common/utils';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
-import { node as createNode } from '@/common/utils/node';
+import { node as createNode } from '@/common/utils';
 
 export type NodeEditFormProps = {
   node: RFNode;
@@ -26,14 +26,20 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setName(event.target.value);
     onNodeNameChange?.(
-      createNode({ ...node, data: { ...node.data, label: event.target.value } })
+      createNode({
+        ...node,
+        data: { ...(node.style ?? {}), label: event.target.value },
+      })
     );
   };
 
   const handleColorChange: ColorPickerProps['onChange'] = (newColor) => {
     setColor(newColor);
     onNodeColorChange?.(
-      createNode({ ...node, style: { ...node.style, background: newColor } })
+      createNode({
+        ...node,
+        style: { ...(node.style ?? {}), background: newColor },
+      })
     );
   };
 
@@ -42,7 +48,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       createNode({
         ...node,
         data: { ...node.data, label: name },
-        style: { ...node.style, background: color },
+        style: { ...(node.style ?? {}), background: color },
       })
     );
   };
@@ -52,14 +58,14 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       <TextField
         value={name}
         onChange={handleNameChange}
-        size="small"
         label="Node Name"
+        size="small"
       />
       <ColorPicker
         value={color}
         onChange={handleColorChange}
-        size="small"
         label="Node Color"
+        size="small"
       />
       <SaveButtonStyled onClick={handleSave} variant="contained">
         Save

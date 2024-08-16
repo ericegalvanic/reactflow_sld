@@ -14,6 +14,7 @@ export type ModalId = keyof AppModalProps;
 export type AppModalMap = Record<ModalId, ReactNode>;
 
 export type ModalContextData = {
+  open: boolean;
   invokeModal: <M extends ModalId>(id: M, payload?: AppModalProps[M]) => void;
   closeModal: () => void;
 };

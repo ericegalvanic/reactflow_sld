@@ -10,7 +10,7 @@ type UseEdgeEditModalReturn = Retype<
 >;
 
 export const useEdgeEditModal = (): UseEdgeEditModalReturn => {
-  const { invokeModal, closeModal } = useModal();
+  const { invokeModal, closeModal, open } = useModal();
 
   const invokeModalWithId: UseEdgeEditModalReturn['invokeModal'] = (
     payload
@@ -19,6 +19,7 @@ export const useEdgeEditModal = (): UseEdgeEditModalReturn => {
   };
 
   return {
+    open,
     invokeModal: invokeModalWithId,
     closeModal,
   };

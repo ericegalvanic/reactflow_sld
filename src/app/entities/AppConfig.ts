@@ -5,4 +5,5 @@ export type AppConfig = {
   appVersion: string;
   appEnvironment: AppEnvironment;
   apiUrl: string;
+  historyDeepness: number;
 };

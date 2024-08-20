@@ -10,3 +10,4 @@ export * from './useUpdateEdge';
 export * from './useStateWithHistory';
 export * from './useNodesStateWithHistory';
 export * from './useEdgesStateWithHistory';
+export * from './useFlowState';

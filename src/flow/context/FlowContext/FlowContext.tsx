@@ -1,10 +1,7 @@
-import { createContext, ReactNode, useCallback, useMemo } from 'react';
+import { createContext, ReactNode, useMemo } from 'react';
 import { FlowContextData } from './FlowContext.entities';
 import { initialNodes, initialEdges } from './FlowContext.data';
-import {
-  useEdgesStateWithHistory,
-  useNodesStateWithHistory,
-} from '@/flow/hooks';
+import { useFlowState } from '@/flow/hooks';
 import { useHotKey } from '@/common/hooks';
 
 export const FlowContext = createContext<FlowContextData>({
@@ -23,40 +20,22 @@ export type FlowContextProviderProps = {
 export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   children,
 }) => {
-  const [
-    nodes,
-    setNodes,
-    onNodesChange,
-    { back: prevNodeState, forward: nextNodeState, history: nodesHistory },
-  ] = useNodesStateWithHistory(initialNodes);
-  const [
-    edges,
-    setEdges,
-    onEdgesChange,
-    { back: prevEdgeState, forward: nextEdgeState, history: edgesHistory },
-  ] = useEdgesStateWithHistory(initialEdges);
+  const {
+    nodeState: [nodes, setNodes, onNodesChange],
+    edgeState: [edges, setEdges, onEdgesChange],
+    history: { back: prevState, forward: nextState },
+  } = useFlowState({
+    nodes: initialNodes,
+    edges: initialEdges,
+    stateId: 'initial-state-id',
+  });
 
-  const history = {
-    nodesHistory,
-    edgesHistory,
-  };
-
-  console.log(history);
-
-  const nextState = useCallback(() => {
-    nextNodeState();
-    nextEdgeState();
-  }, [nextEdgeState, nextNodeState]);
-
-  const prevState = useCallback(() => {
-    console.log('here');
-    prevNodeState();
-    prevEdgeState();
-  }, [prevEdgeState, prevNodeState]);
+  console.log('HISTORY', history);
+  console.log('NODES: ', nodes);
+  console.log('EDGES', edges);
 
   useHotKey(['Ctrl', 'Z'], prevState);
   useHotKey(['Ctrl', 'Y'], nextState);
-  useHotKey(['Meta', 'Shift', 'Z'], nextState);
 
   const providerValue = useMemo(
     (): FlowContextData => ({

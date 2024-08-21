@@ -27,7 +27,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   } = useFlowState({
     nodes: initialNodes,
     edges: initialEdges,
-    stateId: 'initial-state-id',
+    stateId: 'initial-state',
   });
 
   console.log('HISTORY', history);

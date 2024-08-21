@@ -3,6 +3,7 @@ import Background from '@/common/ui/Background';
 import Minimap from '@/common/ui/Minimap';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import {
+  EdgeContextMenu as EdgeContextMenuType,
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
 } from '@/flow/entities';
@@ -11,16 +12,19 @@ import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
 import NodeContextMenu from '../NodeContextMenu';
 import { snapGrid } from '@/flow/constants';
+import EdgeContextMenu from '../EdgeContextMenu';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
   nodeMenu: Nullable<NodeContextMenuType>;
+  edgeMenu: Nullable<EdgeContextMenuType>;
   nodes: RFNode[];
   edges: RFEdge[];
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
   onNodeDelete?: (nodeId: string) => void;
+  onEdgeDelete?: (edgeId: string) => void;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
@@ -30,6 +34,8 @@ const FlowPane = forwardRef(
       onNodeCreate,
       nodeMenu,
       onNodeDelete,
+      edgeMenu,
+      onEdgeDelete,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
@@ -44,6 +50,9 @@ const FlowPane = forwardRef(
           )}
           {nodeMenu && (
             <NodeContextMenu onNodeDelete={onNodeDelete} {...nodeMenu} />
+          )}
+          {edgeMenu && (
+            <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />
           )}
         </ReactFlow>
       </div>

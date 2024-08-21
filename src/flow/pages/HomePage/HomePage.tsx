@@ -9,6 +9,7 @@ import {
   useUpdateEdge,
   useEdgeContextMenu,
   useDeleteEdge,
+  useAddEdge,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
@@ -24,6 +25,8 @@ import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
+import { RFNode } from '@/common/entities';
+import { getDownstreamNodePosition } from '@/flow/utils';
 
 const HomePage: React.FC = () => {
   const {
@@ -70,6 +73,7 @@ const HomePage: React.FC = () => {
   const deleteNode = useDeleteNode(setNodes);
   const updateNode = useUpdateNode(setNodes);
   const updateEdge = useUpdateEdge(setEdges);
+  const createEdge = useAddEdge(setEdges);
   const deleteEdge = useDeleteEdge(setEdges);
 
   const handleNodeCreate = () => {
@@ -77,6 +81,17 @@ const HomePage: React.FC = () => {
       const node = createNode(paneMenu.position);
       closePaneMenu();
       openDrawer(node);
+    }
+  };
+
+  const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
+    if (nodeMenu) {
+      const downstreamNode = createNode(
+        getDownstreamNodePosition(upstreamNode.position)
+      );
+      createEdge(upstreamNode, downstreamNode);
+      closeNodeMenu();
+      openDrawer(downstreamNode);
     }
   };
 
@@ -181,6 +196,7 @@ const HomePage: React.FC = () => {
         onNodeDelete={handleNodeDelete}
         onEdgeDelete={handleEdgeDelete}
         onEdgeClick={handleEdgeClick}
+        onCreateDownstreamAsset={handleCreateDownstreamAsset}
         snapToGrid
         snapGrid={snapGrid}
       />

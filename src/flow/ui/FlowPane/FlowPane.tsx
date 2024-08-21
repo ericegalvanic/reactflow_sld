@@ -24,6 +24,7 @@ export type FlowPaneProps = {
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
   onNodeDelete?: (nodeId: string) => void;
+  onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
   onEdgeDelete?: (edgeId: string) => void;
 } & ReactFlowProps;
 
@@ -36,6 +37,7 @@ const FlowPane = forwardRef(
       onNodeDelete,
       edgeMenu,
       onEdgeDelete,
+      onCreateDownstreamAsset,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
@@ -49,7 +51,11 @@ const FlowPane = forwardRef(
             <PaneContextMenu onNodeCreate={onNodeCreate} {...paneMenu} />
           )}
           {nodeMenu && (
-            <NodeContextMenu onNodeDelete={onNodeDelete} {...nodeMenu} />
+            <NodeContextMenu
+              onNodeDelete={onNodeDelete}
+              onCreateDownstreamAsset={onCreateDownstreamAsset}
+              {...nodeMenu}
+            />
           )}
           {edgeMenu && (
             <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />

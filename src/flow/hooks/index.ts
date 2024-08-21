@@ -13,3 +13,4 @@ export * from './useStateWithHistory';
 export * from './useNodesStateWithHistory';
 export * from './useEdgesStateWithHistory';
 export * from './useFlowState';
+export * from './useAddEdge';

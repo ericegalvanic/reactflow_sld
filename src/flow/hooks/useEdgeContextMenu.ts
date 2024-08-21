@@ -1,7 +1,7 @@
 import { Nullable, SetState } from '@/common/types';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import { ElementRef, RefObject, useCallback } from 'react';
-import { NodeContextMenu as EdgeContextMenu } from '../entities';
+import { EdgeContextMenu } from '../entities';
 import {
   getMenuPositionFromEventAndDom,
   getNodePositionFromEvent,
@@ -25,6 +25,7 @@ export const useEdgeContextMenu = (
         id: edge.id,
         ...getMenuPositionFromEventAndDom(event, pane),
         position: getNodePositionFromEvent(event),
+        targetEdge: edge,
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

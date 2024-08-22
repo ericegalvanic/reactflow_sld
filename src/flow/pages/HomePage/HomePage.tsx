@@ -10,6 +10,7 @@ import {
   useEdgeContextMenu,
   useDeleteEdge,
   useAddEdge,
+  useAddSubNode,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
@@ -27,6 +28,7 @@ import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
 import { RFNode } from '@/common/entities';
 import { getDownstreamNodePosition } from '@/flow/utils';
+import { isSubNode } from '@/common/utils';
 
 const HomePage: React.FC = () => {
   const {
@@ -75,6 +77,7 @@ const HomePage: React.FC = () => {
   const updateEdge = useUpdateEdge(setEdges);
   const createEdge = useAddEdge(setEdges);
   const deleteEdge = useDeleteEdge(setEdges);
+  const createSubNode = useAddSubNode(setNodes);
 
   const handleNodeCreate = () => {
     if (paneMenu) {
@@ -84,10 +87,26 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handleSubNodeCreate = (parentNode: RFNode) => {
+    if (nodeMenu) {
+      const subNode = createSubNode(parentNode);
+      closeNodeMenu();
+      openDrawer(subNode);
+    }
+  };
+
   const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
     if (nodeMenu) {
+      const isUpstreamASubNode = isSubNode(upstreamNode);
+
       const downstreamNode = createNode(
-        getDownstreamNodePosition(upstreamNode.position)
+        getDownstreamNodePosition(upstreamNode.position),
+        {
+          type: isUpstreamASubNode ? 'ResizableSubNode' : 'ResizableNode',
+          data: {
+            label: `SC ${appNodes.length + 1}`,
+          },
+        }
       );
       createEdge(upstreamNode, downstreamNode);
       closeNodeMenu();
@@ -197,6 +216,7 @@ const HomePage: React.FC = () => {
         onEdgeDelete={handleEdgeDelete}
         onEdgeClick={handleEdgeClick}
         onCreateDownstreamAsset={handleCreateDownstreamAsset}
+        onSubNodeCreate={handleSubNodeCreate}
         snapToGrid
         snapGrid={snapGrid}
       />

@@ -5,3 +5,5 @@ export * from './nodeName';
 export * from './nodeColor';
 export * from './edgeColor';
 export * from './displayNode';
+export * from './nodeCenter';
+export * from './isSubNode';

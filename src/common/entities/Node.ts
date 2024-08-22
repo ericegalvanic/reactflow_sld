@@ -4,9 +4,9 @@ import { Optional, Retype } from '../types';
 
 export type RFNode = Node;
 
-export type ManualNode = Retype<RFNode, 'type', NodeType>
+export type ManualNode = Retype<RFNode, 'type', NodeType>;
 
 export type CreateRFNodeDTO = Optional<
-  Optional<Optional<RFNode, 'id'>, 'type'>,
+  Retype<Optional<RFNode, 'id'>, 'type', NodeType, true>,
   'data'
 >;

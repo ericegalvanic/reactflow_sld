@@ -5,10 +5,13 @@ import { NodeContextMenu as NodeContextMenuType } from '@/flow/entities';
 import { useMemo } from 'react';
 import { contextMenuZIndex } from '@/flow/constants';
 import { RFNode } from '@/common/entities';
+import { AddToQueue } from '@mui/icons-material';
+import { isSubNode } from '@/common/utils';
 
 export type PaneContextMenuProps = {
   onNodeDelete?: (nodeId: string) => void;
   onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
+  onSubNodeCreate?: (parentNode: RFNode) => void;
   iconMenuProps?: Omit<IconMenuProps, 'items' | 'itemsAfterDivider'>;
 } & NodeContextMenuType;
 
@@ -16,9 +19,13 @@ const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
   iconMenuProps,
   onNodeDelete,
   onCreateDownstreamAsset,
+  onSubNodeCreate,
   targetNode,
   ...contextMenuProps
 }) => {
+  const hasParents = isSubNode(targetNode);
+  const isParent = !hasParents;
+
   const items = useMemo(
     (): IconMenuProps['items'] => [
       {
@@ -32,8 +39,24 @@ const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
         icon: <AddIcon />,
         onClick: () => onCreateDownstreamAsset?.(targetNode),
       },
+      ...(isParent
+        ? [
+            {
+              text: 'Create New Subcomponent',
+              icon: <AddToQueue />,
+              onClick: () => onSubNodeCreate?.(targetNode),
+            },
+          ]
+        : []),
     ],
-    [contextMenuProps.id, onCreateDownstreamAsset, onNodeDelete, targetNode]
+    [
+      contextMenuProps.id,
+      isParent,
+      onCreateDownstreamAsset,
+      onNodeDelete,
+      onSubNodeCreate,
+      targetNode,
+    ]
   );
 
   return (

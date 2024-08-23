@@ -5,6 +5,6 @@ export type Rename<
   TNewType = T[TProp],
   TOptional extends boolean = false
 > = Omit<T, TProp> &
-  (TOptional extends false
+  ([TOptional] extends [false]
     ? { [R in TNewName]: TNewType }
     : { [R in TNewName]?: TNewType });

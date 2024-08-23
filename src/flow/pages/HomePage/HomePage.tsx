@@ -18,6 +18,7 @@ import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
+  nodeType,
   nodeTypeMap,
 } from '@/flow/entities';
 import { Nullable } from '@/common/types';
@@ -102,7 +103,9 @@ const HomePage: React.FC = () => {
       const downstreamNode = createNode(
         getDownstreamNodePosition(upstreamNode.position),
         {
-          type: isUpstreamASubNode ? 'ResizableSubNode' : 'ResizableNode',
+          type: isUpstreamASubNode
+            ? nodeType.ResizableSubNode
+            : nodeType.ResizableNode,
           data: {
             label: `SC ${appNodes.length + 1}`,
           },

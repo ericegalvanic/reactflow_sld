@@ -1,7 +1,13 @@
-import { RFNode } from '../entities';
+import { RFNode, NativeNode } from '../entities';
 
-export const nodeName = (node: RFNode): string | undefined =>
-  ('label' in node.data &&
+export type NodeName<N extends NativeNode> = N extends {
+  data: { label: infer TNodeName };
+}
+  ? TNodeName
+  : undefined;
+
+export const nodeName = <N extends RFNode>(node: RFNode) =>
+  (('label' in node.data &&
     typeof node.data['label'] === 'string' &&
     node.data['label']) ||
-  undefined;
+    undefined) as NodeName<N>;

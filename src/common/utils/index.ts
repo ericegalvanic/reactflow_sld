@@ -7,3 +7,7 @@ export * from './edgeColor';
 export * from './displayNode';
 export * from './nodeCenter';
 export * from './isSubNode';
+export * from './isParent';
+export * from './parent';
+export * from './children';
+export * from './renamedNode';

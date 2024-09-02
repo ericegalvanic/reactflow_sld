@@ -8,7 +8,7 @@ import {
   NodeChange,
 } from '@xyflow/react';
 import { SetState } from '@/common/types';
-import { id } from '@/common/utils';
+import { edge, id } from '@/common/utils';
 
 export type FlowState = {
   nodes: RFNode[];
@@ -90,7 +90,7 @@ export const useFlowState = (initialState: FlowState) => {
     (changes: EdgeChange<RFEdge>[]) => {
       decoratedSetState((prev) => ({
         ...prev,
-        edges: applyEdgeChanges(changes, prev.edges),
+        edges: applyEdgeChanges(changes, prev.edges).map(edge),
       }));
     },
     [decoratedSetState]

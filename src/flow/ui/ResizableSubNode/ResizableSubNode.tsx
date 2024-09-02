@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import { Handle, Position, NodeResizeControl } from '@xyflow/react';
+import { Handle, NodeResizeControl } from '@xyflow/react';
 import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled } from './ResizableSubNode.styles';
+import { useNodeHandlePosition } from '@/flow/hooks';
 
 export type ResizableSubNodeProps = {
   data: {
@@ -10,6 +11,8 @@ export type ResizableSubNodeProps = {
 };
 
 const ResizableSubNode: React.FC<ResizableSubNodeProps> = ({ data }) => {
+  const { targetPosition, sourceNodePosition } = useNodeHandlePosition();
+
   return (
     <>
       <NodeResizeControl
@@ -17,9 +20,9 @@ const ResizableSubNode: React.FC<ResizableSubNodeProps> = ({ data }) => {
         minWidth={48}
         minHeight={48}
       ></NodeResizeControl>
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={targetPosition} />
       <NodeCoreStyled>{data.label}</NodeCoreStyled>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={sourceNodePosition} />
     </>
   );
 };

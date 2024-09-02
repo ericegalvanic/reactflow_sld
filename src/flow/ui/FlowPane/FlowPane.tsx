@@ -7,12 +7,14 @@ import {
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
 } from '@/flow/entities';
-import { ElementRef, ForwardedRef, forwardRef } from 'react';
+import { ElementRef, ForwardedRef, forwardRef, MouseEventHandler } from 'react';
 import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
 import NodeContextMenu from '../NodeContextMenu';
 import { snapGrid } from '@/flow/constants';
 import EdgeContextMenu from '../EdgeContextMenu';
+import Panel from '@/common/ui/Panel';
+import Button from '@/common/ui/Button';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
@@ -27,6 +29,8 @@ export type FlowPaneProps = {
   onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
   onEdgeDelete?: (edgeId: string) => void;
   onSubNodeCreate?: (parentNode: RFNode) => void;
+  onHorizontalClick?: MouseEventHandler<HTMLButtonElement>;
+  onVerticalClick?: MouseEventHandler<HTMLButtonElement>;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
@@ -40,6 +44,8 @@ const FlowPane = forwardRef(
       onEdgeDelete,
       onCreateDownstreamAsset,
       onSubNodeCreate,
+      onHorizontalClick,
+      onVerticalClick,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
@@ -62,6 +68,24 @@ const FlowPane = forwardRef(
           )}
           {edgeMenu && (
             <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />
+          )}
+          {(onHorizontalClick || onVerticalClick) && (
+            <Panel position="top-right">
+              {onVerticalClick && (
+                <Button
+                  onClick={onVerticalClick}
+                  variant="contained"
+                  sx={{ marginRight: 1 }}
+                >
+                  Vertical
+                </Button>
+              )}
+              {onHorizontalClick && (
+                <Button onClick={onHorizontalClick} variant="contained">
+                  Horizontal
+                </Button>
+              )}
+            </Panel>
           )}
         </ReactFlow>
       </div>

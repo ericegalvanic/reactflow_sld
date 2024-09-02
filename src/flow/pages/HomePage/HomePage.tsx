@@ -39,6 +39,7 @@ const HomePage: React.FC = () => {
     setEdges,
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
+    onLayout,
   } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
@@ -194,6 +195,14 @@ const HomePage: React.FC = () => {
     invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
   };
 
+  const onVerticalClick = () => {
+    onLayout('TB');
+  };
+
+  const onHorizontalClick = () => {
+    onLayout('LR');
+  };
+
   return (
     <>
       <FlowPane
@@ -222,6 +231,8 @@ const HomePage: React.FC = () => {
         onSubNodeCreate={handleSubNodeCreate}
         snapToGrid
         snapGrid={snapGrid}
+        onVerticalClick={onVerticalClick}
+        onHorizontalClick={onHorizontalClick}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

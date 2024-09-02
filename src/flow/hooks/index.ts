@@ -15,3 +15,4 @@ export * from './useEdgesStateWithHistory';
 export * from './useFlowState';
 export * from './useAddEdge';
 export * from './useAddSubNode';
+export * from './useNodeHandlePosition';

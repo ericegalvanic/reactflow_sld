@@ -18,6 +18,7 @@ import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
+  flowViewMode,
   nodeType,
   nodeTypeMap,
 } from '@/flow/entities';
@@ -35,8 +36,10 @@ const HomePage: React.FC = () => {
   const {
     nodes: appNodes,
     edges: appEdges,
+    viewMode: appViewMode,
     setNodes,
     setEdges,
+    setViewMode,
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
     onLayout,
@@ -203,12 +206,23 @@ const HomePage: React.FC = () => {
     onLayout('LR');
   };
 
+  const toggleViewMode: NonNullable<FlowPaneProps['onToggleViewMode']> = () => {
+    setViewMode((v) => {
+      if (v === flowViewMode.standard) {
+        return flowViewMode.enhanced;
+      }
+
+      return flowViewMode.standard;
+    });
+  };
+
   return (
     <>
       <FlowPane
         ref={paneRef}
         nodes={appNodes}
         edges={appEdges}
+        viewMode={appViewMode}
         setNodes={setNodes}
         setEdges={setEdges}
         onNodesChange={onAppNodesChange}
@@ -233,6 +247,7 @@ const HomePage: React.FC = () => {
         snapGrid={snapGrid}
         onVerticalClick={onVerticalClick}
         onHorizontalClick={onHorizontalClick}
+        onToggleViewMode={toggleViewMode}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

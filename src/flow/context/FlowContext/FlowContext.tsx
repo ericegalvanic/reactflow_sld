@@ -12,15 +12,21 @@ import { useHotKey } from '@/common/hooks';
 import dagre from '@dagrejs/dagre';
 import { RFEdge, RFNode } from '@/common/entities';
 import { Position } from '@xyflow/react';
-import { FlowDirection } from '@/flow/entities';
+import {
+  flowDirection as flowDirectionEnum,
+  FlowDirection,
+  flowViewMode,
+} from '@/flow/entities';
 
 export const FlowContext = createContext<FlowContextData>({
   nodes: initialNodes,
   edges: initialEdges,
-  flowDirection: 'TB',
+  flowDirection: flowDirectionEnum.vertical,
+  viewMode: flowViewMode.enhanced,
   setNodes: () => {},
   setEdges: () => {},
   setFlowDirection: () => {},
+  setViewMode: () => {},
   onNodesChange: () => {},
   onEdgesChange: () => {},
   onLayout: () => {},
@@ -39,9 +45,9 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const getLayoutedElements = (
   nodes: RFNode[],
   edges: RFEdge[],
-  direction: FlowDirection = 'TB'
+  direction: FlowDirection = flowDirectionEnum.vertical
 ) => {
-  const isHorizontal = direction === 'LR';
+  const isHorizontal = direction === flowDirectionEnum.horizontal;
   dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
@@ -75,7 +81,7 @@ const getLayoutedElements = (
 const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialNodes,
   initialEdges,
-  'TB'
+  flowDirectionEnum.vertical
 );
 
 export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
@@ -84,13 +90,17 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   const {
     nodeState: [nodes, setNodes, onNodesChange],
     edgeState: [edges, setEdges, onEdgesChange],
+    viewModeState: [viewMode, setViewMode],
     history: { back: prevState, forward: nextState },
   } = useFlowState({
     nodes: layoutedNodes,
     edges: layoutedEdges,
+    viewMode: flowViewMode.enhanced,
     stateId: 'initial-state',
   });
-  const [flowDirection, setFlowDirection] = useState<FlowDirection>('TB');
+  const [flowDirection, setFlowDirection] = useState<FlowDirection>(
+    flowDirectionEnum.vertical
+  );
 
   const onLayout = useCallback(
     (direction: FlowDirection) => {
@@ -112,9 +122,11 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       nodes,
       edges,
       flowDirection,
+      viewMode,
       setNodes,
       setEdges,
       setFlowDirection,
+      setViewMode,
       onNodesChange,
       onEdgesChange,
       onLayout,
@@ -123,8 +135,10 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       nodes,
       edges,
       flowDirection,
+      viewMode,
       setNodes,
       setEdges,
+      setViewMode,
       onNodesChange,
       onEdgesChange,
       onLayout,

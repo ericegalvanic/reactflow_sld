@@ -1,6 +1,6 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { useStateWithHistory } from './useStateWithHistory';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   applyEdgeChanges,
   applyNodeChanges,
@@ -8,11 +8,13 @@ import {
   NodeChange,
 } from '@xyflow/react';
 import { SetState } from '@/common/types';
-import { edge, id } from '@/common/utils';
+import { edge, id, isSubNode } from '@/common/utils';
+import { flowViewMode, FlowViewMode } from '../entities';
 
 export type FlowState = {
   nodes: RFNode[];
   edges: RFEdge[];
+  viewMode: FlowViewMode;
   stateId: string;
 };
 
@@ -76,6 +78,25 @@ export const useFlowState = (initialState: FlowState) => {
     [decoratedSetState]
   );
 
+  const setViewMode: SetState<FlowViewMode> = useCallback(
+    (flowMode) => {
+      decoratedSetState((previous) => {
+        if (typeof flowMode !== 'function') {
+          return {
+            ...previous,
+            viewMode: flowMode,
+          };
+        }
+
+        return {
+          ...previous,
+          viewMode: flowMode(previous.viewMode),
+        };
+      });
+    },
+    [decoratedSetState]
+  );
+
   const onNodesChange = useCallback(
     (changes: NodeChange<RFNode>[]) => {
       decoratedSetState((prev) => ({
@@ -96,9 +117,18 @@ export const useFlowState = (initialState: FlowState) => {
     [decoratedSetState]
   );
 
+  const viewModeNodes = useMemo(() => {
+    if (state.viewMode === flowViewMode.enhanced) {
+      return state.nodes;
+    }
+
+    return state.nodes.filter((node) => !isSubNode(node));
+  }, [state]);
+
   return {
-    nodeState: [state.nodes, setNodes, onNodesChange],
+    nodeState: [viewModeNodes, setNodes, onNodesChange],
     edgeState: [state.edges, setEdges, onEdgesChange],
+    viewModeState: [state.viewMode, setViewMode],
     history,
   } as const;
 };

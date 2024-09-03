@@ -4,6 +4,10 @@ import Minimap from '@/common/ui/Minimap';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import {
   EdgeContextMenu as EdgeContextMenuType,
+  flowDirection,
+  flowDirectionNameMap,
+  FlowViewMode,
+  flowViewModeNameMap,
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
 } from '@/flow/entities';
@@ -22,6 +26,7 @@ export type FlowPaneProps = {
   edgeMenu: Nullable<EdgeContextMenuType>;
   nodes: RFNode[];
   edges: RFEdge[];
+  viewMode: FlowViewMode;
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
@@ -31,6 +36,7 @@ export type FlowPaneProps = {
   onSubNodeCreate?: (parentNode: RFNode) => void;
   onHorizontalClick?: MouseEventHandler<HTMLButtonElement>;
   onVerticalClick?: MouseEventHandler<HTMLButtonElement>;
+  onToggleViewMode?: MouseEventHandler<HTMLButtonElement>;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
@@ -42,10 +48,12 @@ const FlowPane = forwardRef(
       onNodeDelete,
       edgeMenu,
       onEdgeDelete,
+      viewMode,
       onCreateDownstreamAsset,
       onSubNodeCreate,
       onHorizontalClick,
       onVerticalClick,
+      onToggleViewMode,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
@@ -77,14 +85,21 @@ const FlowPane = forwardRef(
                   variant="contained"
                   sx={{ marginRight: 1 }}
                 >
-                  Vertical
+                  {flowDirectionNameMap[flowDirection.vertical]}
                 </Button>
               )}
               {onHorizontalClick && (
                 <Button onClick={onHorizontalClick} variant="contained">
-                  Horizontal
+                  {flowDirectionNameMap[flowDirection.horizontal]}
                 </Button>
               )}
+            </Panel>
+          )}
+          {onToggleViewMode && (
+            <Panel position="bottom-left">
+              <Button variant="contained" onClick={onToggleViewMode}>
+                {flowViewModeNameMap[viewMode]}
+              </Button>
             </Panel>
           )}
         </ReactFlow>

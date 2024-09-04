@@ -2,7 +2,10 @@ import { Nullable, SetState } from '@/common/types';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import { ElementRef, RefObject, useCallback } from 'react';
 import { NodeContextMenu } from '../entities';
-import { getMenuPositionFromEventAndDom, getNodePositionFromEvent } from '../utils';
+import {
+  getMenuPositionFromEventAndDom,
+  getNodePositionFromEvent,
+} from '../utils';
 
 type OnNodeContextMenuParams = Parameters<
   NonNullable<ReactFlowProps['onNodeContextMenu']>
@@ -22,6 +25,7 @@ export const useNodeContextMenu = (
         id: node.id,
         ...getMenuPositionFromEventAndDom(event, pane),
         position: getNodePositionFromEvent(event),
+        targetNode: node,
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

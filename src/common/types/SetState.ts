@@ -1,3 +1,3 @@
-import { SetStateAction } from 'react';
+import { SetStateAction, Dispatch } from 'react';
 
-export type SetState<S> = React.Dispatch<SetStateAction<S>>;
+export type SetState<S> = Dispatch<SetStateAction<S>>;

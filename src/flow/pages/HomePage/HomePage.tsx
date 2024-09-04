@@ -1,28 +1,53 @@
 import FlowPane, { FlowPaneProps } from '../../ui/FlowPane';
 import {
-  useNodesState,
-  useEdgesState,
   usePaneContextMenu,
   useAddNode,
   useNodeContextMenu,
   useDeleteNode,
   useNodeEditDrawer,
   useUpdateNode,
+  useUpdateEdge,
+  useEdgeContextMenu,
+  useDeleteEdge,
+  useAddEdge,
+  useAddSubNode,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge } from '@xyflow/react';
-import { NodeContextMenu, PaneContextMenu, nodeTypeMap } from '@/flow/entities';
-import { initialEdges, initialNodes } from './HomePage.nodes';
+import {
+  EdgeContextMenu,
+  NodeContextMenu,
+  PaneContextMenu,
+  flowViewMode,
+  nodeType,
+  nodeTypeMap,
+} from '@/flow/entities';
 import { Nullable } from '@/common/types';
 import { snapGrid } from '@/flow/constants';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
+import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
+import { useFlow } from '@/flow/context';
+import { RFNode } from '@/common/entities';
+import { getDownstreamNodePosition } from '@/flow/utils';
+import { isSubNode } from '@/common/utils';
 
 const HomePage: React.FC = () => {
-  const [appNodes, setNodes, onAppNodesChange] = useNodesState(initialNodes);
-  const [appEdges, setEdges, onAppEdgesChange] = useEdgesState(initialEdges);
+  const {
+    nodes: appNodes,
+    edges: appEdges,
+    viewMode: appViewMode,
+    setNodes,
+    setEdges,
+    setViewMode,
+    onNodesChange: onAppNodesChange,
+    onEdgesChange: onAppEdgesChange,
+    onLayout,
+  } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
+  const [edgeMenu, setEdgeMenu] = useState<Nullable<EdgeContextMenu>>(null);
+
   const {
     open: drawerOpen,
     closeDrawer,
@@ -30,15 +55,16 @@ const HomePage: React.FC = () => {
     nodeToEdit,
   } = useNodeEditDrawer();
 
+  const { invokeModal: invokeEdgeEditModal, closeModal: closeEdgeEditModal } =
+    useEdgeEditModal();
+
   const paneRef = useRef<ElementRef<typeof FlowPane>>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onAppEdgesConnect = useCallback(
-    ((connection) =>
-      setEdges((edges) =>
-        addEdge(connection, edges)
-      )) satisfies FlowPaneProps['onConnect'],
-    []
+  const onAppEdgesConnect = useCallback<
+    NonNullable<FlowPaneProps['onConnect']>
+  >(
+    (connection) => setEdges((edges) => addEdge(connection, edges)),
+    [setEdges]
   );
 
   const { openMenu: openPaneMenu, closeMenu: closePaneMenu } =
@@ -47,15 +73,51 @@ const HomePage: React.FC = () => {
   const { openMenu: openNodeMenu, closeMenu: closeNodeMenu } =
     useNodeContextMenu(paneRef, setNodeMenu);
 
+  const { openMenu: openEdgeMenu, closeMenu: closeEdgeMenu } =
+    useEdgeContextMenu(paneRef, setEdgeMenu);
+
   const createNode = useAddNode(setNodes);
   const deleteNode = useDeleteNode(setNodes);
   const updateNode = useUpdateNode(setNodes);
+  const updateEdge = useUpdateEdge(setEdges);
+  const createEdge = useAddEdge(setEdges);
+  const deleteEdge = useDeleteEdge(setEdges);
+  const createSubNode = useAddSubNode(setNodes);
 
   const handleNodeCreate = () => {
     if (paneMenu) {
       const node = createNode(paneMenu.position);
       closePaneMenu();
       openDrawer(node);
+    }
+  };
+
+  const handleSubNodeCreate = (parentNode: RFNode) => {
+    if (nodeMenu) {
+      const subNode = createSubNode(parentNode);
+      closeNodeMenu();
+      openDrawer(subNode);
+    }
+  };
+
+  const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
+    if (nodeMenu) {
+      const isUpstreamASubNode = isSubNode(upstreamNode);
+
+      const downstreamNode = createNode(
+        getDownstreamNodePosition(upstreamNode.position),
+        {
+          type: isUpstreamASubNode
+            ? nodeType.ResizableSubNode
+            : nodeType.ResizableNode,
+          data: {
+            label: `SC ${appNodes.length + 1}`,
+          },
+        }
+      );
+      createEdge(upstreamNode, downstreamNode);
+      closeNodeMenu();
+      openDrawer(downstreamNode);
     }
   };
 
@@ -66,6 +128,13 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const handleEdgeDelete = (edgeId: string) => {
+    if (edgeMenu) {
+      deleteEdge(edgeId);
+      closeEdgeMenu();
+    }
+  };
+
   const handlePaneClick = () => {
     if (paneMenu) {
       closePaneMenu();
@@ -73,21 +142,34 @@ const HomePage: React.FC = () => {
     if (nodeMenu) {
       closeNodeMenu();
     }
-    closeDrawer();
-  };
-
-  const handleNodeContextMenu: typeof openNodeMenu = (event, node) => {
-    if (paneMenu) {
-      closePaneMenu();
+    if (edgeMenu) {
+      closeEdgeMenu();
     }
-    openNodeMenu(event, node);
+    closeDrawer();
   };
 
   const handlePaneContextMenu: typeof openPaneMenu = (event) => {
     if (nodeMenu) {
       closeNodeMenu();
+      return;
     }
     openPaneMenu(event);
+  };
+
+  const handleNodeContextMenu: typeof openNodeMenu = (event, node) => {
+    if (paneMenu) {
+      closePaneMenu();
+      return;
+    }
+    openNodeMenu(event, node);
+  };
+
+  const handleEdgeContextMenu: typeof openEdgeMenu = (event, edge) => {
+    if (edgeMenu) {
+      closeEdgeMenu();
+      return;
+    }
+    openEdgeMenu(event, edge);
   };
 
   const handleNodeEditSave: NonNullable<NodeEditFormProps['onSave']> = (
@@ -97,12 +179,41 @@ const HomePage: React.FC = () => {
     closeDrawer();
   };
 
+  const handleEdgeEditSave: EdgeEditModalProps['onSave'] = (edge) => {
+    updateEdge(edge);
+    closeEdgeEditModal();
+  };
+
   const handleNodeClick: NonNullable<FlowPaneProps['onNodeClick']> = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     event,
     node
   ) => {
     openDrawer(node);
+  };
+
+  const handleEdgeClick: NonNullable<FlowPaneProps['onEdgeClick']> = (
+    event,
+    edge
+  ) => {
+    invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
+  };
+
+  const onVerticalClick = () => {
+    onLayout('TB');
+  };
+
+  const onHorizontalClick = () => {
+    onLayout('LR');
+  };
+
+  const toggleViewMode: NonNullable<FlowPaneProps['onToggleViewMode']> = () => {
+    setViewMode((v) => {
+      if (v === flowViewMode.standard) {
+        return flowViewMode.enhanced;
+      }
+
+      return flowViewMode.standard;
+    });
   };
 
   return (
@@ -111,6 +222,7 @@ const HomePage: React.FC = () => {
         ref={paneRef}
         nodes={appNodes}
         edges={appEdges}
+        viewMode={appViewMode}
         setNodes={setNodes}
         setEdges={setEdges}
         onNodesChange={onAppNodesChange}
@@ -119,14 +231,23 @@ const HomePage: React.FC = () => {
         nodeTypes={nodeTypeMap}
         onContextMenu={handlePaneContextMenu}
         onNodeContextMenu={handleNodeContextMenu}
+        onEdgeContextMenu={handleEdgeContextMenu}
         onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
         paneMenu={paneMenu}
         nodeMenu={nodeMenu}
+        edgeMenu={edgeMenu}
         onNodeCreate={handleNodeCreate}
         onNodeDelete={handleNodeDelete}
+        onEdgeDelete={handleEdgeDelete}
+        onEdgeClick={handleEdgeClick}
+        onCreateDownstreamAsset={handleCreateDownstreamAsset}
+        onSubNodeCreate={handleSubNodeCreate}
         snapToGrid
         snapGrid={snapGrid}
+        onVerticalClick={onVerticalClick}
+        onHorizontalClick={onHorizontalClick}
+        onToggleViewMode={toggleViewMode}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

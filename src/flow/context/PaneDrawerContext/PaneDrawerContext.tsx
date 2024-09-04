@@ -1,16 +1,8 @@
 import { useBoolean } from '@/common/hooks';
-import { SetState } from '@/common/types';
 import { createContext, ReactNode, useMemo } from 'react';
+import { PaneDrawerData } from './PaneDrawerContext.entities';
 
-export type PaneDrawerState = {
-  open: boolean;
-  openDrawer: () => void;
-  closeDrawer: () => void;
-  toggleDrawer: () => void;
-  setOpen: SetState<boolean>;
-};
-
-const defaultState: PaneDrawerState = {
+const defaultState: PaneDrawerData = {
   open: false,
   openDrawer: () => {},
   closeDrawer: () => {},
@@ -18,7 +10,7 @@ const defaultState: PaneDrawerState = {
   setOpen: () => {},
 };
 
-export const PaneDrawerContext = createContext<PaneDrawerState>(defaultState);
+export const PaneDrawerContext = createContext<PaneDrawerData>(defaultState);
 
 export type PaneDrawerProviderProps = {
   children?: ReactNode;
@@ -30,7 +22,7 @@ export const PaneDrawerContextProvider: React.FC<PaneDrawerProviderProps> = ({
   const [open, setOpen, openDrawer, closeDrawer, toggleDrawer] = useBoolean();
 
   const providerValue = useMemo(
-    (): PaneDrawerState => ({
+    (): PaneDrawerData => ({
       open,
       setOpen,
       openDrawer,

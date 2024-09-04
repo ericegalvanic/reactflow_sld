@@ -11,14 +11,21 @@ import {
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
 } from '@/flow/entities';
-import { ElementRef, ForwardedRef, forwardRef, MouseEventHandler } from 'react';
+import {
+  ChangeEventHandler,
+  ElementRef,
+  ForwardedRef,
+  forwardRef,
+  MouseEventHandler,
+  useRef,
+} from 'react';
 import PaneContextMenu from '../PaneContextMenu';
 import { RFEdge, RFNode } from '@/common/entities';
 import NodeContextMenu from '../NodeContextMenu';
 import { snapGrid } from '@/flow/constants';
 import EdgeContextMenu from '../EdgeContextMenu';
-import Panel from '@/common/ui/Panel';
 import Button from '@/common/ui/Button';
+import { FileInputStyled, FlowPanelStyled } from './FlowPane.styles';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
@@ -37,6 +44,8 @@ export type FlowPaneProps = {
   onHorizontalClick?: MouseEventHandler<HTMLButtonElement>;
   onVerticalClick?: MouseEventHandler<HTMLButtonElement>;
   onToggleViewMode?: MouseEventHandler<HTMLButtonElement>;
+  onExportFlow?: MouseEventHandler<HTMLButtonElement>;
+  onImportFlow?: ChangeEventHandler<HTMLInputElement>;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
@@ -54,10 +63,18 @@ const FlowPane = forwardRef(
       onHorizontalClick,
       onVerticalClick,
       onToggleViewMode,
+      onExportFlow,
+      onImportFlow,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
   ) => {
+    const fileInputRef = useRef<ElementRef<'input'>>(null);
+
+    const handleImportFlow: MouseEventHandler<HTMLButtonElement> = () => {
+      fileInputRef.current?.click();
+    };
+
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
         <ReactFlow ref={ref} {...rfProps}>
@@ -78,13 +95,12 @@ const FlowPane = forwardRef(
             <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />
           )}
           {(onHorizontalClick || onVerticalClick) && (
-            <Panel position="top-right">
+            <FlowPanelStyled
+              position="top-right"
+              style={{ display: 'flex', gap: 4 }}
+            >
               {onVerticalClick && (
-                <Button
-                  onClick={onVerticalClick}
-                  variant="contained"
-                  sx={{ marginRight: 1 }}
-                >
+                <Button onClick={onVerticalClick} variant="contained">
                   {flowDirectionNameMap[flowDirection.vertical]}
                 </Button>
               )}
@@ -93,14 +109,34 @@ const FlowPane = forwardRef(
                   {flowDirectionNameMap[flowDirection.horizontal]}
                 </Button>
               )}
-            </Panel>
+            </FlowPanelStyled>
           )}
-          {onToggleViewMode && (
-            <Panel position="bottom-left">
-              <Button variant="contained" onClick={onToggleViewMode}>
-                {flowViewModeNameMap[viewMode]}
-              </Button>
-            </Panel>
+          {(onToggleViewMode || onExportFlow || onImportFlow) && (
+            <FlowPanelStyled
+              position="bottom-left"
+              style={{ display: 'flex', gap: 4 }}
+            >
+              {onToggleViewMode && (
+                <Button variant="contained" onClick={onToggleViewMode}>
+                  {flowViewModeNameMap[viewMode]}
+                </Button>
+              )}
+              {onExportFlow && (
+                <Button variant="contained" onClick={onExportFlow}>
+                  Export
+                </Button>
+              )}
+              {onImportFlow && (
+                <Button variant="contained" onClick={handleImportFlow}>
+                  <FileInputStyled
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={onImportFlow}
+                  />
+                  Import
+                </Button>
+              )}
+            </FlowPanelStyled>
           )}
         </ReactFlow>
       </div>

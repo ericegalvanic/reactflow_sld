@@ -11,3 +11,6 @@ export * from './isParent';
 export * from './parent';
 export * from './children';
 export * from './renamedNode';
+export * from './downloadFile';
+export * from './assertIsObject';
+export * from './assertIsFlowSave';

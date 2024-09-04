@@ -28,9 +28,10 @@ import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
-import { RFNode } from '@/common/entities';
-import { getDownstreamNodePosition } from '@/flow/utils';
-import { isSubNode } from '@/common/utils';
+import { FlowSave, RFNode } from '@/common/entities';
+import { generateFlowSaveName, getDownstreamNodePosition } from '@/flow/utils';
+import { assertIsFlowSave, downloadFile, isSubNode } from '@/common/utils';
+import { JSON_MIME_TYPE } from '@/common/constants';
 
 const HomePage: React.FC = () => {
   const {
@@ -216,6 +217,56 @@ const HomePage: React.FC = () => {
     });
   };
 
+  const handleExportFlow: NonNullable<FlowPaneProps['onExportFlow']> = () => {
+    const preparedToBeExported: FlowSave = {
+      nodes: appNodes,
+      edges: appEdges,
+    };
+
+    const preparedJson = JSON.stringify(preparedToBeExported);
+
+    const flowBlob = new Blob([preparedJson], { type: JSON_MIME_TYPE });
+
+    const temporaryDownloadUrl = URL.createObjectURL(flowBlob);
+
+    downloadFile(temporaryDownloadUrl, { filename: generateFlowSaveName() });
+
+    URL.revokeObjectURL(temporaryDownloadUrl);
+  };
+
+  const handleImportFlow: NonNullable<FlowPaneProps['onImportFlow']> = (
+    event
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file || file.type !== JSON_MIME_TYPE) {
+      return alert('Please upload a JSON file');
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (readEvent) => {
+      const readFile = readEvent.target?.result;
+
+      if (!readFile) {
+        return alert('Failed to read the file');
+      }
+
+      if (typeof readFile !== 'string') {
+        return alert('File is not a string');
+      }
+
+      const importedFlow = JSON.parse(readFile);
+
+      assertIsFlowSave(importedFlow);
+
+      setNodes(importedFlow.nodes);
+      setEdges(importedFlow.edges);
+    };
+
+    reader.readAsText(file);
+  };
+
   return (
     <>
       <FlowPane
@@ -248,6 +299,8 @@ const HomePage: React.FC = () => {
         onVerticalClick={onVerticalClick}
         onHorizontalClick={onHorizontalClick}
         onToggleViewMode={toggleViewMode}
+        onExportFlow={handleExportFlow}
+        onImportFlow={handleImportFlow}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

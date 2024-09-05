@@ -20,6 +20,7 @@ export type FlowState = {
 
 export const useFlowState = (initialState: FlowState) => {
   const [state, setState, history] = useStateWithHistory(initialState);
+  // const [viewMode, setViewMode] = useState<FlowViewMode>(flowViewMode.enhanced);
 
   const decoratedSetState: SetState<Omit<FlowState, 'stateId'>> = useCallback(
     (newState) => {

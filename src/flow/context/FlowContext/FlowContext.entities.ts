@@ -15,4 +15,5 @@ export type FlowContextData = {
   onNodesChange: OnNodesChange<RFNode>;
   onEdgesChange: OnEdgesChange<RFEdge>;
   onLayout: (direction: FlowDirection) => void;
+  takeSnapshot: () => void;
 };

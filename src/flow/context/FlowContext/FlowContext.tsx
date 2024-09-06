@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createContext,
   ReactNode,
@@ -30,6 +31,7 @@ export const FlowContext = createContext<FlowContextData>({
   onNodesChange: () => {},
   onEdgesChange: () => {},
   onLayout: () => {},
+  takeSnapshot: () => {},
 });
 
 export type FlowContextProviderProps = {
@@ -91,7 +93,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
     nodeState: [nodes, setNodes, onNodesChange],
     edgeState: [edges, setEdges, onEdgesChange],
     viewModeState: [viewMode, setViewMode],
-    history: { back: prevState, forward: nextState },
+    history: { undo: prevState, redo: nextState, takeSnapshot },
   } = useFlowState({
     nodes: layoutedNodes,
     edges: layoutedEdges,
@@ -130,6 +132,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       onNodesChange,
       onEdgesChange,
       onLayout,
+      takeSnapshot,
     }),
     [
       nodes,
@@ -142,6 +145,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       onNodesChange,
       onEdgesChange,
       onLayout,
+      takeSnapshot,
     ]
   );
 

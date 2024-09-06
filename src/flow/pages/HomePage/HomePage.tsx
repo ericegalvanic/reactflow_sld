@@ -28,7 +28,7 @@ import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
-import { FlowSave, RFNode } from '@/common/entities';
+import { EdgeType, FlowSave, RFNode } from '@/common/entities';
 import { generateFlowSaveName, getDownstreamNodePosition } from '@/flow/utils';
 import { assertIsFlowSave, downloadFile, isSubNode } from '@/common/utils';
 import { JSON_MIME_TYPE } from '@/common/constants';
@@ -44,6 +44,7 @@ const HomePage: React.FC = () => {
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
     onLayout,
+    takeSnapshot,
   } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
@@ -87,6 +88,7 @@ const HomePage: React.FC = () => {
 
   const handleNodeCreate = () => {
     if (paneMenu) {
+      takeSnapshot();
       const node = createNode(paneMenu.position);
       closePaneMenu();
       openDrawer(node);
@@ -95,6 +97,7 @@ const HomePage: React.FC = () => {
 
   const handleSubNodeCreate = (parentNode: RFNode) => {
     if (nodeMenu) {
+      takeSnapshot();
       const subNode = createSubNode(parentNode);
       closeNodeMenu();
       openDrawer(subNode);
@@ -103,6 +106,7 @@ const HomePage: React.FC = () => {
 
   const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
     if (nodeMenu) {
+      takeSnapshot();
       const isUpstreamASubNode = isSubNode(upstreamNode);
 
       const downstreamNode = createNode(
@@ -124,6 +128,7 @@ const HomePage: React.FC = () => {
 
   const handleNodeDelete = (nodeId: string) => {
     if (nodeMenu) {
+      takeSnapshot();
       deleteNode(nodeId);
       closeNodeMenu();
     }
@@ -131,6 +136,7 @@ const HomePage: React.FC = () => {
 
   const handleEdgeDelete = (edgeId: string) => {
     if (edgeMenu) {
+      takeSnapshot();
       deleteEdge(edgeId);
       closeEdgeMenu();
     }
@@ -176,11 +182,13 @@ const HomePage: React.FC = () => {
   const handleNodeEditSave: NonNullable<NodeEditFormProps['onSave']> = (
     updatedNode
   ) => {
+    takeSnapshot();
     updateNode(updatedNode);
     closeDrawer();
   };
 
   const handleEdgeEditSave: EdgeEditModalProps['onSave'] = (edge) => {
+    takeSnapshot();
     updateEdge(edge);
     closeEdgeEditModal();
   };
@@ -267,6 +275,18 @@ const HomePage: React.FC = () => {
     reader.readAsText(file);
   };
 
+  const handleNodeDragStart: NonNullable<
+    FlowPaneProps['onNodeDragStart']
+  > = () => {
+    takeSnapshot();
+  };
+
+  const handleNodeConnectStart: NonNullable<
+    FlowPaneProps['onConnectStart']
+  > = () => {
+    takeSnapshot();
+  };
+
   return (
     <>
       <FlowPane
@@ -301,6 +321,9 @@ const HomePage: React.FC = () => {
         onToggleViewMode={toggleViewMode}
         onExportFlow={handleExportFlow}
         onImportFlow={handleImportFlow}
+        onNodeDragStart={handleNodeDragStart}
+        onConnectStart={handleNodeConnectStart}
+        connectionLineType={EdgeType.Step}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

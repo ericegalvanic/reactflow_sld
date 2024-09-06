@@ -1,6 +1,5 @@
 import { RFEdge, RFNode } from '@/common/entities';
-import { useStateWithHistory } from './useStateWithHistory';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   applyEdgeChanges,
   applyNodeChanges,
@@ -10,6 +9,7 @@ import {
 import { SetState } from '@/common/types';
 import { edge, id, isSubNode } from '@/common/utils';
 import { flowViewMode, FlowViewMode } from '../entities';
+import { useUndoRedo } from './useUndoRedo';
 
 export type FlowState = {
   nodes: RFNode[];
@@ -19,8 +19,8 @@ export type FlowState = {
 };
 
 export const useFlowState = (initialState: FlowState) => {
-  const [state, setState, history] = useStateWithHistory(initialState);
-  // const [viewMode, setViewMode] = useState<FlowViewMode>(flowViewMode.enhanced);
+  const [state, setState] = useState(initialState);
+  const history = useUndoRedo();
 
   const decoratedSetState: SetState<Omit<FlowState, 'stateId'>> = useCallback(
     (newState) => {

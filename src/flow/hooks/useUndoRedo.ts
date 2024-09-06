@@ -1,17 +1,13 @@
 import { useCallback, useState } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import { RFEdge, RFNode } from '@/common/entities';
+import { config } from '@/app';
 
 type UseUndoRedoOptions = {
   maxHistorySize: number;
 };
 
-export type FlowState = {
-  nodes: RFNode[];
-  edges: RFEdge[];
-};
-
-type UseUndoRedo = (options?: UseUndoRedoOptions) => FlowState & {
+type UseUndoRedo = (options?: UseUndoRedoOptions) => {
   undo: () => void;
   redo: () => void;
   takeSnapshot: () => void;
@@ -25,7 +21,7 @@ type HistoryItem = {
 };
 
 const defaultOptions: UseUndoRedoOptions = {
-  maxHistorySize: 100,
+  maxHistorySize: config.historyDeepness,
 };
 
 export const useUndoRedo: UseUndoRedo = ({
@@ -73,12 +69,7 @@ export const useUndoRedo: UseUndoRedo = ({
     }
   }, [setNodes, setEdges, getNodes, getEdges, future]);
 
-  const nodes = getNodes();
-  const edges = getEdges();
-
   return {
-    nodes,
-    edges,
     undo,
     redo,
     takeSnapshot,
@@ -86,5 +77,3 @@ export const useUndoRedo: UseUndoRedo = ({
     canRedo: !future.length,
   };
 };
-
-export default useUndoRedo;

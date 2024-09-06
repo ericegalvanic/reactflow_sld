@@ -324,6 +324,9 @@ const HomePage: React.FC = () => {
         onNodeDragStart={handleNodeDragStart}
         onConnectStart={handleNodeConnectStart}
         connectionLineType={EdgeType.Step}
+        defaultEdgeOptions={{
+          type: EdgeType.Step,
+        }}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
         {nodeToEdit && (

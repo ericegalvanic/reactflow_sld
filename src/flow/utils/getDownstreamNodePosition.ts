@@ -1,12 +1,18 @@
-import { Position } from '@/common/entities';
+import { Position, RFNode } from '@/common/entities';
+import { safeNumber } from '@/common/utils';
 
 const downstreamYOffsetPx = 100;
 
-export const getDownstreamNodePosition = (
-  upstreamNodePosition: Position
-): Position => {
+const downstreamYOffsetWithNodeWidthPx = 40;
+
+export const getDownstreamNodePosition = (upstreamNode: RFNode): Position => {
   return {
-    x: upstreamNodePosition.x,
-    y: upstreamNodePosition.y + downstreamYOffsetPx,
+    x: upstreamNode.position.x,
+    y:
+      upstreamNode.position.y +
+      Math.max(
+        downstreamYOffsetPx,
+        safeNumber(upstreamNode.height) + downstreamYOffsetWithNodeWidthPx
+      ),
   };
 };

@@ -110,13 +110,13 @@ const HomePage: React.FC = () => {
       const isUpstreamASubNode = isSubNode(upstreamNode);
 
       const downstreamNode = createNode(
-        getDownstreamNodePosition(upstreamNode.position),
+        getDownstreamNodePosition(upstreamNode),
         {
           type: isUpstreamASubNode
             ? nodeType.ResizableSubNode
             : nodeType.ResizableNode,
           data: {
-            label: `SC ${appNodes.length + 1}`,
+            label: `ASSET ${appNodes.length + 1}`,
           },
         }
       );

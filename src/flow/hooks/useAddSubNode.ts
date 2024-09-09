@@ -1,8 +1,9 @@
 import { CreateRFNodeDTO, RFNode } from '@/common/entities';
 import { Optional, SetState } from '@/common/types';
 import { useCallback } from 'react';
-import { node, nodeCenter } from '@/common/utils';
+import { node, parentNodeCenter } from '@/common/utils';
 import { nodeType } from '../entities';
+import { defaultSubnodeHeightPx, defaultSubnodeWidthPx } from '../constants';
 
 export const useAddSubNode = (setNodes: SetState<RFNode[]>) => {
   return useCallback(
@@ -18,7 +19,7 @@ export const useAddSubNode = (setNodes: SetState<RFNode[]>) => {
         parentId: parentNode.id,
         extent: 'parent',
         type: overriddenType ?? nodeType.ResizableSubNode,
-        position: overriddenPosition ?? nodeCenter(parentNode),
+        position: overriddenPosition ?? parentNodeCenter(parentNode),
         ...overriddenDefaultNodeCreateOptions,
       });
       setNodes((nodes) => {
@@ -29,8 +30,8 @@ export const useAddSubNode = (setNodes: SetState<RFNode[]>) => {
         } = overriddenDefaultNodeCreateOptions;
         newNode.data['label'] =
           overriddenData?.['label'] ?? `SC ${nodes.length + 1}`;
-        newNode.width = overriddenWidth ?? 48;
-        newNode.height = overriddenHeight ?? 48;
+        newNode.width = overriddenWidth ?? defaultSubnodeWidthPx;
+        newNode.height = overriddenHeight ?? defaultSubnodeHeightPx;
         return [...nodes, newNode];
       });
       return newNode;

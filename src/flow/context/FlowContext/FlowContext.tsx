@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { FlowContextData } from './FlowContext.entities';
 import { initialNodes, initialEdges } from './FlowContext.data';
-import { useFlowState } from '@/flow/hooks';
+import { useCopyPaste, useFlowState, useShortcut } from '@/flow/hooks';
 import { useHotKey } from '@/common/hooks';
 import dagre from '@dagrejs/dagre';
 import { RFEdge, RFNode } from '@/common/entities';
@@ -103,6 +103,21 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   const [flowDirection, setFlowDirection] = useState<FlowDirection>(
     flowDirectionEnum.vertical
   );
+  const { cut, copy, paste } = useCopyPaste();
+
+  const decoratedCut = (...args: Parameters<typeof cut>) => {
+    takeSnapshot();
+    cut(...args);
+  };
+
+  const decoratedPaste = (...args: Parameters<typeof paste>) => {
+    takeSnapshot();
+    paste(...args);
+  };
+
+  useShortcut(['Meta+x', 'Control+x'], decoratedCut);
+  useShortcut(['Meta+c', 'Control+c'], copy);
+  useShortcut(['Meta+v', 'Control+v'], decoratedPaste);
 
   const onLayout = useCallback(
     (direction: FlowDirection) => {

@@ -8,13 +8,14 @@ import {
 } from '@xyflow/react';
 import { SetState } from '@/common/types';
 import { edge, id, isSubNode } from '@/common/utils';
-import { flowViewMode, FlowViewMode } from '../entities';
+import { FlowEditMode, flowViewMode, FlowViewMode } from '../entities';
 import { useUndoRedo } from './useUndoRedo';
 
 export type FlowState = {
   nodes: RFNode[];
   edges: RFEdge[];
   viewMode: FlowViewMode;
+  editMode: FlowEditMode;
   stateId: string;
 };
 
@@ -98,6 +99,25 @@ export const useFlowState = (initialState: FlowState) => {
     [decoratedSetState]
   );
 
+  const setEditMode: SetState<FlowEditMode> = useCallback(
+    (editMode) => {
+      decoratedSetState((previous) => {
+        if (typeof editMode !== 'function') {
+          return {
+            ...previous,
+            editMode,
+          };
+        }
+
+        return {
+          ...previous,
+          editMode: editMode(previous.editMode),
+        };
+      });
+    },
+    [decoratedSetState]
+  );
+
   const onNodesChange = useCallback(
     (changes: NodeChange<RFNode>[]) => {
       decoratedSetState((prev) => ({
@@ -130,6 +150,7 @@ export const useFlowState = (initialState: FlowState) => {
     nodeState: [viewModeNodes, setNodes, onNodesChange],
     edgeState: [state.edges, setEdges, onEdgesChange],
     viewModeState: [state.viewMode, setViewMode],
+    editModeState: [state.editMode, setEditMode],
     history,
   } as const;
 };

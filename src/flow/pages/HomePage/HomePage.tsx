@@ -18,6 +18,7 @@ import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
+  flowEditMode,
   flowViewMode,
   nodeType,
   nodeTypeMap,
@@ -38,9 +39,11 @@ const HomePage: React.FC = () => {
     nodes: appNodes,
     edges: appEdges,
     viewMode: appViewMode,
+    editMode: appEditMode,
     setNodes,
     setEdges,
     setViewMode,
+    setEditMode,
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
     onLayout,
@@ -49,6 +52,8 @@ const HomePage: React.FC = () => {
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
   const [edgeMenu, setEdgeMenu] = useState<Nullable<EdgeContextMenu>>(null);
+
+  const changesEnabled = appEditMode === flowEditMode.unlocked;
 
   const {
     open: drawerOpen,
@@ -87,7 +92,7 @@ const HomePage: React.FC = () => {
   const createSubNode = useAddSubNode(setNodes);
 
   const handleNodeCreate = () => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
       takeSnapshot();
       const node = createNode(paneMenu.position);
       closePaneMenu();
@@ -96,7 +101,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleSubNodeCreate = (parentNode: RFNode) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       takeSnapshot();
       const subNode = createSubNode(parentNode);
       closeNodeMenu();
@@ -105,7 +110,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       takeSnapshot();
       const isUpstreamASubNode = isSubNode(upstreamNode);
 
@@ -127,7 +132,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleNodeDelete = (nodeId: string) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       takeSnapshot();
       deleteNode(nodeId);
       closeNodeMenu();
@@ -135,7 +140,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleEdgeDelete = (edgeId: string) => {
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
       takeSnapshot();
       deleteEdge(edgeId);
       closeEdgeMenu();
@@ -143,20 +148,20 @@ const HomePage: React.FC = () => {
   };
 
   const handlePaneClick = () => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
       closePaneMenu();
     }
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       closeNodeMenu();
     }
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
       closeEdgeMenu();
     }
     closeDrawer();
   };
 
   const handlePaneContextMenu: typeof openPaneMenu = (event) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       closeNodeMenu();
       return;
     }
@@ -164,7 +169,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleNodeContextMenu: typeof openNodeMenu = (event, node) => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
       closePaneMenu();
       return;
     }
@@ -172,7 +177,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleEdgeContextMenu: typeof openEdgeMenu = (event, edge) => {
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
       closeEdgeMenu();
       return;
     }
@@ -182,12 +187,20 @@ const HomePage: React.FC = () => {
   const handleNodeEditSave: NonNullable<NodeEditFormProps['onSave']> = (
     updatedNode
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     takeSnapshot();
     updateNode(updatedNode);
     closeDrawer();
   };
 
   const handleEdgeEditSave: EdgeEditModalProps['onSave'] = (edge) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     takeSnapshot();
     updateEdge(edge);
     closeEdgeEditModal();
@@ -197,6 +210,10 @@ const HomePage: React.FC = () => {
     event,
     node
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     openDrawer(node);
   };
 
@@ -204,6 +221,10 @@ const HomePage: React.FC = () => {
     event,
     edge
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
   };
 
@@ -287,13 +308,29 @@ const HomePage: React.FC = () => {
     takeSnapshot();
   };
 
+  const handleToggleEditMode: NonNullable<
+    FlowPaneProps['onToggleEditMode']
+  > = () => {
+    setEditMode((previous) => {
+      if (previous === flowEditMode.locked) {
+        return flowEditMode.unlocked;
+      }
+
+      return flowEditMode.locked;
+    });
+  };
+
   return (
     <>
       <FlowPane
+        draggable={changesEnabled}
+        nodesDraggable={changesEnabled}
+        edgesReconnectable={changesEnabled}
         ref={paneRef}
         nodes={appNodes}
         edges={appEdges}
         viewMode={appViewMode}
+        editMode={appEditMode}
         setNodes={setNodes}
         setEdges={setEdges}
         onNodesChange={onAppNodesChange}
@@ -323,13 +360,14 @@ const HomePage: React.FC = () => {
         onImportFlow={handleImportFlow}
         onNodeDragStart={handleNodeDragStart}
         onConnectStart={handleNodeConnectStart}
+        onToggleEditMode={handleToggleEditMode}
         connectionLineType={EdgeType.Step}
         defaultEdgeOptions={{
           type: EdgeType.Step,
         }}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
-        {nodeToEdit && (
+        {nodeToEdit && changesEnabled && (
           <NodeEditForm node={nodeToEdit} onSave={handleNodeEditSave} />
         )}
       </PaneDrawer>

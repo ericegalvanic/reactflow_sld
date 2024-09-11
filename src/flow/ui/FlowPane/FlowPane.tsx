@@ -4,12 +4,15 @@ import Minimap from '@/common/ui/Minimap';
 import ReactFlow, { ReactFlowProps } from '@/common/ui/ReactFlow';
 import {
   EdgeContextMenu as EdgeContextMenuType,
+  FlowEditMode,
+  flowEditModeNameMap,
   flowDirection,
   flowDirectionNameMap,
   FlowViewMode,
   flowViewModeNameMap,
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
+  flowEditMode,
 } from '@/flow/entities';
 import {
   ChangeEventHandler,
@@ -34,6 +37,7 @@ export type FlowPaneProps = {
   nodes: RFNode[];
   edges: RFEdge[];
   viewMode: FlowViewMode;
+  editMode: FlowEditMode;
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   onNodeCreate?: () => void;
@@ -46,6 +50,7 @@ export type FlowPaneProps = {
   onToggleViewMode?: MouseEventHandler<HTMLButtonElement>;
   onExportFlow?: MouseEventHandler<HTMLButtonElement>;
   onImportFlow?: ChangeEventHandler<HTMLInputElement>;
+  onToggleEditMode?: MouseEventHandler<HTMLButtonElement>;
 } & ReactFlowProps;
 
 const FlowPane = forwardRef(
@@ -58,6 +63,7 @@ const FlowPane = forwardRef(
       edgeMenu,
       onEdgeDelete,
       viewMode,
+      editMode,
       onCreateDownstreamAsset,
       onSubNodeCreate,
       onHorizontalClick,
@@ -65,11 +71,14 @@ const FlowPane = forwardRef(
       onToggleViewMode,
       onExportFlow,
       onImportFlow,
+      onToggleEditMode,
       ...rfProps
     }: FlowPaneProps,
     ref: ForwardedRef<ElementRef<typeof ReactFlow>>
   ) => {
     const fileInputRef = useRef<ElementRef<'input'>>(null);
+
+    const changesEnabled = editMode === flowEditMode.unlocked;
 
     const handleImportFlow: MouseEventHandler<HTMLButtonElement> = () => {
       fileInputRef.current?.click();
@@ -80,10 +89,10 @@ const FlowPane = forwardRef(
         <ReactFlow ref={ref} {...rfProps}>
           <Background gap={snapGrid} />
           <Minimap />
-          {paneMenu && (
+          {paneMenu && changesEnabled && (
             <PaneContextMenu onNodeCreate={onNodeCreate} {...paneMenu} />
           )}
-          {nodeMenu && (
+          {nodeMenu && changesEnabled && (
             <NodeContextMenu
               onNodeDelete={onNodeDelete}
               onCreateDownstreamAsset={onCreateDownstreamAsset}
@@ -91,14 +100,11 @@ const FlowPane = forwardRef(
               {...nodeMenu}
             />
           )}
-          {edgeMenu && (
+          {edgeMenu && changesEnabled && (
             <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />
           )}
           {(onHorizontalClick || onVerticalClick) && (
-            <FlowPanelStyled
-              position="top-right"
-              style={{ display: 'flex', gap: 4 }}
-            >
+            <FlowPanelStyled position="top-right">
               {onVerticalClick && (
                 <Button onClick={onVerticalClick} variant="contained">
                   {flowDirectionNameMap[flowDirection.vertical]}
@@ -111,11 +117,11 @@ const FlowPane = forwardRef(
               )}
             </FlowPanelStyled>
           )}
-          {(onToggleViewMode || onExportFlow || onImportFlow) && (
-            <FlowPanelStyled
-              position="bottom-left"
-              style={{ display: 'flex', gap: 4 }}
-            >
+          {(onToggleViewMode ||
+            onExportFlow ||
+            onImportFlow ||
+            onToggleEditMode) && (
+            <FlowPanelStyled position="bottom-left">
               {onToggleViewMode && (
                 <Button variant="contained" onClick={onToggleViewMode}>
                   {flowViewModeNameMap[viewMode]}
@@ -134,6 +140,11 @@ const FlowPane = forwardRef(
                     onChange={onImportFlow}
                   />
                   Import
+                </Button>
+              )}
+              {onToggleEditMode && (
+                <Button variant="contained" onClick={onToggleEditMode}>
+                  {flowEditModeNameMap[editMode]}
                 </Button>
               )}
             </FlowPanelStyled>

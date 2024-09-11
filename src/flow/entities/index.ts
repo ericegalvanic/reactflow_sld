@@ -6,3 +6,4 @@ export * from './SnapGrid';
 export * from './FlowDirection';
 export * from './FlowViewMode';
 export * from './KeyCode';
+export * from './EditMode';

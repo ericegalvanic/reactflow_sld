@@ -19,3 +19,5 @@ export * from './useNodeHandlePosition';
 export * from './useKeyPress';
 export * from './useShortcut';
 export * from './useCopyPaste';
+export * from './useUpdateNodeInternals';
+export * from './useRotatableNode';

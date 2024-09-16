@@ -11,3 +11,5 @@ export * from './RFPosition';
 export * from './FlowSave';
 export * from './CSSFunction';
 export * from './HasId';
+export * from './IsNodeComponent';
+export * from './NodeComponentProps';

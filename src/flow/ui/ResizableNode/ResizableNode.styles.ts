@@ -8,3 +8,31 @@ export const NodeCoreStyled = styled('div')`
   justify-content: center;
   align-items: center;
 `;
+
+export const NodeRotatableBase = styled('div')<{ rotation: number }>`
+  transform: rotate(${(props) => props.rotation}deg);
+`;
+
+export const NodeRotationHandle = styled('div')<{ rotatable: boolean }>`
+  display: ${(props) => (props.rotatable ? 'block' : 'none')};
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #3367d9;
+  left: 50%;
+  top: -30px;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  cursor: alias;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 30px;
+    background: #3367d9;
+    left: 4px;
+    top: 5px;
+  }
+`;

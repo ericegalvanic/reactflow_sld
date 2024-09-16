@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { NodeResizeControl } from '@xyflow/react';
 import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled } from './ResizableSubNode.styles';
+import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 
 export type ResizableSubNodeProps = {
   data: {
@@ -9,7 +10,7 @@ export type ResizableSubNodeProps = {
   };
 };
 
-const ResizableSubNode: React.FC<ResizableSubNodeProps> = ({ data }) => {
+const ResizableSubNode = NodeComponent<ResizableSubNodeProps>(({ data }) => {
   return (
     <>
       <NodeResizeControl
@@ -20,6 +21,6 @@ const ResizableSubNode: React.FC<ResizableSubNodeProps> = ({ data }) => {
       <NodeCoreStyled>{data.label}</NodeCoreStyled>
     </>
   );
-};
+});
 
 export default memo(ResizableSubNode);

@@ -13,7 +13,7 @@ import {
   useAddSubNode,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
-import { addEdge } from '@xyflow/react';
+import { addEdge, NodeTypes } from '@xyflow/react';
 import {
   EdgeContextMenu,
   NodeContextMenu,
@@ -336,7 +336,7 @@ const HomePage: React.FC = () => {
         onNodesChange={onAppNodesChange}
         onEdgesChange={onAppEdgesChange}
         onConnect={onAppEdgesConnect}
-        nodeTypes={nodeTypeMap}
+        nodeTypes={nodeTypeMap as unknown as NodeTypes}
         onContextMenu={handlePaneContextMenu}
         onNodeContextMenu={handleNodeContextMenu}
         onEdgeContextMenu={handleEdgeContextMenu}

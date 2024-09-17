@@ -26,6 +26,7 @@ export const FlowContext = createContext<FlowContextData>({
   flowDirection: flowDirectionEnum.vertical,
   viewMode: flowViewMode.enhanced,
   editMode: flowEditMode.unlocked,
+  changesEnabled: false,
   setNodes: () => {},
   setEdges: () => {},
   setFlowDirection: () => {},
@@ -139,6 +140,11 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   useHotKey(['Ctrl', 'Z'], prevState);
   useHotKey(['Ctrl', 'Y'], nextState);
 
+  const changesEnabled = useMemo(
+    () => editMode === flowEditMode.unlocked,
+    [editMode]
+  );
+
   const providerValue = useMemo(
     (): FlowContextData => ({
       nodes,
@@ -155,6 +161,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       onEdgesChange,
       onLayout,
       takeSnapshot,
+      changesEnabled,
     }),
     [
       nodes,
@@ -170,6 +177,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       onEdgesChange,
       onLayout,
       takeSnapshot,
+      changesEnabled,
     ]
   );
 

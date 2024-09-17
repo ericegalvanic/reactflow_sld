@@ -22,6 +22,14 @@ export const useRotatableNode = (
   const [rotatable, setRotatable] = useState(!!namedParams.rotatable);
 
   useEffect(() => {
+    setRotatable(!!namedParams.rotatable);
+  }, [namedParams]);
+
+  useEffect(() => {
+    setResizable(!!namedParams.resizable);
+  }, [namedParams]);
+
+  useEffect(() => {
     if (!rotateControlRef.current) {
       return;
     }

@@ -40,6 +40,7 @@ const HomePage: React.FC = () => {
     edges: appEdges,
     viewMode: appViewMode,
     editMode: appEditMode,
+    changesEnabled,
     setNodes,
     setEdges,
     setViewMode,
@@ -52,8 +53,6 @@ const HomePage: React.FC = () => {
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
   const [edgeMenu, setEdgeMenu] = useState<Nullable<EdgeContextMenu>>(null);
-
-  const changesEnabled = appEditMode === flowEditMode.unlocked;
 
   const {
     open: drawerOpen,
@@ -323,7 +322,6 @@ const HomePage: React.FC = () => {
   return (
     <>
       <FlowPane
-        draggable={changesEnabled}
         nodesDraggable={changesEnabled}
         edgesReconnectable={changesEnabled}
         ref={paneRef}

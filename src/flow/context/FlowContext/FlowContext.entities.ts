@@ -9,6 +9,7 @@ export type FlowContextData = {
   flowDirection: FlowDirection;
   viewMode: FlowViewMode;
   editMode: FlowEditMode;
+  changesEnabled: boolean;
   setNodes: SetState<RFNode[]>;
   setEdges: SetState<RFEdge[]>;
   setFlowDirection: SetState<FlowDirection>;

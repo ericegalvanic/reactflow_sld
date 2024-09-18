@@ -13,3 +13,5 @@ export * from './CSSFunction';
 export * from './HasId';
 export * from './IsNodeComponent';
 export * from './NodeComponentProps';
+export * from './HelperLineInfoObject';
+export * from './NodePositionChange';

@@ -1,4 +1,5 @@
-import { HelperLineInfoObject, NodePositionChange, RFNode } from '../entities';
+import { NodePositionChange, RFNode } from '@/common/entities';
+import { HelperLineInfoObject } from '../entities';
 
 export function helperLines(
   change: NodePositionChange,

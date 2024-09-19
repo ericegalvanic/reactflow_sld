@@ -27,11 +27,15 @@ export const FlowContext = createContext<FlowContextData>({
   viewMode: flowViewMode.enhanced,
   editMode: flowEditMode.unlocked,
   changesEnabled: false,
+  horizontalHelperLine: undefined,
+  verticalHelperLine: undefined,
   setNodes: () => {},
   setEdges: () => {},
   setFlowDirection: () => {},
   setViewMode: () => {},
   setEditMode: () => {},
+  setHorizontalHelperLine: () => {},
+  setVerticalHelperLine: () => {},
   onNodesChange: () => {},
   onEdgesChange: () => {},
   onLayout: () => {},
@@ -98,6 +102,8 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
     edgeState: [edges, setEdges, onEdgesChange],
     viewModeState: [viewMode, setViewMode],
     editModeState: [editMode, setEditMode],
+    horizontalHelperLineState: [horizontalHelperLine, setHorizontalHelperLine],
+    verticalHelperLineState: [verticalHelperLine, setVerticalHelperLine],
     history: { undo: prevState, redo: nextState, takeSnapshot },
   } = useFlowState({
     nodes: layoutedNodes,
@@ -109,6 +115,7 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   const [flowDirection, setFlowDirection] = useState<FlowDirection>(
     flowDirectionEnum.vertical
   );
+
   const { cut, copy, paste } = useCopyPaste();
 
   const decoratedCut = (...args: Parameters<typeof cut>) => {
@@ -152,11 +159,15 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       flowDirection,
       viewMode,
       editMode,
+      horizontalHelperLine,
+      verticalHelperLine,
       setNodes,
       setEdges,
       setFlowDirection,
       setViewMode,
       setEditMode,
+      setHorizontalHelperLine,
+      setVerticalHelperLine,
       onNodesChange,
       onEdgesChange,
       onLayout,
@@ -169,10 +180,14 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
       flowDirection,
       viewMode,
       editMode,
+      horizontalHelperLine,
+      verticalHelperLine,
       setNodes,
       setEdges,
       setViewMode,
       setEditMode,
+      setHorizontalHelperLine,
+      setVerticalHelperLine,
       onNodesChange,
       onEdgesChange,
       onLayout,

@@ -17,4 +17,3 @@ export * from './assertIsFlowSave';
 export * from './parentNodeCenter';
 export * from './safeNumber';
 export * from './CSSRotation';
-export * from './helperLines';

@@ -40,6 +40,8 @@ const HomePage: React.FC = () => {
     edges: appEdges,
     viewMode: appViewMode,
     editMode: appEditMode,
+    horizontalHelperLine,
+    verticalHelperLine,
     changesEnabled,
     setNodes,
     setEdges,
@@ -331,6 +333,8 @@ const HomePage: React.FC = () => {
         editMode={appEditMode}
         setNodes={setNodes}
         setEdges={setEdges}
+        horizontalHelperLine={horizontalHelperLine}
+        verticalHelperLine={verticalHelperLine}
         onNodesChange={onAppNodesChange}
         onEdgesChange={onAppEdgesChange}
         onConnect={onAppEdgesConnect}

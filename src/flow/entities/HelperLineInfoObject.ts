@@ -1,4 +1,4 @@
-import { Position } from './Position';
+import { Position } from '@/common/entities';
 
 export type HelperLineInfoObject = {
   horizontal?: number;

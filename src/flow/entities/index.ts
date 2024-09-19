@@ -7,3 +7,5 @@ export * from './FlowDirection';
 export * from './FlowViewMode';
 export * from './KeyCode';
 export * from './EditMode';
+export * from './HelperLine';
+export * from './HelperLineInfoObject';

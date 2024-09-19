@@ -13,6 +13,7 @@ import {
   NodeContextMenu as NodeContextMenuType,
   PaneContextMenu as PaneContextMenuType,
   flowEditMode,
+  HelperLine,
 } from '@/flow/entities';
 import {
   ChangeEventHandler,
@@ -29,6 +30,7 @@ import { snapGrid } from '@/flow/constants';
 import EdgeContextMenu from '../EdgeContextMenu';
 import Button from '@/common/ui/Button';
 import { FileInputStyled, FlowPanelStyled } from './FlowPane.styles';
+import HelperLines from '../HelperLines';
 
 export type FlowPaneProps = {
   paneMenu: Nullable<PaneContextMenuType>;
@@ -36,6 +38,8 @@ export type FlowPaneProps = {
   edgeMenu: Nullable<EdgeContextMenuType>;
   nodes: RFNode[];
   edges: RFEdge[];
+  horizontalHelperLine: HelperLine;
+  verticalHelperLine: HelperLine;
   viewMode: FlowViewMode;
   editMode: FlowEditMode;
   setNodes: SetState<RFNode[]>;
@@ -64,6 +68,8 @@ const FlowPane = forwardRef(
       onEdgeDelete,
       viewMode,
       editMode,
+      horizontalHelperLine,
+      verticalHelperLine,
       onCreateDownstreamAsset,
       onSubNodeCreate,
       onHorizontalClick,
@@ -89,6 +95,10 @@ const FlowPane = forwardRef(
         <ReactFlow ref={ref} {...rfProps}>
           <Background gap={snapGrid} />
           <Minimap />
+          <HelperLines
+            horizontal={horizontalHelperLine}
+            vertical={verticalHelperLine}
+          />
           {paneMenu && changesEnabled && (
             <PaneContextMenu onNodeCreate={onNodeCreate} {...paneMenu} />
           )}

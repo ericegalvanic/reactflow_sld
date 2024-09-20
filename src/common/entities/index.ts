@@ -14,3 +14,4 @@ export * from './HasId';
 export * from './IsNodeComponent';
 export * from './NodeComponentProps';
 export * from './NodePositionChange';
+export * from './AppImage';

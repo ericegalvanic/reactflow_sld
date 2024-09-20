@@ -9,3 +9,4 @@ export * from './KeyCode';
 export * from './EditMode';
 export * from './HelperLine';
 export * from './HelperLineInfoObject';
+export * from './NodeClassType';

@@ -1,5 +1,6 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { edge, node } from '@/common/utils';
+import { nodeImageMap } from '@/flow/data/nodeImageMap';
 import { nodeType } from '@/flow/entities';
 
 export const initialNodes: RFNode[] = [
@@ -15,8 +16,15 @@ export const initialNodes: RFNode[] = [
     position: { x: 100, y: 150 },
     data: { label: 'ASSET 2' },
   }),
+  node({
+    id: '3',
+    type: nodeType.ImageNode,
+    position: { x: 100, y: 250 },
+    data: { image: nodeImageMap.MISC },
+  }),
 ];
 
 export const initialEdges: RFEdge[] = [
   edge({ id: 'e1-2', source: '1', target: '2' }),
+  edge({ id: 'e2-3', source: '2', target: '3' }),
 ];

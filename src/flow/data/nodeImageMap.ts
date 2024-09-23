@@ -9,8 +9,8 @@ import Transformers from 'public/transformers.png';
 import UPSSystems from 'public/ups_systems.jpg';
 import { NodeClassType, nodeClassType } from '../entities';
 
-const nodeImageWidthPx = 48;
-const nodeImageHeightPx = 48;
+const nodeImageWidthPx = 24;
+const nodeImageHeightPx = 24;
 
 const fallbackNodeImage: AppImage = {
   src: Others,

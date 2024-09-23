@@ -1,7 +1,7 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { edge, node } from '@/common/utils';
 import { nodeImageMap } from '@/flow/data/nodeImageMap';
-import { nodeType } from '@/flow/entities';
+import { nodeClassType, nodeType } from '@/flow/entities';
 
 export const initialNodes: RFNode[] = [
   node({
@@ -20,7 +20,10 @@ export const initialNodes: RFNode[] = [
     id: '3',
     type: nodeType.ImageNode,
     position: { x: 100, y: 250 },
-    data: { image: nodeImageMap.MISC },
+    data: {
+      image: nodeImageMap[nodeClassType.misc],
+      class: nodeClassType.misc,
+    },
   }),
 ];
 

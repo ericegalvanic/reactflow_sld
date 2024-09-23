@@ -8,10 +8,12 @@ import {
 } from './ImageNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage } from '@/common/entities';
+import { NodeClassType } from '@/flow/entities';
 
 export type ImageNodeProps = {
   data: {
     image: AppImage;
+    class: NodeClassType;
   };
 };
 

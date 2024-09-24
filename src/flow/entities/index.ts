@@ -10,4 +10,5 @@ export * from './EditMode';
 export * from './HelperLine';
 export * from './HelperLineInfoObject';
 export * from './NodeClassType';
-export * from './HomogenousNodeClass';
+export * from './HeterogenousNodeClass';
+export * from './NodeClassCode';

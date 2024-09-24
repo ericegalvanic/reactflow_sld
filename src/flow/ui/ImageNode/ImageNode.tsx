@@ -2,18 +2,20 @@ import { memo } from 'react';
 import { Handle, NodeResizeControl } from '@xyflow/react';
 import { defaultControlStyle } from '@/flow/constants';
 import {
+  NodeClassCodeWrapperStyled,
   NodeCoreStyled,
-  NodeRotatableBase,
-  NodeRotationHandle,
+  NodeRotatableBaseStyled,
+  NodeRotationHandleStyled,
 } from './ImageNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage } from '@/common/entities';
-import { NodeClassType } from '@/flow/entities';
+import { NodeClassCode, NodeClassType } from '@/flow/entities';
 
 export type ImageNodeProps = {
   data: {
     image: AppImage;
     class: NodeClassType;
+    code: NodeClassCode;
   };
 };
 
@@ -27,25 +29,27 @@ const ImageNode = NodeComponent<ImageNodeProps>(
     rotateControlRef,
   }) => {
     const { src, alt, width, height } = data.image;
+    const code = data.code;
 
     return (
-      <NodeRotatableBase rotation={rotation}>
+      <NodeRotatableBaseStyled rotation={rotation}>
         <NodeResizeControl
           style={defaultControlStyle}
           minWidth={100}
           minHeight={50}
         ></NodeResizeControl>
-        <NodeRotationHandle
+        <NodeRotationHandleStyled
           ref={rotateControlRef}
           rotatable={rotatable}
           className="nodrag"
-        ></NodeRotationHandle>
+        ></NodeRotationHandleStyled>
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <img src={src} alt={alt} width={width} height={height} />
+          <NodeClassCodeWrapperStyled>{code}</NodeClassCodeWrapperStyled>
         </NodeCoreStyled>
         <Handle type="source" position={sourceNodePosition} />
-      </NodeRotatableBase>
+      </NodeRotatableBaseStyled>
     );
   }
 );

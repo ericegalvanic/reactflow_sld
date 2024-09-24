@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
 
 export const NodeCoreStyled = styled('div')`
+  position: relative;
   padding: 16px 64px;
   height: 100%;
   width: 100%;
@@ -9,7 +10,7 @@ export const NodeCoreStyled = styled('div')`
   align-items: center;
 `;
 
-export const NodeRotatableBase = styled('div')<{ rotation: number }>`
+export const NodeRotatableBaseStyled = styled('div')<{ rotation: number }>`
   transform: rotate(${(props) => props.rotation}deg);
   height: 100%;
   width: 100%;
@@ -18,7 +19,7 @@ export const NodeRotatableBase = styled('div')<{ rotation: number }>`
   border-radius: 4px;
 `;
 
-export const NodeRotationHandle = styled('div')<{ rotatable: boolean }>`
+export const NodeRotationHandleStyled = styled('div')<{ rotatable: boolean }>`
   display: ${(props) => (props.rotatable ? 'block' : 'none')};
   position: absolute;
   width: 10px;
@@ -40,4 +41,11 @@ export const NodeRotationHandle = styled('div')<{ rotatable: boolean }>`
     left: 4px;
     top: 5px;
   }
+`;
+
+export const NodeClassCodeWrapperStyled = styled('p')`
+  margin: 0;
+  position: absolute;
+  left: 4px;
+  bottom: 2px;
 `;

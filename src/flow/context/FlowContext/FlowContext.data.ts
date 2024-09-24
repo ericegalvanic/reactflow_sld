@@ -1,7 +1,7 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { edge, node } from '@/common/utils';
 import { nodeImageMap } from '@/flow/data/nodeImageMap';
-import { nodeClassType, nodeType } from '@/flow/entities';
+import { nodeClassCode, nodeClassType, nodeType } from '@/flow/entities';
 
 export const initialNodes: RFNode[] = [
   node({
@@ -23,6 +23,7 @@ export const initialNodes: RFNode[] = [
     data: {
       image: nodeImageMap[nodeClassType.misc],
       class: nodeClassType.misc,
+      code: nodeClassCode.AMCB,
     },
   }),
 ];

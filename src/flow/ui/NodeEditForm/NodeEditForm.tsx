@@ -157,7 +157,9 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       ? isTopLevelNode
         ? nodeType.ResizableNode
         : nodeType.ResizableSubNode
-      : nodeType.ImageNode;
+      : isTopLevelNode
+      ? nodeType.ImageNode
+      : nodeType.ImageSubNode;
 
     onSave?.(
       createNode({

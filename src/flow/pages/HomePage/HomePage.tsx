@@ -18,13 +18,13 @@ import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
+  flowDirection,
   flowEditMode,
   flowViewMode,
   nodeType,
   nodeTypeMap,
 } from '@/flow/entities';
 import { Nullable } from '@/common/types';
-import { snapGrid } from '@/flow/constants';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
@@ -230,11 +230,11 @@ const HomePage: React.FC = () => {
   };
 
   const onVerticalClick = () => {
-    onLayout('TB');
+    onLayout(flowDirection.vertical);
   };
 
   const onHorizontalClick = () => {
-    onLayout('LR');
+    onLayout(flowDirection.vertical);
   };
 
   const toggleViewMode: NonNullable<FlowPaneProps['onToggleViewMode']> = () => {
@@ -353,8 +353,6 @@ const HomePage: React.FC = () => {
         onEdgeClick={handleEdgeClick}
         onCreateDownstreamAsset={handleCreateDownstreamAsset}
         onSubNodeCreate={handleSubNodeCreate}
-        snapToGrid
-        snapGrid={snapGrid}
         onVerticalClick={onVerticalClick}
         onHorizontalClick={onHorizontalClick}
         onToggleViewMode={toggleViewMode}

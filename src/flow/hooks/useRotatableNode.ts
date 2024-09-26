@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useUpdateNodeInternals } from './useUpdateNodeInternals';
 import { drag } from 'd3-drag';
 import { select } from 'd3-selection';
+import { useNode } from './useNode';
 
 export type UseRotatableNodeNamedParams = {
   resizable?: boolean;
@@ -20,6 +21,8 @@ export const useRotatableNode = (
   const [rotation, setRotation] = useState(0);
   const [resizable, setResizable] = useState(!!namedParams.resizable);
   const [rotatable, setRotatable] = useState(!!namedParams.rotatable);
+
+  const { node, updateNode } = useNode(nodeId);
 
   useEffect(() => {
     setRotatable(!!namedParams.rotatable);
@@ -42,11 +45,18 @@ export const useRotatableNode = (
       const deg = rad * (180 / Math.PI);
       setRotation(180 - deg);
       updateNodeInternals(nodeId);
+      updateNode?.({
+        ...node,
+        data: {
+          ...node.data,
+          rotation: 180 - deg,
+        },
+      });
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selection.call(dragHandler as any);
-  }, [nodeId, updateNodeInternals]);
+  }, [node, nodeId, updateNode, updateNodeInternals]);
 
   return {
     rotation,

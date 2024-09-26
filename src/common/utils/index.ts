@@ -22,3 +22,4 @@ export * from './isAppImage';
 export * from './hasClassType';
 export * from './isTextAssetClass';
 export * from './nodeClassCode';
+export * from './assertExistence';

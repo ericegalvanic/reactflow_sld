@@ -21,3 +21,5 @@ export * from './useShortcut';
 export * from './useCopyPaste';
 export * from './useUpdateNodeInternals';
 export * from './useRotatableNode';
+export * from './useNode';
+export * from './useParentRotation';

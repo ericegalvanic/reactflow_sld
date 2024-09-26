@@ -6,7 +6,11 @@ import {
   NodeFC,
 } from '@/common/entities';
 import { useFlow } from '@/flow/context';
-import { useNodeHandlePosition, useRotatableNode } from '@/flow/hooks';
+import {
+  useNodeHandlePosition,
+  useParentRotation,
+  useRotatableNode,
+} from '@/flow/hooks';
 
 const NodeComponent = <P = {},>(
   OriginalNodeComponent: NodeFC<P & HasId>
@@ -18,12 +22,14 @@ const NodeComponent = <P = {},>(
     const rotatableNodeHookData = useRotatableNode(props.id, {
       rotatable: changesEnabled,
     });
+    const parentRotation = useParentRotation(props.id);
 
     return (
       <OriginalNodeComponent
         {...props}
         {...nodeHandlePositionHookData}
         {...rotatableNodeHookData}
+        parentRotation={parentRotation}
       />
     );
   });

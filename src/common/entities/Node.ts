@@ -12,3 +12,5 @@ export type CreateRFNodeDTO = Optional<
   Retype<Optional<RFNode, 'id'>, 'type', NodeType, true>,
   'data'
 >;
+
+export type UpdateRFNodeDTO = RFNode;

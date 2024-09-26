@@ -18,24 +18,26 @@ export type ImageSubNodeProps = {
   };
 };
 
-const ImageSubNode = NodeComponent<ImageSubNodeProps>(({ data }) => {
-  const { src, alt, width, height } = data.image;
-  const code = data.code;
+const ImageSubNode = NodeComponent<ImageSubNodeProps>(
+  ({ data, parentRotation }) => {
+    const { src, alt, width, height } = data.image;
+    const code = data.code;
 
-  return (
-    <NodeRotatableBaseStyled>
-      <NodeResizeControl
-        style={defaultControlStyle}
-        minWidth={100}
-        minHeight={50}
-      ></NodeResizeControl>
+    return (
+      <NodeRotatableBaseStyled rotation={parentRotation ?? 0}>
+        <NodeResizeControl
+          style={defaultControlStyle}
+          minWidth={100}
+          minHeight={50}
+        ></NodeResizeControl>
 
-      <NodeCoreStyled>
-        <img src={src} alt={alt} width={width} height={height} />
-        <NodeClassCodeWrapperStyled>{code}</NodeClassCodeWrapperStyled>
-      </NodeCoreStyled>
-    </NodeRotatableBaseStyled>
-  );
-});
+        <NodeCoreStyled>
+          <img src={src} alt={alt} width={width} height={height} />
+          <NodeClassCodeWrapperStyled>{code}</NodeClassCodeWrapperStyled>
+        </NodeCoreStyled>
+      </NodeRotatableBaseStyled>
+    );
+  }
+);
 
 export default memo(ImageSubNode);

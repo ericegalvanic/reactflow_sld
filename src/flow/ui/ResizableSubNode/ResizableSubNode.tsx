@@ -10,18 +10,20 @@ export type ResizableSubNodeProps = {
   };
 };
 
-const ResizableSubNode = NodeComponent<ResizableSubNodeProps>(({ data }) => {
-  return (
-    <NodeRotatableBase>
-      <NodeResizeControl
-        style={defaultControlStyle}
-        minWidth={48}
-        minHeight={48}
-      ></NodeResizeControl>
+const ResizableSubNode = NodeComponent<ResizableSubNodeProps>(
+  ({ data, parentRotation }) => {
+    return (
+      <NodeRotatableBase rotation={parentRotation ?? 0}>
+        <NodeResizeControl
+          style={defaultControlStyle}
+          minWidth={48}
+          minHeight={48}
+        ></NodeResizeControl>
 
-      <NodeCoreStyled>{data.label}</NodeCoreStyled>
-    </NodeRotatableBase>
-  );
-});
+        <NodeCoreStyled>{data.label}</NodeCoreStyled>
+      </NodeRotatableBase>
+    );
+  }
+);
 
 export default memo(ResizableSubNode);

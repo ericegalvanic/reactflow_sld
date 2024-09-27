@@ -1,5 +1,5 @@
-import { RFNode } from '../entities';
-import { formattedId } from './id';
+import { RFNode } from '../../common/entities';
+import { formattedId } from '../../common/utils/id';
 import { nodeName } from './nodeName';
 
 export const displayNode = (node: RFNode) =>

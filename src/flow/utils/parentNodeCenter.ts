@@ -2,8 +2,8 @@ import {
   defaultSubnodeHeightPx,
   defaultSubnodeWidthPx,
 } from '@/flow/constants';
-import { Position, RFNode } from '../entities';
-import { safeNumber } from './safeNumber';
+import { Position, RFNode } from '../../common/entities';
+import { safeNumber } from '../../common/utils/safeNumber';
 
 const noOffsetPx = 0;
 

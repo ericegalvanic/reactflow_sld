@@ -1,5 +1,5 @@
 import { RFEdge, RFNode } from '@/common/entities';
-import { edge, node } from '@/common/utils';
+import { edge, node } from '@/flow/utils';
 import { nodeImageMap } from '@/flow/data/nodeImageMap';
 import { nodeClassCode, nodeClassType, nodeType } from '@/flow/entities';
 

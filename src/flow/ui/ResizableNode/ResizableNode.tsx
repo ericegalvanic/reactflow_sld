@@ -8,11 +8,13 @@ import {
 } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 
-export type ResizableNodeProps = {
+export type ResizableNodeData = {
   data: {
     label: string;
   };
 };
+
+export type ResizableNodeProps = ResizableNodeData;
 
 const ResizableNode = NodeComponent<ResizableNodeProps>(
   ({

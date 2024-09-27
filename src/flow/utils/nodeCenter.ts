@@ -1,4 +1,4 @@
-import { Position, RFNode } from '../entities';
+import { Position, RFNode } from '../../common/entities';
 
 export const nodeCenter = (node: RFNode): Position => ({
   x: node.position.x + (node.width ?? 0) / 2,

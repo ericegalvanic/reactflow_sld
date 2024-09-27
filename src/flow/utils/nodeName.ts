@@ -1,4 +1,4 @@
-import { RFNode, NativeNode } from '../entities';
+import { RFNode, NativeNode } from '../../common/entities';
 
 export type NodeName<N extends NativeNode> = N extends {
   data: { label: infer TNodeName };

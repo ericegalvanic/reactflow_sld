@@ -11,13 +11,15 @@ import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage } from '@/common/entities';
 import { NodeClassCode, NodeClassType } from '@/flow/entities';
 
-export type ImageNodeProps = {
+export type ImageNodeData = {
   data: {
     image: AppImage;
     class: NodeClassType;
     code: NodeClassCode;
   };
 };
+
+export type ImageNodeProps = ImageNodeData;
 
 const ImageNode = NodeComponent<ImageNodeProps>(
   ({

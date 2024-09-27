@@ -12,7 +12,9 @@ export type NotFoundNodeData = {
   updateNode: null;
 };
 
-export const useNode = (nodeId: string): FoundNodeData | NotFoundNodeData => {
+export type FoundNodeDataUnion = FoundNodeData | NotFoundNodeData;
+
+export const useNode = (nodeId: string): FoundNodeDataUnion => {
   const { nodes, setNodes } = useFlow();
 
   const targetNode = useMemo(

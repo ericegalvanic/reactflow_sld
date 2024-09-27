@@ -1,7 +1,7 @@
 import { CreateRFNodeDTO, RFNode } from '@/common/entities';
 import { Optional, SetState } from '@/common/types';
 import { useCallback } from 'react';
-import { node, parentNodeCenter } from '@/common/utils';
+import { node, parentNodeCenter } from '@/flow/utils';
 import { nodeType } from '../entities';
 import { defaultSubnodeHeightPx, defaultSubnodeWidthPx } from '../constants';
 

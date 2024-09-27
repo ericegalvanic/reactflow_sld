@@ -1,6 +1,6 @@
 import { nodeType } from '@/flow/entities';
-import { CreateRFNodeDTO, RFNode } from '../entities';
-import { id } from './id';
+import { CreateRFNodeDTO, RFNode } from '../../common/entities';
+import { id } from '../../common/utils/id';
 import { defaultNodeStyle } from '@/flow/constants';
 
 const nodeStyles = defaultNodeStyle();

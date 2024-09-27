@@ -30,8 +30,12 @@ import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
 import { EdgeType, FlowSave, RFNode } from '@/common/entities';
-import { generateFlowSaveName, getDownstreamNodePosition } from '@/flow/utils';
-import { assertIsFlowSave, downloadFile, isSubNode } from '@/common/utils';
+import {
+  generateFlowSaveName,
+  getDownstreamNodePosition,
+  isSubNode,
+} from '@/flow/utils';
+import { assertIsFlowSave, downloadFile } from '@/common/utils';
 import { JSON_MIME_TYPE } from '@/common/constants';
 
 const HomePage: React.FC = () => {

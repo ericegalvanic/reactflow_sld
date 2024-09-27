@@ -4,11 +4,13 @@ import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled, NodeRotatableBase } from './ResizableSubNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 
-export type ResizableSubNodeProps = {
+export type ResizableSubNodeData = {
   data: {
     label: string;
   };
 };
+
+export type ResizableSubNodeProps = ResizableSubNodeData;
 
 const ResizableSubNode = NodeComponent<ResizableSubNodeProps>(
   ({ data, parentRotation }) => {

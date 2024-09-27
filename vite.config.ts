@@ -18,7 +18,6 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath: string) =>
   path.resolve(appDirectory, relativePath);
 
-// @ts-expect-error the error is only on type level
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 

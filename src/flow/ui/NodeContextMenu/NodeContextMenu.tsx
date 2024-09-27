@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { contextMenuZIndex } from '@/flow/constants';
 import { RFNode } from '@/common/entities';
 import { AddToQueue } from '@mui/icons-material';
-import { isSubNode } from '@/common/utils';
+import { isSubNode } from '@/flow/utils';
 
 export type PaneContextMenuProps = {
   onNodeDelete?: (nodeId: string) => void;

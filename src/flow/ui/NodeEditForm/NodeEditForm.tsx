@@ -21,13 +21,13 @@ import {
   nodeWithName,
   parent,
   renamedNode,
-} from '@/common/utils';
+  node as createNode,
+} from '@/flow/utils';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
-import { node as createNode } from '@/common/utils';
 import { useFlow } from '@/flow/context';
 import Select, { SelectProps } from '@/common/ui/Select';
 import MenuItem from '@/common/ui/MenuItem';
-import { nodeClass } from '@/common/utils/nodeClass';
+import { nodeClass } from '@/flow/utils/nodeClass';
 import {
   HeterogenousNodeClass,
   heterogenousNodeClasses,

@@ -1,4 +1,4 @@
-import { RFEdge } from '../entities';
+import { RFEdge } from '../../common/entities';
 
 export const edgeColor = (edge: RFEdge): string | undefined =>
   edge.style?.stroke;

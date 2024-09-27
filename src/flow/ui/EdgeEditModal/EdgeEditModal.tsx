@@ -13,10 +13,9 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { displayNode, edgeColor } from '@/common/utils';
+import { displayNode, edgeColor, edge as createEdge } from '@/flow/utils';
 import TextField from '@/common/ui/TextField';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
-import { edge as createEdge } from '@/common/utils';
 import Select, { SelectProps } from '@/common/ui/Select';
 import { useFlow } from '@/flow/context';
 import MenuItem from '@/common/ui/MenuItem';

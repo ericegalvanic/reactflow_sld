@@ -7,10 +7,11 @@ import {
   NodeChange,
 } from '@xyflow/react';
 import { SetState } from '@/common/types';
-import { edge, id, isSubNode } from '@/common/utils';
+import { edge, isSubNode } from '@/flow/utils';
 import { helperLines as getHelperLines } from '../utils';
 import { FlowEditMode, flowViewMode, FlowViewMode } from '../entities';
 import { useUndoRedo } from './useUndoRedo';
+import { id } from '@/common/utils';
 
 export type FlowState = {
   nodes: RFNode[];

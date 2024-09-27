@@ -1,5 +1,5 @@
-import { CreateRFEDgeDTO, EdgeType, RFEdge } from '../entities';
-import { id } from './id';
+import { CreateRFEDgeDTO, EdgeType, RFEdge } from '../../common/entities';
+import { id } from '../../common/utils/id';
 
 export const edge = (dto: CreateRFEDgeDTO): RFEdge => ({
   ...dto,

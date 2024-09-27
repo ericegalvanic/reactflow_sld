@@ -1,7 +1,7 @@
 import { CreateRFNodeDTO, Position, RFNode } from '@/common/entities';
 import { SetState } from '@/common/types';
 import { useCallback } from 'react';
-import { node } from '@/common/utils';
+import { node } from '@/flow/utils';
 
 export const useAddNode = (setNodes: SetState<RFNode[]>) => {
   return useCallback(

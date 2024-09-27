@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useUpdateNodeInternals } from './useUpdateNodeInternals';
 import { drag } from 'd3-drag';
 import { select } from 'd3-selection';
 import { useNode } from './useNode';
+import { nodeRotation } from '../utils';
 
 export type UseRotatableNodeNamedParams = {
   resizable?: boolean;
@@ -18,11 +19,14 @@ export const useRotatableNode = (
 ) => {
   const rotateControlRef = useRef(null);
   const updateNodeInternals = useUpdateNodeInternals();
-  const [rotation, setRotation] = useState(0);
+  const { node, updateNode } = useNode(nodeId);
+  const loadedRotation = useMemo(
+    () => (node ? nodeRotation(node) ?? 0 : 0),
+    [node]
+  );
+  const [rotation, setRotation] = useState(loadedRotation);
   const [resizable, setResizable] = useState(!!namedParams.resizable);
   const [rotatable, setRotatable] = useState(!!namedParams.rotatable);
-
-  const { node, updateNode } = useNode(nodeId);
 
   useEffect(() => {
     setRotatable(!!namedParams.rotatable);
@@ -31,6 +35,10 @@ export const useRotatableNode = (
   useEffect(() => {
     setResizable(!!namedParams.resizable);
   }, [namedParams]);
+
+  useEffect(() => {
+    setRotation(loadedRotation);
+  }, [loadedRotation]);
 
   useEffect(() => {
     if (!rotateControlRef.current) {

@@ -1,5 +1,5 @@
-import { RFNode } from '../entities';
-import { Retype } from '../types';
+import { RFNode } from '../../common/entities';
+import { Retype } from '../../common/types';
 
 export const isSubNode = (
   node: RFNode

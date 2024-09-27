@@ -1,16 +1,7 @@
-import { parent } from '@/common/utils';
-import { useFlow } from '../context';
-import { useNode } from './useNode';
+import { useParentNode } from './useParentNode';
 
 export const useParentRotation = (currentNodeId: string) => {
-  const { nodes } = useFlow();
-  const { node } = useNode(currentNodeId);
-
-  if (!node) {
-    return undefined;
-  }
-
-  const parentNode = parent(node, nodes);
+  const { node: parentNode } = useParentNode(currentNodeId);
 
   return parentNode?.data['rotation'] as number | undefined;
 };

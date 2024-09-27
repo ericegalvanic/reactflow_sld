@@ -1,4 +1,4 @@
-import { RFNode } from '../entities';
+import { RFNode } from '../../common/entities';
 import { node as createNode } from './node';
 
 export const renamedNode = (node: RFNode, newName: string) =>

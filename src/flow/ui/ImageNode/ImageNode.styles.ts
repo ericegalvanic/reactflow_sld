@@ -2,21 +2,22 @@ import { styled } from '@mui/material';
 
 export const NodeCoreStyled = styled('div')`
   position: relative;
-  padding: 16px 64px;
+  padding: 16px 48px;
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
 `;
 
 export const NodeRotatableBaseStyled = styled('div')<{ rotation: number }>`
   transform: rotate(${(props) => props.rotation}deg);
   height: 100%;
   width: 100%;
-  border: 2px solid #eee;
-  background: #eeeeee55;
-  border-radius: 4px;
+  border: 2px solid #ededed;
+  background: #ededed;
+  border-radius: 8px;
 `;
 
 export const NodeRotationHandleStyled = styled('div')<{ rotatable: boolean }>`
@@ -45,7 +46,4 @@ export const NodeRotationHandleStyled = styled('div')<{ rotatable: boolean }>`
 
 export const NodeClassCodeWrapperStyled = styled('p')`
   margin: 0;
-  position: absolute;
-  left: 4px;
-  bottom: 2px;
 `;

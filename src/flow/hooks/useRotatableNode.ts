@@ -51,13 +51,17 @@ export const useRotatableNode = (
       const dy = evt.y - 100;
       const rad = Math.atan2(dx, dy);
       const deg = rad * (180 / Math.PI);
-      setRotation(180 - deg);
+      const nextRotation = 180 - deg;
+      setRotation(nextRotation);
       updateNodeInternals(nodeId);
       updateNode?.({
         ...node,
         data: {
           ...node.data,
-          rotation: 180 - deg,
+          rotation: nextRotation,
+        },
+        style: {
+          ...node.style,
         },
       });
     });

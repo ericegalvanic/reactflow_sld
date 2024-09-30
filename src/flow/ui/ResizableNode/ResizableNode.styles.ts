@@ -13,9 +13,9 @@ export const NodeRotatableBase = styled('div')<{ rotation: number }>`
   transform: rotate(${(props) => props.rotation}deg);
   height: 100%;
   width: 100%;
-  border: 2px solid #eee;
-  background: #eeeeee55;
-  border-radius: 4px;
+  border: 2px solid #ededed;
+  background: #ededed;
+  border-radius: 8px;
 `;
 
 export const NodeRotationHandle = styled('div')<{ rotatable: boolean }>`

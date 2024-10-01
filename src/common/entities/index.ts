@@ -16,3 +16,4 @@ export * from './NodePositionChange';
 export * from './AppImage';
 export * from './NodeData';
 export * from './PossibleNodeData';
+export * from './PopupAnchor';

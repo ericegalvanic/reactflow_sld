@@ -7,6 +7,7 @@ import {
   NodeRotationHandle,
 } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
+import { usePopupAnchor } from '@/common/hooks';
 
 export type ResizableNodeData = {
   data: {
@@ -24,9 +25,19 @@ const ResizableNode = NodeComponent<ResizableNodeProps>(
     sourceNodePosition,
     rotatable,
     rotateControlRef,
+    handleNodeBaseHover,
+    handleNodeBaseMouseLeave,
+    setPopupAnchor,
   }) => {
+    const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
+
     return (
-      <NodeRotatableBase rotation={rotation}>
+      <NodeRotatableBase
+        ref={nodeBaseRef}
+        rotation={rotation}
+        onMouseEnter={handleNodeBaseHover}
+        onMouseLeave={handleNodeBaseMouseLeave}
+      >
         <NodeResizeControl
           style={defaultControlStyle}
           minWidth={100}

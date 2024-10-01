@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { KeyCode } from '../entities';
 import { useKeyPress } from './useKeyPress';
+import { useBoolean } from '@/common/hooks';
 
 export const useShortcut = (keyCode: KeyCode, callback: Function): void => {
-  const [didRun, setDidRun] = useState(false);
+  const [didRun, setDidRun] = useBoolean();
   const shouldRun = useKeyPress(keyCode);
 
   useEffect(() => {
@@ -13,5 +14,5 @@ export const useShortcut = (keyCode: KeyCode, callback: Function): void => {
     } else {
       setDidRun(shouldRun);
     }
-  }, [shouldRun, didRun, callback]);
+  }, [shouldRun, didRun, callback, setDidRun]);
 };

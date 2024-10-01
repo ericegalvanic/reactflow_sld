@@ -10,6 +10,7 @@ import {
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage } from '@/common/entities';
 import { NodeClassCode, NodeClassType } from '@/flow/entities';
+import { usePopupAnchor } from '@/common/hooks';
 
 export type ImageNodeData = {
   data: {
@@ -29,12 +30,22 @@ const ImageNode = NodeComponent<ImageNodeProps>(
     sourceNodePosition,
     rotatable,
     rotateControlRef,
+    handleNodeBaseHover,
+    handleNodeBaseMouseLeave,
+    setPopupAnchor,
   }) => {
+    const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
+
     const { src, alt, width, height } = data.image;
     const code = data.code;
 
     return (
-      <NodeRotatableBaseStyled rotation={rotation}>
+      <NodeRotatableBaseStyled
+        ref={nodeBaseRef}
+        rotation={rotation}
+        onMouseEnter={handleNodeBaseHover}
+        onMouseLeave={handleNodeBaseMouseLeave}
+      >
         <NodeResizeControl
           style={defaultControlStyle}
           minWidth={100}

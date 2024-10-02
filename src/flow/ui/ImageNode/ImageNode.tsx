@@ -8,7 +8,7 @@ import {
   NodeRotationHandleStyled,
 } from './ImageNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
-import { AppImage } from '@/common/entities';
+import { AppImage, RFNode } from '@/common/entities';
 import { NodeClassCode, NodeClassType } from '@/flow/entities';
 import { usePopupAnchor } from '@/common/hooks';
 
@@ -20,7 +20,7 @@ export type ImageNodeData = {
   };
 };
 
-export type ImageNodeProps = ImageNodeData;
+export type ImageNodeProps = RFNode & ImageNodeData;
 
 const ImageNode = NodeComponent<ImageNodeProps>(
   ({

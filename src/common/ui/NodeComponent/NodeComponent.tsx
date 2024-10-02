@@ -5,6 +5,7 @@ import {
   IsNodeComponent,
   NodeFC,
   PopupAnchor,
+  RFNode,
 } from '@/common/entities';
 import { useBoolean } from '@/common/hooks';
 import { useFlow } from '@/flow/context';
@@ -16,12 +17,25 @@ import {
 import Popup from '../Popup';
 import PopupCore from '../PopupCore';
 import { MouseEventHandler, useState } from 'react';
+import {
+  displayNode,
+  nodeClass,
+  nodeClassCode,
+  nodeClosestParent,
+} from '@/flow/utils';
+import {
+  NodePropertyNameStyled,
+  NodePropertyRowStyled,
+  NodePropertyValueStyled,
+} from './NodeComponent.styles';
+import { Nullable } from '@/common/types';
+import { assertImperatively } from '@/common/utils';
 
 const NodeComponent = <P = {},>(
   OriginalNodeComponent: NodeFC<P & HasId>
 ): IsNodeComponent<P & HasId> =>
   createNodeComponent((props) => {
-    const { changesEnabled } = useFlow();
+    const { changesEnabled, nodes, edges } = useFlow();
     const [showPopup, setShowPopup, invokePopup, hidePopup] = useBoolean();
     const [popupAnchor, setPopupAnchor] = useState<PopupAnchor>(null);
 
@@ -40,6 +54,18 @@ const NodeComponent = <P = {},>(
     const handleNodeBaseMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
       hidePopup();
     };
+
+    const theNode = props;
+    assertImperatively<RFNode>(theNode);
+
+    const theNodeName = displayNode(theNode);
+    const theNodeClass = nodeClass(theNode);
+    const theNodeCode = nodeClassCode(theNode);
+    const theClosestParent: Nullable<RFNode> = nodeClosestParent(
+      theNode,
+      nodes,
+      edges
+    );
 
     return (
       <>
@@ -61,7 +87,30 @@ const NodeComponent = <P = {},>(
           open={showPopup}
           placement="top"
         >
-          <PopupCore>{props.id}</PopupCore>
+          <PopupCore>
+            <NodePropertyRowStyled>
+              <NodePropertyNameStyled>Name:</NodePropertyNameStyled>
+              <NodePropertyValueStyled>{theNodeName}</NodePropertyValueStyled>
+            </NodePropertyRowStyled>
+            <NodePropertyRowStyled>
+              <NodePropertyNameStyled>Class:</NodePropertyNameStyled>
+              <NodePropertyValueStyled>{theNodeClass}</NodePropertyValueStyled>
+            </NodePropertyRowStyled>
+            {theNodeCode && (
+              <NodePropertyRowStyled>
+                <NodePropertyNameStyled>Class Code:</NodePropertyNameStyled>
+                <NodePropertyValueStyled>{theNodeCode}</NodePropertyValueStyled>
+              </NodePropertyRowStyled>
+            )}
+            {theClosestParent && (
+              <NodePropertyRowStyled>
+                <NodePropertyNameStyled>Closest Parent:</NodePropertyNameStyled>
+                <NodePropertyValueStyled>
+                  {displayNode(theClosestParent)}
+                </NodePropertyValueStyled>
+              </NodePropertyRowStyled>
+            )}
+          </PopupCore>
         </Popup>
       </>
     );

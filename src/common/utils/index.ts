@@ -6,3 +6,4 @@ export * from './safeNumber';
 export * from './CSSRotation';
 export * from './isAppImage';
 export * from './assertExistence';
+export * from './assertImperatively';

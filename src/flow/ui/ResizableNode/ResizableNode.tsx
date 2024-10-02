@@ -8,6 +8,7 @@ import {
 } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { usePopupAnchor } from '@/common/hooks';
+import { RFNode } from '@/common/entities';
 
 export type ResizableNodeData = {
   data: {
@@ -15,7 +16,7 @@ export type ResizableNodeData = {
   };
 };
 
-export type ResizableNodeProps = ResizableNodeData;
+export type ResizableNodeProps = RFNode & ResizableNodeData;
 
 const ResizableNode = NodeComponent<ResizableNodeProps>(
   ({

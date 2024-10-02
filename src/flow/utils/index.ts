@@ -22,3 +22,4 @@ export * from './nodeWithName';
 export * from './parent';
 export * from './parentNodeCenter';
 export * from './renamedNode';
+export * from './nodeClosestParent';

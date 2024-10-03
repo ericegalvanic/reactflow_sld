@@ -18,7 +18,6 @@ import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
-  flowDirection,
   flowEditMode,
   flowViewMode,
   nodeType,
@@ -53,7 +52,6 @@ const HomePage: React.FC = () => {
     setEditMode,
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
-    onLayout,
     takeSnapshot,
   } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
@@ -233,14 +231,6 @@ const HomePage: React.FC = () => {
     invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
   };
 
-  const onVerticalClick = () => {
-    onLayout(flowDirection.vertical);
-  };
-
-  const onHorizontalClick = () => {
-    onLayout(flowDirection.vertical);
-  };
-
   const toggleViewMode: NonNullable<FlowPaneProps['onToggleViewMode']> = () => {
     setViewMode((v) => {
       if (v === flowViewMode.standard) {
@@ -357,8 +347,6 @@ const HomePage: React.FC = () => {
         onEdgeClick={handleEdgeClick}
         onCreateDownstreamAsset={handleCreateDownstreamAsset}
         onSubNodeCreate={handleSubNodeCreate}
-        onVerticalClick={onVerticalClick}
-        onHorizontalClick={onHorizontalClick}
         onToggleViewMode={toggleViewMode}
         onExportFlow={handleExportFlow}
         onImportFlow={handleImportFlow}

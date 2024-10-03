@@ -1,4 +1,6 @@
-import { RFNode } from '../../common/entities';
+import { Colorable, RFNode } from '../../common/entities';
 
-export const nodeColor = (node: RFNode): string | undefined =>
-  node.style?.background as string;
+export const nodeColor = (node: RFNode): Colorable => ({
+  background: node.data?.background,
+  border: node.data?.border,
+});

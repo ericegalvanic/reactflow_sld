@@ -22,6 +22,7 @@ import {
   nodeClass,
   nodeClassCode,
   nodeClosestParent,
+  nodeColor,
 } from '@/flow/utils';
 import {
   NodePropertyNameStyled,
@@ -66,6 +67,7 @@ const NodeComponent = <P = {},>(
       nodes,
       edges
     );
+    const theNodeColor = nodeColor(theNode);
 
     return (
       <>
@@ -80,6 +82,7 @@ const NodeComponent = <P = {},>(
           setPopupAnchor={setPopupAnchor}
           handleNodeBaseHover={handleNodeBaseHover}
           handleNodeBaseMouseLeave={handleNodeBaseMouseLeave}
+          nodeColor={theNodeColor}
         />
         <Popup
           id={popupId}

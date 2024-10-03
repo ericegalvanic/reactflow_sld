@@ -33,6 +33,7 @@ const ImageNode = NodeComponent<ImageNodeProps>(
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
+    nodeColor,
   }) => {
     const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
 
@@ -45,6 +46,7 @@ const ImageNode = NodeComponent<ImageNodeProps>(
         rotation={rotation}
         onMouseEnter={handleNodeBaseHover}
         onMouseLeave={handleNodeBaseMouseLeave}
+        {...nodeColor}
       >
         <NodeResizeControl
           style={defaultControlStyle}

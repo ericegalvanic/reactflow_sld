@@ -17,11 +17,11 @@ export type ImageSubNodeData = {
 export type ImageSubNodeProps = RFNode & ImageSubNodeData;
 
 const ImageSubNode = NodeComponent<ImageSubNodeProps>(
-  ({ data, parentRotation }) => {
+  ({ data, parentRotation, nodeColor }) => {
     const { src, alt, width, height } = data.image;
 
     return (
-      <NodeRotatableBaseStyled rotation={parentRotation ?? 0}>
+      <NodeRotatableBaseStyled rotation={parentRotation ?? 0} {...nodeColor}>
         <NodeResizeControl
           style={defaultControlStyle}
           minWidth={100}

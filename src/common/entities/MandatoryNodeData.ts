@@ -1,5 +1,5 @@
-import { HasColor } from './HasColor';
+import { Colorable } from './Colorable';
 
 export type MandatoryNodeData = {
-  data: HasColor;
+  data: Colorable;
 };

@@ -17,5 +17,5 @@ export * from './AppImage';
 export * from './NodeData';
 export * from './PossibleNodeData';
 export * from './PopupAnchor';
-export * from './HasColor';
+export * from './Colorable';
 export * from './MandatoryNodeData';

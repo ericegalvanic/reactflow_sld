@@ -59,7 +59,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 }) => {
   const { nodes: existingNodes, setNodes } = useFlow();
   const [name, setName] = useState(() => nodeName(node) ?? '');
-  const [color, setColor] = useState(() => nodeColor(node) ?? '');
+  const [color, setColor] = useState(() => nodeColor(node).background ?? '');
   const [heterogenousClass, setHeterogenousClass] = useState(() =>
     nodeClass(node)
   );
@@ -123,7 +123,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     onNodeNameChange?.(
       createNode({
         ...node,
-        data: { ...(node.style ?? {}), label: event.target.value.trim() },
+        data: { ...node.data, label: event.target.value.trim() },
       })
     );
   };
@@ -146,7 +146,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     onNodeColorChange?.(
       createNode({
         ...node,
-        style: { ...(node.style ?? {}), background: newColor },
+        data: { ...node.data, background: newColor },
       })
     );
   };
@@ -166,14 +166,14 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         ...node,
         type: newNodeType,
         data: savingAsTextAsset
-          ? { ...node.data, label: name.trim() }
+          ? { ...node.data, label: name.trim(), background: color }
           : {
               ...node.data,
               class: heterogenousClass,
               image: nodeImageMap[heterogenousClass],
               code: code,
+              background: color,
             },
-        style: { ...(node.style ?? {}), background: color },
       })
     );
 

@@ -1,4 +1,4 @@
-export interface HasColor {
+export interface Colorable {
   background: string;
   border: string;
 }

@@ -29,6 +29,7 @@ const ResizableNode = NodeComponent<ResizableNodeProps>(
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
+    nodeColor,
   }) => {
     const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
 
@@ -38,6 +39,7 @@ const ResizableNode = NodeComponent<ResizableNodeProps>(
         rotation={rotation}
         onMouseEnter={handleNodeBaseHover}
         onMouseLeave={handleNodeBaseMouseLeave}
+        {...nodeColor}
       >
         <NodeResizeControl
           style={defaultControlStyle}

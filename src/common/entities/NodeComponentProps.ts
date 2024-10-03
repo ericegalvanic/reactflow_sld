@@ -2,6 +2,7 @@ import { useNodeHandlePosition, useRotatableNode } from '@/flow/hooks';
 import { SetState } from '../types';
 import { MouseEventHandler } from 'react';
 import { PopupAnchor } from './PopupAnchor';
+import { Colorable } from './Colorable';
 
 export type NodeComponentProps<P extends Record<string, unknown> = {}> =
   ReturnType<typeof useNodeHandlePosition> &
@@ -13,4 +14,5 @@ export type NodeComponentProps<P extends Record<string, unknown> = {}> =
       setPopupAnchor: SetState<PopupAnchor>;
       handleNodeBaseHover: MouseEventHandler<HTMLElement>;
       handleNodeBaseMouseLeave: MouseEventHandler<HTMLElement>;
+      nodeColor: Colorable;
     } & P;

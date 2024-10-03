@@ -1,3 +1,4 @@
+import { Colorable } from '@/common/entities';
 import { styled } from '@mui/material';
 
 export const NodeCoreStyled = styled('div')`
@@ -10,12 +11,13 @@ export const NodeCoreStyled = styled('div')`
   align-items: center;
 `;
 
-export const NodeRotatableBaseStyled = styled('div')<{ rotation: number }>`
+export const NodeRotatableBaseStyled = styled('div')<
+  { rotation: number } & Colorable
+>`
   transform: rotate(${(props) => props.rotation}deg);
   height: 100%;
   width: 100%;
-  border: 2px solid #ccc;
-  background: #ededed;
+  background: ${(props) => props.background};
   border-radius: 8px;
 `;
 

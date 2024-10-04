@@ -4,7 +4,7 @@ import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled, NodeRotatableBaseStyled } from './ImageSubNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage, RFNode } from '@/common/entities';
-import { NodeClassCode, NodeClassType } from '@/flow/entities';
+import { NodeClassCode, NodeClassType, ResizeControlVariant } from '@/flow/entities';
 
 export type ImageSubNodeData = {
   data: {
@@ -26,6 +26,7 @@ const ImageSubNode = NodeComponent<ImageSubNodeProps>(
           style={defaultControlStyle}
           minWidth={100}
           minHeight={50}
+          variant={ResizeControlVariant.Line}
         ></NodeResizeControl>
 
         <NodeCoreStyled>

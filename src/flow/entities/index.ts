@@ -11,3 +11,4 @@ export * from './HelperLineInfoObject';
 export * from './NodeClassType';
 export * from './HeterogenousNodeClass';
 export * from './NodeClassCode';
+export * from './ResizeControlVariant';

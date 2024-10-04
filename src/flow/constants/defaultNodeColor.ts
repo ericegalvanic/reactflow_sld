@@ -1,6 +1,6 @@
 import { Colorable } from '@/common/entities';
 
-export const defaultNodeBackgroundColor = '#ededed';
+export const defaultNodeBackgroundColor = 'none';
 export const defaultNodeBorderColor = '#ededed';
 
 export const defaultNodeColor = (

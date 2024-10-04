@@ -5,11 +5,14 @@ import {
   NodeClassCodeWrapperStyled,
   NodeCoreStyled,
   NodeRotatableBaseStyled,
-  NodeRotationHandleStyled,
 } from './ImageNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { AppImage, RFNode } from '@/common/entities';
-import { NodeClassCode, NodeClassType } from '@/flow/entities';
+import {
+  NodeClassCode,
+  NodeClassType,
+  ResizeControlVariant,
+} from '@/flow/entities';
 import { usePopupAnchor } from '@/common/hooks';
 
 export type ImageNodeData = {
@@ -28,8 +31,6 @@ const ImageNode = NodeComponent<ImageNodeProps>(
     targetPosition,
     rotation,
     sourceNodePosition,
-    rotatable,
-    rotateControlRef,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
@@ -52,12 +53,9 @@ const ImageNode = NodeComponent<ImageNodeProps>(
           style={defaultControlStyle}
           minWidth={100}
           minHeight={50}
+          variant={ResizeControlVariant.Line}
         ></NodeResizeControl>
-        <NodeRotationHandleStyled
-          ref={rotateControlRef}
-          rotatable={rotatable}
-          className="nodrag"
-        ></NodeRotationHandleStyled>
+
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <img src={src} alt={alt} width={width} height={height} />

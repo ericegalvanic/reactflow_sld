@@ -120,11 +120,6 @@ const FlowPane = forwardRef(
                   {flowDirectionNameMap[flowDirection.vertical]}
                 </Button>
               )}
-              {onHorizontalClick && (
-                <Button onClick={onHorizontalClick} variant="contained">
-                  {flowDirectionNameMap[flowDirection.horizontal]}
-                </Button>
-              )}
             </FlowPanelStyled>
           )}
           {(onToggleViewMode ||

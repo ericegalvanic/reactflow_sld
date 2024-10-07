@@ -6,6 +6,8 @@ import {
   EdgeContextMenu as EdgeContextMenuType,
   FlowEditMode,
   flowEditModeNameMap,
+  flowDirection,
+  flowDirectionNameMap,
   FlowViewMode,
   flowViewModeNameMap,
   NodeContextMenu as NodeContextMenuType,
@@ -47,6 +49,8 @@ export type FlowPaneProps = {
   onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
   onEdgeDelete?: (edgeId: string) => void;
   onSubNodeCreate?: (parentNode: RFNode) => void;
+  onHorizontalClick?: MouseEventHandler<HTMLButtonElement>;
+  onVerticalClick?: MouseEventHandler<HTMLButtonElement>;
   onToggleViewMode?: MouseEventHandler<HTMLButtonElement>;
   onExportFlow?: MouseEventHandler<HTMLButtonElement>;
   onImportFlow?: ChangeEventHandler<HTMLInputElement>;
@@ -68,6 +72,8 @@ const FlowPane = forwardRef(
       verticalHelperLine,
       onCreateDownstreamAsset,
       onSubNodeCreate,
+      onHorizontalClick,
+      onVerticalClick,
       onToggleViewMode,
       onExportFlow,
       onImportFlow,
@@ -107,7 +113,20 @@ const FlowPane = forwardRef(
           {edgeMenu && changesEnabled && (
             <EdgeContextMenu onEdgeDelete={onEdgeDelete} {...edgeMenu} />
           )}
-
+          {(onHorizontalClick || onVerticalClick) && (
+            <FlowPanelStyled position="top-right">
+              {onVerticalClick && (
+                <Button onClick={onVerticalClick} variant="contained">
+                  {flowDirectionNameMap[flowDirection.vertical]}
+                </Button>
+              )}
+              {onHorizontalClick && (
+                <Button onClick={onHorizontalClick} variant="contained">
+                  {flowDirectionNameMap[flowDirection.horizontal]}
+                </Button>
+              )}
+            </FlowPanelStyled>
+          )}
           {(onToggleViewMode ||
             onExportFlow ||
             onImportFlow ||

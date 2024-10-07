@@ -1,32 +1,35 @@
-import { memo } from 'react';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
-import {
-  NodeClassCodeWrapperStyled,
-  NodeCoreStyled,
-  NodeRotatableBaseStyled,
-} from './ImageNode.styles';
-import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
-import { AppImage } from '@/common/entities';
+import { usePopupAnchor } from '@/common/hooks';
+import NodeComponent from '@/common/ui/NodeComponent';
 import {
   NodeClassCode,
-  NodeClassType,
   NodeProps,
   ResizeControlVariant,
 } from '@/flow/entities';
-import { usePopupAnchor } from '@/common/hooks';
+import {
+  NodeClassCodeStyled,
+  NodeCoreStyled,
+  NodeImageStyled,
+  NodeLabelStyled,
+  NodeRotatableBaseStyled,
+  NodeTextDataStyled,
+} from './SwitchNode.styles';
+import { Handle, NodeResizeControl } from '@xyflow/react';
+import { defaultControlStyle } from '@/flow/constants';
+import { switchNodeImage } from './SwitchNode.data';
+import { memo } from 'react';
 
-export type ImageNodeData = {
+export type SwitchNodeData = {
   data: {
-    image: AppImage;
-    class: NodeClassType;
     code: NodeClassCode;
+    label: string;
   };
 };
 
-export type ImageNodeProps = NodeProps<ImageNodeData>;
+export type SwitchNodeProps = NodeProps<SwitchNodeData>;
 
-const ImageNode = NodeComponent<ImageNodeProps>(
+const { src, alt, width, height } = switchNodeImage;
+
+const SwitchNode = NodeComponent<SwitchNodeProps>(
   ({
     data,
     targetPosition,
@@ -38,8 +41,7 @@ const ImageNode = NodeComponent<ImageNodeProps>(
     nodeColor,
   }) => {
     const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
-
-    const { src, alt, width, height } = data.image;
+    const label = data.label;
     const code = data.code;
 
     return (
@@ -59,8 +61,11 @@ const ImageNode = NodeComponent<ImageNodeProps>(
 
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
-          <img src={src} alt={alt} width={width} height={height} />
-          <NodeClassCodeWrapperStyled>{code}</NodeClassCodeWrapperStyled>
+          <NodeImageStyled src={src} alt={alt} width={width} height={height} />
+          <NodeTextDataStyled>
+            <NodeLabelStyled>{label}</NodeLabelStyled>
+            <NodeClassCodeStyled>{code}</NodeClassCodeStyled>
+          </NodeTextDataStyled>
         </NodeCoreStyled>
         <Handle type="source" position={sourceNodePosition} />
       </NodeRotatableBaseStyled>
@@ -68,4 +73,4 @@ const ImageNode = NodeComponent<ImageNodeProps>(
   }
 );
 
-export default memo(ImageNode);
+export default memo(SwitchNode);

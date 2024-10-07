@@ -3,8 +3,13 @@ import { NodeResizeControl } from '@xyflow/react';
 import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled, NodeRotatableBaseStyled } from './ImageSubNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
-import { AppImage, RFNode } from '@/common/entities';
-import { NodeClassCode, NodeClassType, ResizeControlVariant } from '@/flow/entities';
+import { AppImage } from '@/common/entities';
+import {
+  NodeClassCode,
+  NodeClassType,
+  NodeProps,
+  ResizeControlVariant,
+} from '@/flow/entities';
 
 export type ImageSubNodeData = {
   data: {
@@ -14,7 +19,7 @@ export type ImageSubNodeData = {
   };
 };
 
-export type ImageSubNodeProps = RFNode & ImageSubNodeData;
+export type ImageSubNodeProps = NodeProps<ImageSubNodeData>;
 
 const ImageSubNode = NodeComponent<ImageSubNodeProps>(
   ({ data, parentRotation, nodeColor }) => {

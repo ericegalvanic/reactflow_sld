@@ -3,14 +3,15 @@ import CircuitBreakers from 'public/circuit_breakers.png';
 import ElectricalPanels from 'public/electrical_panels.jpg';
 import Fuses from 'public/fuses.png';
 import Others from 'public/others.jpg';
-import Switches from 'public/switches.png';
+import Switches from 'src/assets/switch.png';
 import TransferSwitches from 'public/transfer_switches.png';
 import Transformers from 'public/transformers.png';
 import UPSSystems from 'public/ups_systems.jpg';
-import { NodeClassType, nodeClassType } from '../entities';
+import { NodeClassType } from '../entities';
+import { nodeHeightPx } from '../constants';
 
-const nodeImageWidthPx = 24;
-const nodeImageHeightPx = 24;
+const nodeImageWidthPx = 180;
+const nodeImageHeightPx = nodeHeightPx;
 
 const fallbackNodeImage: AppImage = {
   src: Others,
@@ -20,59 +21,59 @@ const fallbackNodeImage: AppImage = {
 };
 
 export const nodeImageMap = {
-  [nodeClassType.circuitBreaker]: {
+  CIRCUIT_BREAKER: {
     src: CircuitBreakers,
     alt: 'circuit breakers',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.electricalPanel]: {
+  ELECTRICAL_PANEL: {
     src: ElectricalPanels,
     alt: 'electrical panels',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.fuse]: {
+  FUSE: {
     src: Fuses,
     alt: 'fuses',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.misc]: {
+  MISC: {
     src: Others,
     alt: 'others',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.switch]: {
+  SWITCH: {
     src: Switches,
     alt: 'switches',
-    width: nodeImageWidthPx,
+    width: 60,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.transferSwitch]: {
+  TRANSFER_SWITCH: {
     src: TransferSwitches,
     alt: 'transfer switches',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.transformer]: {
+  TRANSFORMER: {
     src: Transformers,
     alt: 'transformers',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.upsSystem]: {
+  UPS_SYSTEM: {
     src: UPSSystems,
     alt: 'ups systems',
     width: nodeImageWidthPx,
     height: nodeImageHeightPx,
   },
-  [nodeClassType.generator]: fallbackNodeImage,
-  [nodeClassType.groundFaultSystem]: fallbackNodeImage,
-  [nodeClassType.groundingOrBonding]: fallbackNodeImage,
-  [nodeClassType.instrumentTransformer]: fallbackNodeImage,
-  [nodeClassType.meter]: fallbackNodeImage,
-  [nodeClassType.motor]: fallbackNodeImage,
-  [nodeClassType.relay]: fallbackNodeImage,
+  GENERATOR: fallbackNodeImage,
+  GROUND_FAULT_SYSTEM: fallbackNodeImage,
+  GROUNDING_OR_BONDING: fallbackNodeImage,
+  INSTRUMENT_TRANSFORMER: fallbackNodeImage,
+  METER: fallbackNodeImage,
+  MOTOR: fallbackNodeImage,
+  RELAY: fallbackNodeImage,
 } as const satisfies Record<NodeClassType, AppImage>;

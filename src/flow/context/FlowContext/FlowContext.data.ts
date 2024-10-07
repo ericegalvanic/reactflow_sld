@@ -1,7 +1,6 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { edge, node } from '@/flow/utils';
-import { nodeImageMap } from '@/flow/data/nodeImageMap';
-import { nodeClassCode, nodeClassType, nodeType } from '@/flow/entities';
+import { nodeClassCode, nodeType } from '@/flow/entities';
 
 export const initialNodes: RFNode[] = [
   node({
@@ -18,12 +17,11 @@ export const initialNodes: RFNode[] = [
   }),
   node({
     id: '3',
-    type: nodeType.ImageNode,
+    type: nodeType.SwitchNode,
     position: { x: 100, y: 250 },
     data: {
-      image: nodeImageMap[nodeClassType.misc],
-      class: nodeClassType.misc,
       code: nodeClassCode.AMCB,
+      label: 'AUX SWITCH',
     },
   }),
 ];

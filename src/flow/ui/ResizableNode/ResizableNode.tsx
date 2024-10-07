@@ -4,8 +4,7 @@ import { defaultControlStyle } from '@/flow/constants';
 import { NodeCoreStyled, NodeRotatableBase } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { usePopupAnchor } from '@/common/hooks';
-import { RFNode } from '@/common/entities';
-import { ResizeControlVariant } from '@/flow/entities';
+import { NodeProps, ResizeControlVariant } from '@/flow/entities';
 
 export type ResizableNodeData = {
   data: {
@@ -13,7 +12,7 @@ export type ResizableNodeData = {
   };
 };
 
-export type ResizableNodeProps = RFNode & ResizableNodeData;
+export type ResizableNodeProps = NodeProps<ResizableNodeData>;
 
 const ResizableNode = NodeComponent<ResizableNodeProps>(
   ({

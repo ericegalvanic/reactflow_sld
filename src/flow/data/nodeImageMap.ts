@@ -8,7 +8,7 @@ import TransferSwitches from 'public/transfer_switches.png';
 import Transformers from 'public/transformers.png';
 import UPSSystems from 'public/ups_systems.jpg';
 import { NodeClassType } from '../entities';
-import { nodeHeightPx } from '../constants';
+import { nodeHeightFactor, nodeHeightPx } from '../constants';
 
 const nodeImageWidthPx = 180;
 const nodeImageHeightPx = nodeHeightPx;
@@ -48,7 +48,7 @@ export const nodeImageMap = {
   SWITCH: {
     src: Switches,
     alt: 'switches',
-    width: 60,
+    width: 60 * nodeHeightFactor,
     height: nodeImageHeightPx,
   },
   TRANSFER_SWITCH: {

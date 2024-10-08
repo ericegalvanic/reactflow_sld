@@ -7,7 +7,7 @@ export const NodeCoreStyled = styled('div')`
   position: relative;
   height: 100%;
   width: 100%;
-  min-width: 628px;
+  min-width: 280px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,14 +65,14 @@ export const NodeTextDataStyled = styled('div')`
 
 export const NodeLabelStyled = styled('p')`
   font-weight: 700;
-  font-size: 28px;
+  font-size: 12px;
   line-height: 1.2423;
   margin: 0;
 `;
 
 export const NodeClassCodeStyled = styled('p')`
   font-style: italic;
-  font-size: 12px;
+  font-size: 6px;
   line-height: 1.1667;
   margin: 0;
 `;

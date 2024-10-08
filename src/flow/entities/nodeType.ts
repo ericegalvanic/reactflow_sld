@@ -4,6 +4,8 @@ import ResizableSubNode from '../ui/ResizableSubNode';
 import ImageNode from '../ui/ImageNode';
 import ImageSubNode from '../ui/ImageSubNode';
 import SwitchNode from '../ui/SwitchNode';
+import CapacitorNode from '../ui/CapacitorNode';
+import TransformerNode from '../ui/TransformerNode';
 
 export const nodeType = {
   ResizableNode: 'ResizableNode',
@@ -11,6 +13,8 @@ export const nodeType = {
   ImageNode: 'ImageNode',
   ImageSubNode: 'ImageSubNode',
   SwitchNode: 'SwitchNode',
+  CapacitorNode: 'CapacitorNode',
+  TransformerNode: 'TransformerNode',
 } as const satisfies Record<string, string>;
 
 export type NodeType = ObjectValues<typeof nodeType>;
@@ -21,4 +25,6 @@ export const nodeTypeMap = {
   ImageNode: ImageNode,
   ImageSubNode: ImageSubNode,
   SwitchNode: SwitchNode,
+  CapacitorNode: CapacitorNode,
+  TransformerNode: TransformerNode,
 } as const satisfies Record<NodeType, React.FC<never>>;

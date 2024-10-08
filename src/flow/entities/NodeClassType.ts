@@ -16,6 +16,7 @@ export const nodeClassType = {
   transferSwitch: 'TRANSFER_SWITCH',
   transformer: 'TRANSFORMER',
   upsSystem: 'UPS_SYSTEM',
+  capacitor: 'CAPACITOR',
 } as const satisfies Record<string, string>;
 
 export type NodeClassType = ObjectValues<typeof nodeClassType>;
@@ -36,6 +37,7 @@ export const nodeClassTypeNameMap: Record<NodeClassType, string> = {
   [nodeClassType.transferSwitch]: 'Transfer Switch',
   [nodeClassType.transformer]: 'Transformer',
   [nodeClassType.upsSystem]: 'UPS System',
+  [nodeClassType.capacitor]: 'Capacitor',
 };
 
 export const nodeClassTypes: NodeClassType[] = [
@@ -54,4 +56,5 @@ export const nodeClassTypes: NodeClassType[] = [
   nodeClassType.transferSwitch,
   nodeClassType.transformer,
   nodeClassType.upsSystem,
+  nodeClassType.capacitor,
 ];

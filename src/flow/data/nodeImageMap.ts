@@ -5,13 +5,16 @@ import Fuses from 'public/fuses.png';
 import Others from 'public/others.jpg';
 import Switches from 'src/assets/switch.png';
 import TransferSwitches from 'public/transfer_switches.png';
-import Transformers from 'public/transformers.png';
+import Transformer from 'src/assets/transformer.png';
 import UPSSystems from 'public/ups_systems.jpg';
+import Capacitor from 'src/assets/capacitor.png';
 import { NodeClassType } from '../entities';
 import { nodeHeightFactor, nodeHeightPx } from '../constants';
 
 const nodeImageWidthPx = 180;
 const nodeImageHeightPx = nodeHeightPx;
+
+const squaredHeightFactor = nodeHeightFactor ** 2;
 
 const fallbackNodeImage: AppImage = {
   src: Others,
@@ -58,15 +61,21 @@ export const nodeImageMap = {
     height: nodeImageHeightPx,
   },
   TRANSFORMER: {
-    src: Transformers,
-    alt: 'transformers',
-    width: nodeImageWidthPx,
+    src: Transformer,
+    alt: 'transformer',
+    width: 180 * nodeHeightFactor,
     height: nodeImageHeightPx,
   },
   UPS_SYSTEM: {
     src: UPSSystems,
     alt: 'ups systems',
     width: nodeImageWidthPx,
+    height: nodeImageHeightPx,
+  },
+  CAPACITOR: {
+    src: Capacitor,
+    alt: 'capacitor',
+    width: 201 * squaredHeightFactor,
     height: nodeImageHeightPx,
   },
   GENERATOR: fallbackNodeImage,

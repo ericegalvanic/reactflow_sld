@@ -24,9 +24,29 @@ export const initialNodes: RFNode[] = [
       label: 'AUX SWITCH',
     },
   }),
+  node({
+    id: '4',
+    type: nodeType.CapacitorNode,
+    position: { x: 100, y: 300 },
+    data: {
+      code: nodeClassCode.BNDG,
+      label: 'CAPACITOR 1',
+    },
+  }),
+  node({
+    id: '5',
+    type: nodeType.TransformerNode,
+    position: { x: 100, y: 350 },
+    data: {
+      code: nodeClassCode.BNDG,
+      label: 'TRANSFORMER 1',
+    },
+  }),
 ];
 
 export const initialEdges: RFEdge[] = [
   edge({ id: 'e1-2', source: '1', target: '2' }),
   edge({ id: 'e2-3', source: '2', target: '3' }),
+  edge({ id: 'e3-4', source: '3', target: '4' }),
+  edge({ id: 'e4-5', source: '4', target: '5' }),
 ];

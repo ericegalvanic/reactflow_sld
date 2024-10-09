@@ -4,7 +4,7 @@ import ElectricalPanels from 'public/electrical_panels.jpg';
 import Fuses from 'public/fuses.png';
 import Others from 'public/others.jpg';
 import Switches from 'src/assets/switch.png';
-import TransferSwitches from 'public/transfer_switches.png';
+import TransferSwitch from 'src/assets/transfer_switch.png';
 import Transformer from 'src/assets/transformer.png';
 import UPSSystems from 'public/ups_systems.jpg';
 import Capacitor from 'src/assets/capacitor.png';
@@ -55,9 +55,9 @@ export const nodeImageMap = {
     height: nodeImageHeightPx,
   },
   TRANSFER_SWITCH: {
-    src: TransferSwitches,
-    alt: 'transfer switches',
-    width: nodeImageWidthPx,
+    src: TransferSwitch,
+    alt: 'transfer switch',
+    width: 135 * nodeHeightFactor,
     height: nodeImageHeightPx,
   },
   TRANSFORMER: {

@@ -88,7 +88,7 @@ const NodeComponent = <P = {},>(
           id={popupId}
           anchor={popupAnchor}
           open={showPopup}
-          placement="top"
+          placement="left"
         >
           <PopupCore>
             <NodePropertyRowStyled>

@@ -39,7 +39,16 @@ export const initialNodes: RFNode[] = [
     position: { x: 100, y: 350 },
     data: {
       code: nodeClassCode.BNDG,
-      label: 'TRANSFORMER 1',
+      label: 'TRANSF 1',
+    },
+  }),
+  node({
+    id: '6',
+    type: nodeType.TransferSwitchNode,
+    position: { x: 100, y: 400 },
+    data: {
+      code: nodeClassCode['ATSW-MV'],
+      label: 'ATS-400',
     },
   }),
 ];

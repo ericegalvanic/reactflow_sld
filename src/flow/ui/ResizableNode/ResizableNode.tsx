@@ -1,10 +1,9 @@
 import { memo } from 'react';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
+import { Handle } from '@xyflow/react';
 import { NodeCoreStyled, NodeRotatableBase } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { usePopupAnchor } from '@/common/hooks';
-import { NodeProps, ResizeControlVariant } from '@/flow/entities';
+import { NodeProps } from '@/flow/entities';
 
 export type ResizableNodeData = {
   data: {
@@ -35,12 +34,6 @@ const ResizableNode = NodeComponent<ResizableNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={100}
-          minHeight={50}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>{data.label}</NodeCoreStyled>
         <Handle type="source" position={sourceNodePosition} />

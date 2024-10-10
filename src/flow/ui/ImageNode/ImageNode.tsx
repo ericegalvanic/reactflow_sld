@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
+import { Handle } from '@xyflow/react';
 import {
   NodeClassCodeWrapperStyled,
   NodeCoreStyled,
@@ -12,7 +11,6 @@ import {
   NodeClassCode,
   NodeClassType,
   NodeProps,
-  ResizeControlVariant,
 } from '@/flow/entities';
 import { usePopupAnchor } from '@/common/hooks';
 
@@ -50,13 +48,6 @@ const ImageNode = NodeComponent<ImageNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={100}
-          minHeight={50}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
-
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <img src={src} alt={alt} width={width} height={height} />

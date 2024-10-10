@@ -3,36 +3,33 @@ import NodeComponent from '@/common/ui/NodeComponent';
 import {
   NodeClassCode,
   NodeProps,
+  ResizeControlVariant,
 } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
   NodeCoreStyled,
-  NodeImageStyled,
   NodeLabelStyled,
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
-} from './TransferNode.styles';
-import { Handle } from '@xyflow/react';
-import { switchNodeImage } from './TransferNode.data';
+  PanelLineStyled,
+} from './ElectricalPanelNode.styles';
+import { NodeResizeControl } from '@xyflow/react';
 import { memo } from 'react';
+import { defaultControlStyle } from '@/flow/constants';
 
-export type TransferNodeData = {
+export type ElectricalPanelNodeData = {
   data: {
     code: NodeClassCode;
     label: string;
   };
 };
 
-export type TransferNodeProps = NodeProps<TransferNodeData>;
+export type ElectricalPanelNodeProps = NodeProps<ElectricalPanelNodeData>;
 
-const { src, alt, width, height } = switchNodeImage;
-
-const TransferNode = NodeComponent<TransferNodeProps>(
+const ElectricalPanelNode = NodeComponent<ElectricalPanelNodeProps>(
   ({
     data,
-    targetPosition,
     rotation,
-    sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
@@ -50,18 +47,22 @@ const TransferNode = NodeComponent<TransferNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <Handle type="target" position={targetPosition} />
+        <NodeResizeControl
+          style={defaultControlStyle}
+          minWidth={280}
+          minHeight={60}
+          variant={ResizeControlVariant.Line}
+        ></NodeResizeControl>
         <NodeCoreStyled>
-          <NodeImageStyled src={src} alt={alt} width={width} height={height} />
           <NodeTextDataStyled>
             <NodeLabelStyled>{label}</NodeLabelStyled>
             <NodeClassCodeStyled>{code}</NodeClassCodeStyled>
           </NodeTextDataStyled>
+          <PanelLineStyled />
         </NodeCoreStyled>
-        <Handle type="source" position={sourceNodePosition} />
       </NodeRotatableBaseStyled>
     );
   }
 );
 
-export default memo(TransferNode);
+export default memo(ElectricalPanelNode);

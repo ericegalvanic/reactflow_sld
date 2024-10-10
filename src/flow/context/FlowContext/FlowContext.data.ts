@@ -51,6 +51,15 @@ export const initialNodes: RFNode[] = [
       label: 'ATS-400',
     },
   }),
+  node({
+    id: '7',
+    type: nodeType.ElectricalPanelNode,
+    position: { x: 100, y: 450 },
+    data: {
+      code: nodeClassCode.PANL,
+      label: 'PANL-15',
+    },
+  }),
 ];
 
 export const initialEdges: RFEdge[] = [

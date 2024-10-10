@@ -3,7 +3,6 @@ import NodeComponent from '@/common/ui/NodeComponent';
 import {
   NodeClassCode,
   NodeProps,
-  ResizeControlVariant,
 } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
@@ -13,8 +12,7 @@ import {
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
 } from './TransferSwitchNode.styles';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
+import { Handle } from '@xyflow/react';
 import { switchNodeImage } from './TransferSwitchNode.data';
 import { memo } from 'react';
 import { css } from '@/common/utils';
@@ -64,13 +62,6 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={100}
-          minHeight={50}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
-
         <Handle
           type="target"
           position={targetPosition}

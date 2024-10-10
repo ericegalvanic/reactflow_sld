@@ -3,7 +3,6 @@ import NodeComponent from '@/common/ui/NodeComponent';
 import {
   NodeClassCode,
   NodeProps,
-  ResizeControlVariant,
 } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
@@ -13,8 +12,7 @@ import {
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
 } from './SwitchNode.styles';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
+import { Handle } from '@xyflow/react';
 import { switchNodeImage } from './SwitchNode.data';
 import { memo } from 'react';
 
@@ -52,13 +50,6 @@ const SwitchNode = NodeComponent<SwitchNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={100}
-          minHeight={50}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
-
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <NodeImageStyled src={src} alt={alt} width={width} height={height} />

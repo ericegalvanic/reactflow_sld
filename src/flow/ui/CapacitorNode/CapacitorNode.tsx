@@ -3,7 +3,6 @@ import NodeComponent from '@/common/ui/NodeComponent';
 import {
   NodeClassCode,
   NodeProps,
-  ResizeControlVariant,
 } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
@@ -12,9 +11,8 @@ import {
   NodeLabelStyled,
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
-} from './CapacitorNode.style';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
+} from './CapacitorNode.styles';
+import { Handle } from '@xyflow/react';
 import { switchNodeImage } from './CapacitorNode.data';
 import { memo } from 'react';
 
@@ -52,13 +50,6 @@ const CapacitorNode = NodeComponent<CapacitorNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={100}
-          minHeight={50}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
-
         <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <NodeImageStyled src={src} alt={alt} width={width} height={height} />

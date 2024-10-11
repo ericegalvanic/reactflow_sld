@@ -1,9 +1,15 @@
-import { HeterogenousNodeClass, heterogenousNodeClass } from '@/flow/entities';
+import {
+  HeterogenousNodeClass,
+  heterogenousNodeClass,
+  nodeTypeNodeClassMap,
+} from '@/flow/entities';
 import { RFNode } from '../../common/entities';
-import { hasClassType } from './hasClassType';
-import { isAppImage } from '../../common/utils/isAppImage';
+import { hasExplicitClassType } from './hasExplicitClassType';
+import { hasImplicitClassType } from './hasImplicitClassType';
 
 export const nodeClass = (node: RFNode): HeterogenousNodeClass =>
-  'image' in node.data && isAppImage(node.data['image']) && hasClassType(node)
+  hasExplicitClassType(node)
     ? node.data.class
+    : hasImplicitClassType(node)
+    ? nodeTypeNodeClassMap[node.type]
     : heterogenousNodeClass.textAsset;

@@ -14,3 +14,6 @@ export * from './HeterogenousNodeClass';
 export * from './NodeClassCode';
 export * from './ResizeControlVariant';
 export * from './NodeProps';
+export * from './NodeTypeWithImplicitClass';
+export * from './nodeTypeNodeClassMap';
+export * from './ImplicitNodeClass';

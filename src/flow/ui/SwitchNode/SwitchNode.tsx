@@ -1,9 +1,6 @@
 import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
-import {
-  NodeClassCode,
-  NodeProps,
-} from '@/flow/entities';
+import { NodeClassCode, NodeProps } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
   NodeCoreStyled,

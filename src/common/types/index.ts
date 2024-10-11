@@ -6,3 +6,5 @@ export * from './SetState';
 export * from './Nullable';
 export * from './Brand';
 export * from './ComponentProps';
+export * from './StrictExtract';
+export * from './ReverselyMapped';

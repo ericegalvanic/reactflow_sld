@@ -22,6 +22,8 @@ import {
   parent,
   renamedNode,
   node as createNode,
+  isImplicitClassType,
+  hasImplicitClassType,
 } from '@/flow/utils';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
 import { useFlow } from '@/flow/context';
@@ -35,6 +37,7 @@ import {
   NodeClassCode,
   nodeClassCodeNameMap,
   nodeClassCodeNames,
+  nodeClassNodeTypeMap,
   NodeType,
   nodeType,
 } from '@/flow/entities';
@@ -66,6 +69,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   const [code, setCode] = useState(() => nodeClassCode(node));
 
   const isTextAsset = isTextAssetClass(heterogenousClass);
+  const isWithImplicitClass = hasImplicitClassType(node);
   const hasName = nodeWithName(node);
   const hasParent = isSubNode(node);
   const isTopLevelNode = !hasParent;
@@ -158,8 +162,12 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         ? nodeType.ResizableNode
         : nodeType.ResizableSubNode
       : isTopLevelNode
-      ? nodeType.ImageNode
-      : nodeType.ImageSubNode;
+      ? isImplicitClassType(heterogenousClass)
+        ? nodeClassNodeTypeMap[heterogenousClass]
+        : nodeType.ImageNode
+      : isImplicitClassType(heterogenousClass)
+      ? nodeClassNodeTypeMap[heterogenousClass]
+      : nodeType.ImageNode;
 
     onSave?.(
       createNode({
@@ -173,6 +181,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
               image: nodeImageMap[heterogenousClass],
               code: code,
               background: color,
+              ...(isWithImplicitClass ? { label: name.trim() } : {}),
             },
       })
     );
@@ -229,7 +238,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       >
         {nodeHomogenousClassDisplayList}
       </Select>
-      {isTextAsset ? (
+      {(isTextAsset || isWithImplicitClass) && (
         <TextField
           value={name}
           onChange={handleNameChange}
@@ -238,7 +247,8 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           error={nameExistsAlready}
           helperText={nameHelperText}
         />
-      ) : (
+      )}
+      {!isTextAsset && (
         <Select
           label="Node Class Code"
           inputLabel="Node Class Code"
@@ -263,7 +273,6 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           value={`${displayNode(nodeParent)}`}
         />
       )}
-
       {hasChildren &&
         nodeChildren.map((child, index) => (
           <TextField

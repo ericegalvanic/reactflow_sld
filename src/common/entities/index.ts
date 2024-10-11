@@ -19,3 +19,4 @@ export * from './PossibleNodeData';
 export * from './PopupAnchor';
 export * from './Colorable';
 export * from './MandatoryNodeData';
+export * from './Reversible';

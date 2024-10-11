@@ -8,3 +8,4 @@ export * from './isAppImage';
 export * from './assertExistence';
 export * from './assertImperatively';
 export * from './css';
+export * from './reverseObjectEntries';

@@ -33,10 +33,15 @@ import { nodeClass } from '@/flow/utils/nodeClass';
 import {
   NodeClassCode,
   nodeClassCodeNameMap,
-  nodeClassCodeNames,
   nodeClassNodeTypeMap,
   NodeType,
   nodeType,
+  SubLevelNodeClassCode,
+  subLevelNodeClasses,
+  subLevelNodeCodeClassMap,
+  TopLevelNodeClassCode,
+  topLevelNodeClasses,
+  topLevelNodeCodeNodeClassMap,
 } from '@/flow/entities';
 import { nodeImageMap } from '@/flow/data/nodeImageMap';
 
@@ -59,17 +64,18 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   const [name, setName] = useState(() => nodeName(node) ?? '');
   const [color, setColor] = useState(() => nodeColor(node).background ?? '');
   const [code, setCode] = useState(() => nodeClassCode(node));
+  const [nodeChildren, setNodeChildren] = useState(() =>
+    children(node, existingNodes)
+  );
+
+  const hasParent = useMemo(() => isSubNode(node), [node]);
+  const isTopLevelNode = useMemo(() => !hasParent, [hasParent]);
 
   const heterogenousClass = nodeClass(node);
   const isWithImplicitClass = hasImplicitClassType(node);
   const hasName = nodeWithName(node);
-  const hasParent = isSubNode(node);
-  const isTopLevelNode = !hasParent;
   const nodeParent = parent(node, existingNodes);
   const hasChildren = isParent(node, existingNodes);
-  const [nodeChildren, setNodeChildren] = useState(() =>
-    children(node, existingNodes)
-  );
   const parentNodeInputLabel = hasName ? 'Parent name' : 'Parent id';
 
   useEffect(() => {
@@ -133,17 +139,28 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 
   const handleSave: MouseEventHandler<HTMLButtonElement> = () => {
     const savingAsTextAsset = isTextAssetClass(heterogenousClass);
+    const topLevelNodeClass =
+      topLevelNodeCodeNodeClassMap[code as TopLevelNodeClassCode];
+    const subLevelNodeClass =
+      subLevelNodeCodeClassMap[code as SubLevelNodeClassCode];
+
+    const newClass = !savingAsTextAsset
+      ? isTopLevelNode
+        ? topLevelNodeClass
+        : subLevelNodeClass
+      : null;
+
     const newNodeType: NodeType = savingAsTextAsset
       ? isTopLevelNode
         ? nodeType.ResizableNode
         : nodeType.ResizableSubNode
       : isTopLevelNode
-      ? isImplicitClassType(heterogenousClass)
-        ? nodeClassNodeTypeMap[heterogenousClass]
+      ? isImplicitClassType(topLevelNodeClass)
+        ? nodeClassNodeTypeMap[topLevelNodeClass]
         : nodeType.ImageNode
-      : isImplicitClassType(heterogenousClass)
-      ? nodeClassNodeTypeMap[heterogenousClass]
-      : nodeType.ImageNode;
+      : isImplicitClassType(subLevelNodeClass)
+      ? nodeClassNodeTypeMap[subLevelNodeClass]
+      : nodeType.ImageSubNode;
 
     onSave?.(
       createNode({
@@ -153,8 +170,8 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           ? { ...node.data, label: name.trim(), background: color }
           : {
               ...node.data,
-              class: heterogenousClass,
-              image: nodeImageMap[heterogenousClass],
+              class: newClass ?? heterogenousClass,
+              image: nodeImageMap[newClass ?? heterogenousClass],
               code: code,
               background: color,
               ...(isWithImplicitClass ? { label: name.trim() } : {}),
@@ -181,18 +198,29 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 
   const nodeClassCodeDisplayList = useMemo(
     () =>
-      nodeClassCodeNames.map((classCode) => {
-        return (
-          <MenuItem key={classCode} value={classCode}>
-            {nodeClassCodeNameMap[classCode]}
-          </MenuItem>
-        );
-      }),
-    []
+      (isTopLevelNode ? topLevelNodeClasses : subLevelNodeClasses).map(
+        (classCode) => {
+          return (
+            <MenuItem key={classCode} value={classCode}>
+              {nodeClassCodeNameMap[classCode]}
+            </MenuItem>
+          );
+        }
+      ),
+    [isTopLevelNode]
   );
 
   return (
     <FormStyled>
+      <Select
+        label="Node Class Code"
+        inputLabel="Node Class Code"
+        value={code}
+        onChange={handleNodeClassCodeChange}
+        size="small"
+      >
+        {nodeClassCodeDisplayList}
+      </Select>
       {isWithImplicitClass && (
         <TextField
           value={name}
@@ -203,17 +231,6 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           helperText={nameHelperText}
         />
       )}
-      {
-        <Select
-          label="Node Class Code"
-          inputLabel="Node Class Code"
-          value={code}
-          onChange={handleNodeClassCodeChange}
-          size="small"
-        >
-          {nodeClassCodeDisplayList}
-        </Select>
-      }
       <ColorPicker
         value={color}
         onChange={handleColorChange}

@@ -1,5 +1,5 @@
 import { StrictExtract } from '@/common/types';
-import { NodeClassCode } from './NodeClassCode';
+import { nodeClassCode, NodeClassCode } from './NodeClassCode';
 
 export type SubLevelNodeClassCode = StrictExtract<
   NodeClassCode,
@@ -26,3 +26,28 @@ export type SubLevelNodeClassCode = StrictExtract<
   | 'HPSW'
   | 'LISW'
 >;
+
+export const subLevelNodeClasses = [
+  nodeClassCode['AMCB'],
+  nodeClassCode['CTCR'],
+  nodeClassCode['ARCB'],
+  nodeClassCode['GICB'],
+  nodeClassCode['ICCB'],
+  nodeClassCode['LVCB'],
+  nodeClassCode['MCCB-L-LV'],
+  nodeClassCode['MCCB-S-LV'],
+  nodeClassCode['OICB'],
+  nodeClassCode['RCLS'],
+  nodeClassCode['VCCB'],
+  nodeClassCode['FUSE-LV'],
+  nodeClassCode['FUSE-MV'],
+  nodeClassCode['BISW-LV'],
+  nodeClassCode['BISW-MV'],
+  nodeClassCode['BPSW'],
+  nodeClassCode['DISC-F-LV'],
+  nodeClassCode['DISC-F-MV'],
+  nodeClassCode['DISC-LV'],
+  nodeClassCode['DISC-MV'],
+  nodeClassCode['HPSW'],
+  nodeClassCode['LISW'],
+];

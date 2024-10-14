@@ -166,7 +166,7 @@ export const nodeClassCodeNameMap: Record<NodeClassCode, string> = {
   SCAP: 'S-Capcitor',
 };
 
-export const nodeClassCodeNames: NodeClassCode[] = [
+export const nodeClassCodeNames: Array<NodeClassCode> = [
   'ARCB',
   'AMCB',
   'CTCR',

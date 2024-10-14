@@ -1,7 +1,7 @@
-import { Retype } from '../types';
+import { Retyped } from '../types';
 import { NodeData } from './NodeData';
 
-export type PossibleNodeData = Retype<
+export type PossibleNodeData = Retyped<
   NodeData,
   'data',
   Partial<NodeData['data']>

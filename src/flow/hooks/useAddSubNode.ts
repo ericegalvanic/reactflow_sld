@@ -1,5 +1,5 @@
 import { CreateRFNodeDTO, RFNode } from '@/common/entities';
-import { Optional, SetState } from '@/common/types';
+import { MadeOptional, SetState } from '@/common/types';
 import { useCallback } from 'react';
 import { node, parentNodeCenter } from '@/flow/utils';
 import { nodeType } from '../entities';
@@ -13,7 +13,7 @@ export const useAddSubNode = (setNodes: SetState<RFNode[]>) => {
         position: overriddenPosition,
         type: overriddenType,
         ...overriddenDefaultNodeCreateOptions
-      }: Optional<Omit<CreateRFNodeDTO, 'parentId'>, 'position'> = {}
+      }: MadeOptional<Omit<CreateRFNodeDTO, 'parentId'>, 'position'> = {}
     ) => {
       const newNode = node({
         parentId: parentNode.id,

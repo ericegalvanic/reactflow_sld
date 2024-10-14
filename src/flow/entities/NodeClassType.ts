@@ -1,4 +1,4 @@
-import { ObjectValues } from '@/common/types';
+import { ExhaustiveArray, ObjectValues } from '@/common/types';
 
 export const nodeClassType = {
   circuitBreaker: 'CIRCUIT_BREAKER',
@@ -40,7 +40,7 @@ export const nodeClassTypeNameMap: Record<NodeClassType, string> = {
   [nodeClassType.capacitor]: 'Capacitor',
 };
 
-export const nodeClassTypes: NodeClassType[] = [
+export const nodeClassTypes: ExhaustiveArray<NodeClassType> = [
   nodeClassType.circuitBreaker,
   nodeClassType.electricalPanel,
   nodeClassType.fuse,

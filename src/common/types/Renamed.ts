@@ -1,4 +1,4 @@
-export type Rename<
+export type Renamed<
   T,
   TProp extends keyof T,
   TNewName extends number | string | symbol = TProp,

@@ -31,9 +31,6 @@ import Select, { SelectProps } from '@/common/ui/Select';
 import MenuItem from '@/common/ui/MenuItem';
 import { nodeClass } from '@/flow/utils/nodeClass';
 import {
-  HeterogenousNodeClass,
-  heterogenousNodeClasses,
-  heterogenousNodeClassNameMap,
   NodeClassCode,
   nodeClassCodeNameMap,
   nodeClassCodeNames,
@@ -48,7 +45,6 @@ export type NodeEditFormProps = {
   onSave?: NodeEditFormUpdateHandle;
   onNodeNameChange?: NodeEditFormUpdateHandle;
   onNodeColorChange?: NodeEditFormUpdateHandle;
-  onNodeClassTypeChange?: NodeEditFormUpdateHandle;
   onNodeClassCodeChange?: NodeEditFormUpdateHandle;
 };
 
@@ -57,18 +53,14 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   onSave,
   onNodeNameChange,
   onNodeColorChange,
-  onNodeClassTypeChange,
   onNodeClassCodeChange,
 }) => {
   const { nodes: existingNodes, setNodes } = useFlow();
   const [name, setName] = useState(() => nodeName(node) ?? '');
   const [color, setColor] = useState(() => nodeColor(node).background ?? '');
-  const [heterogenousClass, setHeterogenousClass] = useState(() =>
-    nodeClass(node)
-  );
   const [code, setCode] = useState(() => nodeClassCode(node));
 
-  const isTextAsset = isTextAssetClass(heterogenousClass);
+  const heterogenousClass = nodeClass(node);
   const isWithImplicitClass = hasImplicitClassType(node);
   const hasName = nodeWithName(node);
   const hasParent = isSubNode(node);
@@ -105,22 +97,6 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       ),
     [existingNodes, name, node]
   );
-
-  const handleNodeClassTypeChange: NonNullable<
-    SelectProps<string>['onChange']
-  > = (event) => {
-    const classType = event.target.value as HeterogenousNodeClass;
-    const becomingTextAsset = isTextAssetClass(classType);
-    setHeterogenousClass(classType);
-    onNodeClassTypeChange?.(
-      createNode({
-        ...node,
-        data: becomingTextAsset
-          ? { label: '' }
-          : { class: classType, image: nodeImageMap[classType] },
-      })
-    );
-  };
 
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setName(event.target.value);
@@ -203,18 +179,6 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 
   const nameHelperText = nameExistsAlready ? 'This node exists already' : '';
 
-  const nodeHomogenousClassDisplayList = useMemo(
-    () =>
-      heterogenousNodeClasses.map((classType) => {
-        return (
-          <MenuItem key={classType} value={classType}>
-            {heterogenousNodeClassNameMap[classType]}
-          </MenuItem>
-        );
-      }),
-    []
-  );
-
   const nodeClassCodeDisplayList = useMemo(
     () =>
       nodeClassCodeNames.map((classCode) => {
@@ -229,16 +193,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 
   return (
     <FormStyled>
-      <Select
-        label="Node Class Type"
-        inputLabel="Node Class Type"
-        value={heterogenousClass}
-        onChange={handleNodeClassTypeChange}
-        size="small"
-      >
-        {nodeHomogenousClassDisplayList}
-      </Select>
-      {(isTextAsset || isWithImplicitClass) && (
+      {isWithImplicitClass && (
         <TextField
           value={name}
           onChange={handleNameChange}
@@ -248,7 +203,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           helperText={nameHelperText}
         />
       )}
-      {!isTextAsset && (
+      {
         <Select
           label="Node Class Code"
           inputLabel="Node Class Code"
@@ -258,7 +213,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
         >
           {nodeClassCodeDisplayList}
         </Select>
-      )}
+      }
       <ColorPicker
         value={color}
         onChange={handleColorChange}

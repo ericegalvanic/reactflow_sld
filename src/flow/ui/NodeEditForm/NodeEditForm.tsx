@@ -1,5 +1,10 @@
 import { RFNode } from '@/common/entities';
-import { FormStyled, SaveButtonStyled } from './NodeEditForm.styles';
+import {
+  ClassCodeStyled,
+  FormStyled,
+  MenuItemStyled,
+  SaveButtonStyled,
+} from './NodeEditForm.styles';
 import {
   ChangeEventHandler,
   MouseEventHandler,
@@ -28,7 +33,6 @@ import {
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
 import { useFlow } from '@/flow/context';
 import Select, { SelectProps } from '@/common/ui/Select';
-import MenuItem from '@/common/ui/MenuItem';
 import { nodeClass } from '@/flow/utils/nodeClass';
 import {
   NodeClassCode,
@@ -201,9 +205,10 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       (isTopLevelNode ? topLevelNodeClasses : subLevelNodeClasses).map(
         (classCode) => {
           return (
-            <MenuItem key={classCode} value={classCode}>
+            <MenuItemStyled key={classCode} value={classCode}>
               {nodeClassCodeNameMap[classCode]}
-            </MenuItem>
+              <ClassCodeStyled>{classCode}</ClassCodeStyled>
+            </MenuItemStyled>
           );
         }
       ),

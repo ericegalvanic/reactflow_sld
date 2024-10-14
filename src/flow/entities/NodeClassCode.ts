@@ -1,6 +1,7 @@
 import { ObjectValues } from '@/common/types';
 
 export const nodeClassCode = {
+  ARCB: 'ARCB',
   AMCB: 'AMCB',
   CTCR: 'CTCR',
   GICB: 'GICB',
@@ -77,11 +78,14 @@ export const nodeClassCode = {
   UPSH: 'UPSH',
   UPSR: 'UPSR',
   UPSS: 'UPSS',
+  PCAP: 'PCAP',
+  SCAP: 'SCAP',
 } as const satisfies Record<string, string>;
 
 export type NodeClassCode = ObjectValues<typeof nodeClassCode>;
 
 export const nodeClassCodeNameMap: Record<NodeClassCode, string> = {
+  ARCB: 'ARCB Circuit Breaker',
   AMCB: 'Medium-Voltage Air Magnetic Circuit Breaker',
   CTCR: 'Contactor',
   GICB: 'Medim-Voltage Gas Insulated Circuit Breaker',
@@ -158,9 +162,12 @@ export const nodeClassCodeNameMap: Record<NodeClassCode, string> = {
   UPSH: 'Hybrid UPS System',
   UPSR: 'Rotary UPS System',
   UPSS: 'Static UPS System',
+  PCAP: 'P-Capacitor',
+  SCAP: 'S-Capcitor',
 };
 
 export const nodeClassCodeNames: NodeClassCode[] = [
+  'ARCB',
   'AMCB',
   'CTCR',
   'GICB',
@@ -237,4 +244,6 @@ export const nodeClassCodeNames: NodeClassCode[] = [
   'UPSH',
   'UPSR',
   'UPSS',
+  'PCAP',
+  'SCAP',
 ];

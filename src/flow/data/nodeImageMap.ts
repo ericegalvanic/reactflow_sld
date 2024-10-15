@@ -1,88 +1,112 @@
 import { AppImage } from '@/common/entities';
-import CircuitBreakers from 'public/circuit_breakers.png';
-import ElectricalPanels from 'public/electrical_panels.jpg';
-import Fuses from 'public/fuses.png';
-import Others from 'public/others.jpg';
-import Switches from 'src/assets/switch.png';
+import CircuitBreaker from 'src/assets/circuit_breaker.png';
+import Fuse from 'src/assets/fuse.png';
+import Other from 'src/assets/misc.png';
+import Switch from 'src/assets/switch.png';
 import TransferSwitch from 'src/assets/transfer_switch.png';
 import Transformer from 'src/assets/transformer.png';
-import UPSSystems from 'public/ups_systems.jpg';
+import UPSSystem from 'src/assets/ups_system.png';
 import Capacitor from 'src/assets/capacitor.png';
+import SubSwitch from 'src/assets/sub_switch.png';
+import Motor from 'src/assets/motor.png';
+import Generator from 'src/assets/generator.png';
+import Relay from 'src/assets/relay.png';
 import { NodeClassType } from '../entities';
 import { nodeHeightFactor, nodeHeightPx } from '../constants';
 
-const nodeImageWidthPx = 180;
+const fallbackNodeImageWidthPx = 180;
+const nodeImageWidthPx = (nominalWidth?: number) =>
+  nominalWidth ? nominalWidth * nodeHeightFactor : fallbackNodeImageWidthPx;
 const nodeImageHeightPx = nodeHeightPx;
 
-const squaredHeightFactor = nodeHeightFactor ** 2;
-
 const fallbackNodeImage: AppImage = {
-  src: Others,
+  src: Other,
   alt: 'generic',
-  width: nodeImageWidthPx,
+  width: nodeImageWidthPx(),
   height: nodeImageHeightPx,
 };
 
 export const nodeImageMap = {
   CIRCUIT_BREAKER: {
-    src: CircuitBreakers,
-    alt: 'circuit breakers',
-    width: nodeImageWidthPx,
+    src: CircuitBreaker,
+    alt: 'circuit breaker',
+    width: nodeImageWidthPx(75),
     height: nodeImageHeightPx,
   },
   ELECTRICAL_PANEL: {
-    src: ElectricalPanels,
-    alt: 'electrical panels',
-    width: nodeImageWidthPx,
+    src: Other,
+    alt: 'electrical panel',
+    width: nodeImageWidthPx(0),
     height: nodeImageHeightPx,
   },
   FUSE: {
-    src: Fuses,
-    alt: 'fuses',
-    width: nodeImageWidthPx,
+    src: Fuse,
+    alt: 'fuse',
+    width: nodeImageWidthPx(31),
     height: nodeImageHeightPx,
   },
   MISC: {
-    src: Others,
-    alt: 'others',
-    width: nodeImageWidthPx,
+    src: Other,
+    alt: 'other',
+    width: nodeImageWidthPx(116),
     height: nodeImageHeightPx,
   },
   SWITCH: {
-    src: Switches,
-    alt: 'switches',
-    width: 60 * nodeHeightFactor,
+    src: Switch,
+    alt: 'switch',
+    width: nodeImageWidthPx(77),
     height: nodeImageHeightPx,
   },
   TRANSFER_SWITCH: {
     src: TransferSwitch,
     alt: 'transfer switch',
-    width: 135 * nodeHeightFactor,
+    width: nodeImageWidthPx(130),
     height: nodeImageHeightPx,
   },
   TRANSFORMER: {
     src: Transformer,
     alt: 'transformer',
-    width: 180 * nodeHeightFactor,
+    width: nodeImageWidthPx(180),
     height: nodeImageHeightPx,
   },
   UPS_SYSTEM: {
-    src: UPSSystems,
-    alt: 'ups systems',
-    width: nodeImageWidthPx,
+    src: UPSSystem,
+    alt: 'ups system',
+    width: nodeImageWidthPx(151),
     height: nodeImageHeightPx,
   },
   CAPACITOR: {
     src: Capacitor,
     alt: 'capacitor',
-    width: 201 * squaredHeightFactor,
+    width: nodeImageWidthPx(74),
     height: nodeImageHeightPx,
   },
-  GENERATOR: fallbackNodeImage,
+  SUB_SWITCH: {
+    src: SubSwitch,
+    alt: 'switch',
+    width: nodeImageWidthPx(54),
+    height: nodeImageHeightPx,
+  },
+  MOTOR: {
+    src: Motor,
+    alt: 'motor',
+    width: nodeImageWidthPx(151),
+    height: nodeImageHeightPx,
+  },
+  GENERATOR: {
+    src: Generator,
+    alt: 'generator',
+    width: nodeImageWidthPx(151),
+    height: nodeImageHeightPx,
+  },
+  RELAY: {
+    src: Relay,
+    alt: 'relay',
+    width: nodeImageWidthPx(151),
+    height: nodeImageHeightPx,
+  },
   GROUND_FAULT_SYSTEM: fallbackNodeImage,
   GROUNDING_OR_BONDING: fallbackNodeImage,
   INSTRUMENT_TRANSFORMER: fallbackNodeImage,
   METER: fallbackNodeImage,
-  MOTOR: fallbackNodeImage,
-  RELAY: fallbackNodeImage,
 } as const satisfies Record<NodeClassType, AppImage>;

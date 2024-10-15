@@ -60,6 +60,51 @@ export const initialNodes: RFNode[] = [
       label: 'PANL-15',
     },
   }),
+  node({
+    id: '8',
+    type: nodeType.MiscNode,
+    position: { x: 100, y: 500 },
+    data: {
+      code: nodeClassCode.MMME,
+      label: 'MISC',
+    },
+  }),
+  node({
+    id: '9',
+    type: nodeType.MotorNode,
+    position: { x: 100, y: 550 },
+    data: {
+      code: nodeClassCode.MVSC,
+      label: 'MOTOR',
+    },
+  }),
+  node({
+    id: '10',
+    type: nodeType.GeneratorNode,
+    position: { x: 100, y: 600 },
+    data: {
+      code: nodeClassCode.GENR,
+      label: 'GENERATOR',
+    },
+  }),
+  node({
+    id: '11',
+    type: nodeType.RelayNode,
+    position: { x: 100, y: 650 },
+    data: {
+      code: nodeClassCode.EMRE,
+      label: 'RELAY',
+    },
+  }),
+  node({
+    id: '12',
+    type: nodeType.UPSSystemNode,
+    position: { x: 100, y: 700 },
+    data: {
+      code: nodeClassCode.UPSS,
+      label: 'UPS-1',
+    },
+  }),
 ];
 
 export const initialEdges: RFEdge[] = [

@@ -8,6 +8,11 @@ export const nodeTypeNodeClassMap = {
   SwitchNode: nodeClassType.switch,
   TransferSwitchNode: nodeClassType.transferSwitch,
   TransformerNode: nodeClassType.transformer,
+  MiscNode: nodeClassType.misc,
+  MotorNode: nodeClassType.motor,
+  GeneratorNode: nodeClassType.generator,
+  RelayNode: nodeClassType.relay,
+  UPSSystemNode: nodeClassType.upsSystem,
 } as const satisfies Record<NodeTypeWithImplicitClass, NodeClassType>;
 
 export const nodeClassNodeTypeMap = reverseObjectEntries(nodeTypeNodeClassMap);

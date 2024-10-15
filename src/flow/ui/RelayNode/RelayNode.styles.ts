@@ -78,12 +78,12 @@ export const NodeClassCodeStyled = styled('p')`
   margin: 0;
 `;
 
-export const leftTargetHandleStyles = css({
-  left: 126.6,
+export const topHandleStyles = css({
+  left: 141,
   top: -2,
 });
 
-export const rightTargetHandleStyles = css({
-  left: 153.6,
-  top: -2,
+export const bottomHandleStyles = css({
+  left: 141,
+  top: 55,
 });

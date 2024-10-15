@@ -1,6 +1,5 @@
 import { Colorable } from '@/common/entities';
 import NodeImage from '@/common/ui/NodeImage';
-import { css } from '@/common/utils';
 import { nodeHeightPx } from '@/flow/constants';
 import { styled } from '@mui/material';
 
@@ -77,13 +76,3 @@ export const NodeClassCodeStyled = styled('p')`
   line-height: 1.1667;
   margin: 0;
 `;
-
-export const leftTargetHandleStyles = css({
-  left: 126.6,
-  top: -2,
-});
-
-export const rightTargetHandleStyles = css({
-  left: 153.6,
-  top: -2,
-});

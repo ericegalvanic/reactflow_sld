@@ -2,31 +2,31 @@ import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
 import { NodeClassCode, NodeProps } from '@/flow/entities';
 import {
-  leftTargetHandleStyles,
+  bottomHandleStyles,
   NodeClassCodeStyled,
   NodeCoreStyled,
   NodeImageStyled,
   NodeLabelStyled,
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
-  rightTargetHandleStyles,
-} from './TransferSwitchNode.styles';
+  topHandleStyles,
+} from './UPSSystemNode.styles';
 import { Handle } from '@xyflow/react';
-import { switchNodeImage } from './TransferSwitchNode.data';
+import { switchNodeImage } from './UPSSystemNode.data';
 import { memo } from 'react';
 
-export type TransferSwitchNodeData = {
+export type UPSSystemNodeData = {
   data: {
     code: NodeClassCode;
     label: string;
   };
 };
 
-export type TransferSwitchNodeProps = NodeProps<TransferSwitchNodeData>;
+export type UPSSystemNodeProps = NodeProps<UPSSystemNodeData>;
 
 const { src, alt, width, height } = switchNodeImage;
 
-const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
+const UPSSystemNode = NodeComponent<UPSSystemNodeProps>(
   ({
     data,
     targetPosition,
@@ -36,7 +36,6 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
     handleNodeBaseMouseLeave,
     setPopupAnchor,
     nodeColor,
-    id,
   }) => {
     const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
     const label = data.label;
@@ -53,14 +52,7 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
         <Handle
           type="target"
           position={targetPosition}
-          style={leftTargetHandleStyles}
-          id={`${id}-left`}
-        />
-        <Handle
-          type="target"
-          position={targetPosition}
-          style={rightTargetHandleStyles}
-          id={`${id}-right`}
+          style={topHandleStyles}
         />
         <NodeCoreStyled>
           <NodeImageStyled src={src} alt={alt} width={width} height={height} />
@@ -69,10 +61,14 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
             <NodeClassCodeStyled>{code}</NodeClassCodeStyled>
           </NodeTextDataStyled>
         </NodeCoreStyled>
-        <Handle type="source" position={sourceNodePosition} />
+        <Handle
+          type="source"
+          position={sourceNodePosition}
+          style={bottomHandleStyles}
+        />
       </NodeRotatableBaseStyled>
     );
   }
 );
 
-export default memo(CapacitorNode);
+export default memo(UPSSystemNode);

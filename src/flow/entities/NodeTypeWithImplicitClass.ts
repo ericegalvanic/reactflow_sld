@@ -8,4 +8,9 @@ export type NodeTypeWithImplicitClass = StrictExtract<
   | 'TransferSwitchNode'
   | 'TransformerNode'
   | 'ElectricalPanelNode'
+  | 'MiscNode'
+  | 'MotorNode'
+  | 'GeneratorNode'
+  | 'RelayNode'
+  | 'UPSSystemNode'
 >;

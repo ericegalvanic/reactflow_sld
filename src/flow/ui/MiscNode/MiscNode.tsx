@@ -1,32 +1,33 @@
 import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
-import { NodeClassCode, NodeProps } from '@/flow/entities';
 import {
-  leftTargetHandleStyles,
+  NodeClassCode,
+  NodeProps,
+} from '@/flow/entities';
+import {
   NodeClassCodeStyled,
   NodeCoreStyled,
   NodeImageStyled,
   NodeLabelStyled,
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
-  rightTargetHandleStyles,
-} from './TransferSwitchNode.styles';
+} from './MiscNode.styles';
 import { Handle } from '@xyflow/react';
-import { switchNodeImage } from './TransferSwitchNode.data';
+import { switchNodeImage } from './MiscNode.data';
 import { memo } from 'react';
 
-export type TransferSwitchNodeData = {
+export type MiscNodeData = {
   data: {
     code: NodeClassCode;
     label: string;
   };
 };
 
-export type TransferSwitchNodeProps = NodeProps<TransferSwitchNodeData>;
+export type MiscNodeProps = NodeProps<MiscNodeData>;
 
 const { src, alt, width, height } = switchNodeImage;
 
-const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
+const MiscNode = NodeComponent<MiscNodeProps>(
   ({
     data,
     targetPosition,
@@ -36,7 +37,6 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
     handleNodeBaseMouseLeave,
     setPopupAnchor,
     nodeColor,
-    id,
   }) => {
     const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
     const label = data.label;
@@ -50,18 +50,7 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        <Handle
-          type="target"
-          position={targetPosition}
-          style={leftTargetHandleStyles}
-          id={`${id}-left`}
-        />
-        <Handle
-          type="target"
-          position={targetPosition}
-          style={rightTargetHandleStyles}
-          id={`${id}-right`}
-        />
+        <Handle type="target" position={targetPosition} />
         <NodeCoreStyled>
           <NodeImageStyled src={src} alt={alt} width={width} height={height} />
           <NodeTextDataStyled>
@@ -75,4 +64,4 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
   }
 );
 
-export default memo(CapacitorNode);
+export default memo(MiscNode);

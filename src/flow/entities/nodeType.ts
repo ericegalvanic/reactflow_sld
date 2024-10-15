@@ -8,6 +8,11 @@ import CapacitorNode from '../ui/CapacitorNode';
 import TransformerNode from '../ui/TransformerNode';
 import TransferSwitchNode from '../ui/TransferSwitchNode';
 import ElectricalPanelNode from '../ui/ElectricalPanelNode';
+import MiscNode from '../ui/MiscNode';
+import MotorNode from '../ui/MotorNode';
+import GeneratorNode from '../ui/GeneratorNode';
+import RelayNode from '../ui/RelayNode';
+import UPSSystemNode from '../ui/UPSSystemNode';
 
 export const nodeType = {
   ResizableNode: 'ResizableNode',
@@ -19,6 +24,11 @@ export const nodeType = {
   TransformerNode: 'TransformerNode',
   TransferSwitchNode: 'TransferSwitchNode',
   ElectricalPanelNode: 'ElectricalPanelNode',
+  MiscNode: 'MiscNode',
+  MotorNode: 'MotorNode',
+  GeneratorNode: 'GeneratorNode',
+  RelayNode: 'RelayNode',
+  UPSSystemNode: 'UPSSystemNode',
 } as const satisfies Record<string, string>;
 
 export type NodeType = ObjectValues<typeof nodeType>;
@@ -33,4 +43,9 @@ export const nodeTypeMap = {
   TransformerNode: TransformerNode,
   TransferSwitchNode: TransferSwitchNode,
   ElectricalPanelNode: ElectricalPanelNode,
+  MiscNode: MiscNode,
+  MotorNode: MotorNode,
+  GeneratorNode: GeneratorNode,
+  RelayNode: RelayNode,
+  UPSSystemNode: UPSSystemNode,
 } as const satisfies Record<NodeType, React.FC<never>>;

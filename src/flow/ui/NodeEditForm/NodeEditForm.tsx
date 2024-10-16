@@ -37,6 +37,7 @@ import { nodeClass } from '@/flow/utils/nodeClass';
 import {
   NodeClassCode,
   nodeClassCodeNameMap,
+  nodeClassCodeShortNameMap,
   nodeClassNodeTypeMap,
   NodeType,
   nodeType,
@@ -207,7 +208,9 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           return (
             <MenuItemStyled key={classCode} value={classCode}>
               {nodeClassCodeNameMap[classCode]}
-              <ClassCodeStyled>{classCode}</ClassCodeStyled>
+              <ClassCodeStyled>
+                {nodeClassCodeShortNameMap[classCode]}
+              </ClassCodeStyled>
             </MenuItemStyled>
           );
         }
@@ -226,7 +229,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
       >
         {nodeClassCodeDisplayList}
       </Select>
-      {isWithImplicitClass && (
+      {isWithImplicitClass && isTopLevelNode && (
         <TextField
           value={name}
           onChange={handleNameChange}
@@ -236,12 +239,14 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
           helperText={nameHelperText}
         />
       )}
-      <ColorPicker
-        value={color}
-        onChange={handleColorChange}
-        label="Node Color"
-        size="small"
-      />
+      {isTopLevelNode && (
+        <ColorPicker
+          value={color}
+          onChange={handleColorChange}
+          label="Node Color"
+          size="small"
+        />
+      )}
       {hasParent && nodeParent && (
         <TextField
           disabled

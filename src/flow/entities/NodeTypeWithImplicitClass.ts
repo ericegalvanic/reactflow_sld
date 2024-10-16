@@ -13,4 +13,7 @@ export type NodeTypeWithImplicitClass = StrictExtract<
   | 'GeneratorNode'
   | 'RelayNode'
   | 'UPSSystemNode'
+  | 'SubSwitchNode'
+  | 'FuseNode'
+  | 'CircuitBreakerNode'
 >;

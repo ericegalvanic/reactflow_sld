@@ -12,12 +12,26 @@ import Motor from 'src/assets/motor.png';
 import Generator from 'src/assets/generator.png';
 import Relay from 'src/assets/relay.png';
 import { NodeClassType } from '../entities';
-import { nodeHeightFactor, nodeHeightPx } from '../constants';
+import {
+  nodeHeightFactor,
+  nodeHeightPx,
+  subNodeHeightFactor,
+  subNodeHeightPx,
+} from '../constants';
 
 const fallbackNodeImageWidthPx = 180;
+const fallbackSubNodeImageWidthPx = 30;
+
 const nodeImageWidthPx = (nominalWidth?: number) =>
   nominalWidth ? nominalWidth * nodeHeightFactor : fallbackNodeImageWidthPx;
+
+const subNodeImageWidthPx = (nominalWidth?: number) =>
+  nominalWidth
+    ? nominalWidth * subNodeHeightFactor
+    : fallbackSubNodeImageWidthPx;
+
 const nodeImageHeightPx = nodeHeightPx;
+const subNodeImageHeightPx = subNodeHeightPx;
 
 const fallbackNodeImage: AppImage = {
   src: Other,
@@ -30,8 +44,8 @@ export const nodeImageMap = {
   CIRCUIT_BREAKER: {
     src: CircuitBreaker,
     alt: 'circuit breaker',
-    width: nodeImageWidthPx(75),
-    height: nodeImageHeightPx,
+    width: subNodeImageWidthPx(104),
+    height: subNodeImageHeightPx,
   },
   ELECTRICAL_PANEL: {
     src: Other,
@@ -42,8 +56,8 @@ export const nodeImageMap = {
   FUSE: {
     src: Fuse,
     alt: 'fuse',
-    width: nodeImageWidthPx(31),
-    height: nodeImageHeightPx,
+    width: subNodeImageWidthPx(45),
+    height: subNodeImageHeightPx,
   },
   MISC: {
     src: Other,
@@ -84,8 +98,8 @@ export const nodeImageMap = {
   SUB_SWITCH: {
     src: SubSwitch,
     alt: 'switch',
-    width: nodeImageWidthPx(54),
-    height: nodeImageHeightPx,
+    width: subNodeImageWidthPx(72),
+    height: subNodeImageHeightPx,
   },
   MOTOR: {
     src: Motor,

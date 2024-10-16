@@ -11,23 +11,23 @@ import {
   NodeLabelStyled,
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
-} from './TransferNode.styles';
+} from './TransformerNode.styles';
 import { Handle } from '@xyflow/react';
-import { switchNodeImage } from './TransferNode.data';
+import { switchNodeImage } from './TransformerNode.data';
 import { memo } from 'react';
 
-export type TransferNodeData = {
+export type TransformerNodeData = {
   data: {
     code: NodeClassCode;
     label: string;
   };
 };
 
-export type TransferNodeProps = NodeProps<TransferNodeData>;
+export type TransformerNodeProps = NodeProps<TransformerNodeData>;
 
 const { src, alt, width, height } = switchNodeImage;
 
-const TransferNode = NodeComponent<TransferNodeProps>(
+const TransformerNode = NodeComponent<TransformerNodeProps>(
   ({
     data,
     targetPosition,
@@ -64,4 +64,4 @@ const TransferNode = NodeComponent<TransferNodeProps>(
   }
 );
 
-export default memo(TransferNode);
+export default memo(TransformerNode);

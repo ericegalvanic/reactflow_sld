@@ -21,7 +21,6 @@ import {
   flowDirection,
   flowEditMode,
   flowViewMode,
-  nodeType,
   nodeTypeMap,
 } from '@/flow/entities';
 import { Nullable } from '@/common/types';
@@ -37,6 +36,12 @@ import {
 } from '@/flow/utils';
 import { assertIsFlowSave, downloadFile } from '@/common/utils';
 import { JSON_MIME_TYPE } from '@/common/constants';
+import {
+  defaultSubLevelNodeCode,
+  defaultSubLevelNodeType,
+  defaultTopLevelNodeCode,
+  defaultTopLevelNodeType,
+} from '@/flow/constants';
 
 const HomePage: React.FC = () => {
   const {
@@ -123,10 +128,13 @@ const HomePage: React.FC = () => {
         getDownstreamNodePosition(upstreamNode),
         {
           type: isUpstreamASubNode
-            ? nodeType.ResizableSubNode
-            : nodeType.ResizableNode,
+            ? defaultSubLevelNodeType
+            : defaultTopLevelNodeType,
           data: {
             label: `ASSET ${appNodes.length + 1}`,
+            code: isUpstreamASubNode
+              ? defaultSubLevelNodeCode
+              : defaultTopLevelNodeCode,
           },
         }
       );

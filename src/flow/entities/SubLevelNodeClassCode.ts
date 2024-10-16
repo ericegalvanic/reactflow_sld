@@ -1,4 +1,4 @@
-import { StrictExtract } from '@/common/types';
+import { ExhaustiveArray, StrictExtract } from '@/common/types';
 import { nodeClassCode, NodeClassCode } from './NodeClassCode';
 
 export type SubLevelNodeClassCode = StrictExtract<
@@ -16,18 +16,18 @@ export type SubLevelNodeClassCode = StrictExtract<
   | 'RCLS'
   | 'FUSE-LV'
   | 'FUSE-MV'
-  | 'BISW-LV'
-  | 'BISW-MV'
-  | 'BPSW'
-  | 'DISC-F-LV'
-  | 'DISC-F-MV'
-  | 'DISC-LV'
-  | 'DISC-MV'
-  | 'HPSW'
-  | 'LISW'
+  | 'SUB_BISW-LV'
+  | 'SUB_BISW-MV'
+  | 'SUB_BPSW'
+  | 'SUB_DISC-F-LV'
+  | 'SUB_DISC-F-MV'
+  | 'SUB_DISC-LV'
+  | 'SUB_DISC-MV'
+  | 'SUB_HPSW'
+  | 'SUB_LISW'
 >;
 
-export const subLevelNodeClasses = [
+export const subLevelNodeClasses: ExhaustiveArray<SubLevelNodeClassCode> = [
   nodeClassCode['AMCB'],
   nodeClassCode['CTCR'],
   nodeClassCode['ARCB'],
@@ -41,13 +41,13 @@ export const subLevelNodeClasses = [
   nodeClassCode['VCCB'],
   nodeClassCode['FUSE-LV'],
   nodeClassCode['FUSE-MV'],
-  nodeClassCode['BISW-LV'],
-  nodeClassCode['BISW-MV'],
-  nodeClassCode['BPSW'],
-  nodeClassCode['DISC-F-LV'],
-  nodeClassCode['DISC-F-MV'],
-  nodeClassCode['DISC-LV'],
-  nodeClassCode['DISC-MV'],
-  nodeClassCode['HPSW'],
-  nodeClassCode['LISW'],
+  nodeClassCode['SUB_BISW-LV'],
+  nodeClassCode['SUB_BISW-MV'],
+  nodeClassCode['SUB_BPSW'],
+  nodeClassCode['SUB_DISC-F-LV'],
+  nodeClassCode['SUB_DISC-F-MV'],
+  nodeClassCode['SUB_DISC-LV'],
+  nodeClassCode['SUB_DISC-MV'],
+  nodeClassCode['SUB_HPSW'],
+  nodeClassCode['SUB_LISW'],
 ];

@@ -19,6 +19,7 @@ import PopupCore from '../PopupCore';
 import { MouseEventHandler, useState } from 'react';
 import {
   displayNode,
+  isSubNode,
   nodeClass,
   nodeClassCode,
   nodeClosestParent,
@@ -31,6 +32,11 @@ import {
 } from './NodeComponent.styles';
 import { Nullable } from '@/common/types';
 import { assertImperatively } from '@/common/utils';
+import {
+  nodeClassCodeShortNameMap,
+  NodeClassType,
+  nodeClassTypeShortNameMap,
+} from '@/flow/entities';
 
 const NodeComponent = <P = {},>(
   OriginalNodeComponent: NodeFC<P & HasId>
@@ -59,7 +65,9 @@ const NodeComponent = <P = {},>(
     const theNode = props;
     assertImperatively<RFNode>(theNode);
 
+    const isTopLevelNode = !isSubNode(theNode);
     const theNodeName = displayNode(theNode);
+
     const theNodeClass = nodeClass(theNode);
     const theNodeCode = nodeClassCode(theNode);
     const theClosestParent: Nullable<RFNode> = nodeClosestParent(
@@ -91,18 +99,24 @@ const NodeComponent = <P = {},>(
           placement="left"
         >
           <PopupCore>
-            <NodePropertyRowStyled>
-              <NodePropertyNameStyled>Name:</NodePropertyNameStyled>
-              <NodePropertyValueStyled>{theNodeName}</NodePropertyValueStyled>
-            </NodePropertyRowStyled>
+            {isTopLevelNode && (
+              <NodePropertyRowStyled>
+                <NodePropertyNameStyled>Name:</NodePropertyNameStyled>
+                <NodePropertyValueStyled>{theNodeName}</NodePropertyValueStyled>
+              </NodePropertyRowStyled>
+            )}
             <NodePropertyRowStyled>
               <NodePropertyNameStyled>Class:</NodePropertyNameStyled>
-              <NodePropertyValueStyled>{theNodeClass}</NodePropertyValueStyled>
+              <NodePropertyValueStyled>
+                {nodeClassTypeShortNameMap[theNodeClass as NodeClassType]}
+              </NodePropertyValueStyled>
             </NodePropertyRowStyled>
             {theNodeCode && (
               <NodePropertyRowStyled>
                 <NodePropertyNameStyled>Class Code:</NodePropertyNameStyled>
-                <NodePropertyValueStyled>{theNodeCode}</NodePropertyValueStyled>
+                <NodePropertyValueStyled>
+                  {nodeClassCodeShortNameMap[theNodeCode]}
+                </NodePropertyValueStyled>
               </NodePropertyRowStyled>
             )}
             {theClosestParent && (

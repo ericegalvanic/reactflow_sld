@@ -34,11 +34,15 @@ const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
         onClick: () => onNodeDelete?.(contextMenuProps.id),
         color: 'error.main',
       },
-      {
-        text: 'Create Downstream Asset',
-        icon: <AddIcon />,
-        onClick: () => onCreateDownstreamAsset?.(targetNode),
-      },
+      ...(isParent
+        ? [
+            {
+              text: 'Create Downstream Asset',
+              icon: <AddIcon />,
+              onClick: () => onCreateDownstreamAsset?.(targetNode),
+            },
+          ]
+        : []),
       ...(isParent
         ? [
             {

@@ -6,7 +6,6 @@ export const useKeyboardEventListener = (
 ) => {
   useEffect(() => {
     const handleEscKeyPress = (event: KeyboardEvent) => {
-      console.log(event);
       if (event.key === keyboardKey) {
         eventHandler();
       }

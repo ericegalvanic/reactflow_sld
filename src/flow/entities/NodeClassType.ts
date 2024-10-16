@@ -42,6 +42,27 @@ export const nodeClassTypeNameMap: Record<NodeClassType, string> = {
   [nodeClassType.capacitor]: 'Capacitor',
 };
 
+export const nodeClassTypeShortNameMap: Record<NodeClassType, string> = {
+  [nodeClassType.circuitBreaker]: 'CIRCUIT_BREAKER',
+  [nodeClassType.electricalPanel]: 'ELECTRICAL_PANEL',
+  [nodeClassType.fuse]: 'FUSE',
+  [nodeClassType.generator]: 'GENERATOR',
+  [nodeClassType.groundFaultSystem]: 'GROUND_FAULT_SYSTEM',
+  [nodeClassType.groundingOrBonding]: 'GROUNDING_OR_BONDING',
+  [nodeClassType.instrumentTransformer]: 'INSTRUMENT_TRANSFORMER',
+  [nodeClassType.meter]: 'METER',
+  [nodeClassType.misc]: 'MISC',
+  [nodeClassType.motor]: 'MOTOR',
+  [nodeClassType.relay]: 'RELAY',
+  [nodeClassType.switch]: 'SWITCH',
+  [nodeClassType.subSwitch]: 'SWITCH',
+  [nodeClassType.transferSwitch]: 'TRANSFER_SWITCH',
+  [nodeClassType.transformer]: 'TRANSFORMER',
+  [nodeClassType.upsSystem]: 'UPS_SYSTEM',
+  [nodeClassType.capacitor]: 'CAPACITOR',
+};
+
+
 export const nodeClassTypes: ExhaustiveArray<NodeClassType> = [
   nodeClassType.circuitBreaker,
   nodeClassType.electricalPanel,

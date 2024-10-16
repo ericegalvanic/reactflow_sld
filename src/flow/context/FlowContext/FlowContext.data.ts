@@ -20,7 +20,7 @@ export const initialNodes: RFNode[] = [
     type: nodeType.SwitchNode,
     position: { x: 100, y: 250 },
     data: {
-      code: nodeClassCode.AMCB,
+      code: nodeClassCode.LISW,
       label: 'AUX SWITCH',
     },
   }),
@@ -29,7 +29,7 @@ export const initialNodes: RFNode[] = [
     type: nodeType.CapacitorNode,
     position: { x: 100, y: 300 },
     data: {
-      code: nodeClassCode.BNDG,
+      code: nodeClassCode.PCAP,
       label: 'CAPACITOR 1',
     },
   }),
@@ -38,7 +38,7 @@ export const initialNodes: RFNode[] = [
     type: nodeType.TransformerNode,
     position: { x: 100, y: 350 },
     data: {
-      code: nodeClassCode.BNDG,
+      code: nodeClassCode.OFTR,
       label: 'TRANSF 1',
     },
   }),
@@ -65,7 +65,7 @@ export const initialNodes: RFNode[] = [
     type: nodeType.MiscNode,
     position: { x: 100, y: 500 },
     data: {
-      code: nodeClassCode.MMME,
+      code: nodeClassCode.Other,
       label: 'MISC',
     },
   }),

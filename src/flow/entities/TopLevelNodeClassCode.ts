@@ -57,7 +57,7 @@ export type TopLevelNodeClassCode = StrictExtract<
   | 'WIND'
 >;
 
-export const topLevelNodeClasses = [
+export const topLevelNodeClasses: Array<TopLevelNodeClassCode> = [
   nodeClassCode['ATSW-LV'],
   nodeClassCode['ATSW-MV'],
   nodeClassCode['MTSW-LV'],

@@ -26,7 +26,7 @@ export type TransferSwitchNodeProps = NodeProps<TransferSwitchNodeData>;
 
 const { src, alt, width, height } = switchNodeImage;
 
-const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
+const TransferSwitchNode = NodeComponent<TransferSwitchNodeProps>(
   ({
     data,
     targetPosition,
@@ -75,4 +75,4 @@ const CapacitorNode = NodeComponent<TransferSwitchNodeProps>(
   }
 );
 
-export default memo(CapacitorNode);
+export default memo(TransferSwitchNode);

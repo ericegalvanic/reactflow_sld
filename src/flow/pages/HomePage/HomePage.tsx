@@ -22,6 +22,7 @@ import {
   flowEditMode,
   flowViewMode,
   nodeTypeMap,
+  subNodeArchetype,
 } from '@/flow/entities';
 import { Nullable } from '@/common/types';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
@@ -110,10 +111,23 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleSubNodeCreate = (parentNode: RFNode) => {
+  const handleLineSideSubNodeCreate = (parentNode: RFNode) => {
     if (nodeMenu && changesEnabled) {
       takeSnapshot();
-      const subNode = createSubNode(parentNode);
+      const subNode = createSubNode(parentNode, {
+        data: { archetype: subNodeArchetype.lineSide },
+      });
+      closeNodeMenu();
+      openDrawer(subNode);
+    }
+  };
+
+  const handleLoadSideSubNodeCreate = (parentNode: RFNode) => {
+    if (nodeMenu && changesEnabled) {
+      takeSnapshot();
+      const subNode = createSubNode(parentNode, {
+        data: { archetype: subNodeArchetype.loadSide },
+      });
       closeNodeMenu();
       openDrawer(subNode);
     }
@@ -364,7 +378,8 @@ const HomePage: React.FC = () => {
         onEdgeDelete={handleEdgeDelete}
         onEdgeClick={handleEdgeClick}
         onCreateDownstreamAsset={handleCreateDownstreamAsset}
-        onSubNodeCreate={handleSubNodeCreate}
+        onLineSideSubNodeCreate={handleLineSideSubNodeCreate}
+        onLoadSideSubNodeCreate={handleLoadSideSubNodeCreate}
         onVerticalClick={onVerticalClick}
         onHorizontalClick={onHorizontalClick}
         onToggleViewMode={toggleViewMode}

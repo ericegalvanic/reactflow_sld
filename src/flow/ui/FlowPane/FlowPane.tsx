@@ -48,7 +48,8 @@ export type FlowPaneProps = {
   onNodeDelete?: (nodeId: string) => void;
   onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
   onEdgeDelete?: (edgeId: string) => void;
-  onSubNodeCreate?: (parentNode: RFNode) => void;
+  onLineSideSubNodeCreate?: (parentNode: RFNode) => void;
+  onLoadSideSubNodeCreate?: (parentNode: RFNode) => void;
   onHorizontalClick?: MouseEventHandler<HTMLButtonElement>;
   onVerticalClick?: MouseEventHandler<HTMLButtonElement>;
   onToggleViewMode?: MouseEventHandler<HTMLButtonElement>;
@@ -71,7 +72,8 @@ const FlowPane = forwardRef(
       horizontalHelperLine,
       verticalHelperLine,
       onCreateDownstreamAsset,
-      onSubNodeCreate,
+      onLineSideSubNodeCreate,
+      onLoadSideSubNodeCreate,
       onHorizontalClick,
       onVerticalClick,
       onToggleViewMode,
@@ -106,7 +108,8 @@ const FlowPane = forwardRef(
             <NodeContextMenu
               onNodeDelete={onNodeDelete}
               onCreateDownstreamAsset={onCreateDownstreamAsset}
-              onSubNodeCreate={onSubNodeCreate}
+              onLineSideSubNodeCreate={onLineSideSubNodeCreate}
+              onLoadSideSubNodeCreate={onLoadSideSubNodeCreate}
               {...nodeMenu}
             />
           )}

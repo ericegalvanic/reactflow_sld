@@ -1,7 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconMenu, { IconMenuProps } from '@/common/ui/IconMenu';
-import { NodeContextMenu as NodeContextMenuType } from '@/flow/entities';
+import {
+  NodeContextMenu as NodeContextMenuType,
+  nodeType,
+} from '@/flow/entities';
 import { useMemo } from 'react';
 import { contextMenuZIndex } from '@/flow/constants';
 import { RFNode } from '@/common/entities';
@@ -11,7 +14,8 @@ import { isSubNode } from '@/flow/utils';
 export type PaneContextMenuProps = {
   onNodeDelete?: (nodeId: string) => void;
   onCreateDownstreamAsset?: (upstreamNode: RFNode) => void;
-  onSubNodeCreate?: (parentNode: RFNode) => void;
+  onLineSideSubNodeCreate?: (parentNode: RFNode) => void;
+  onLoadSideSubNodeCreate?: (parentNode: RFNode) => void;
   iconMenuProps?: Omit<IconMenuProps, 'items' | 'itemsAfterDivider'>;
 } & NodeContextMenuType;
 
@@ -19,12 +23,18 @@ const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
   iconMenuProps,
   onNodeDelete,
   onCreateDownstreamAsset,
-  onSubNodeCreate,
+  onLineSideSubNodeCreate,
+  onLoadSideSubNodeCreate,
   targetNode,
   ...contextMenuProps
 }) => {
   const hasParents = isSubNode(targetNode);
   const isParent = !hasParents;
+
+  const isElectricalPanel = useMemo(
+    () => targetNode.type === nodeType.ElectricalPanelNode,
+    [targetNode.type]
+  );
 
   const items = useMemo(
     (): IconMenuProps['items'] => [
@@ -43,23 +53,34 @@ const NodeContextMenu: React.FC<PaneContextMenuProps> = ({
             },
           ]
         : []),
-      ...(isParent
+      ...(isParent && isElectricalPanel
         ? [
             {
-              text: 'Create New Subcomponent',
+              text: 'Create New Line-Side Subcomponent',
               icon: <AddToQueue />,
-              onClick: () => onSubNodeCreate?.(targetNode),
+              onClick: () => onLineSideSubNodeCreate?.(targetNode),
+            },
+          ]
+        : []),
+      ...(isParent && isElectricalPanel
+        ? [
+            {
+              text: 'Create New Load-Side Subcomponent',
+              icon: <AddToQueue />,
+              onClick: () => onLoadSideSubNodeCreate?.(targetNode),
             },
           ]
         : []),
     ],
     [
-      contextMenuProps.id,
       isParent,
-      onCreateDownstreamAsset,
+      isElectricalPanel,
       onNodeDelete,
-      onSubNodeCreate,
+      contextMenuProps.id,
+      onCreateDownstreamAsset,
       targetNode,
+      onLineSideSubNodeCreate,
+      onLoadSideSubNodeCreate,
     ]
   );
 

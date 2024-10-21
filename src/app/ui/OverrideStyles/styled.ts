@@ -1,6 +1,10 @@
 import { styled } from '@mui/material';
 
 export const OverrideStyled = styled('div')`
+  .react-flow__handle {
+    z-index: 30;
+  }
+
   .react-flow__handle.target {
     background-color: ${({ theme }) => theme.palette.green['300']};
   }

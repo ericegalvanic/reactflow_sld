@@ -1,5 +1,6 @@
 import { RFPosition } from '@/common/entities';
 import { useFlow } from '../context';
+import { flowDirection as flowDirectionEnum } from '../entities';
 
 export const useNodeHandlePosition = (): {
   sourceNodePosition: RFPosition;
@@ -9,7 +10,12 @@ export const useNodeHandlePosition = (): {
 
   return {
     sourceNodePosition:
-      flowDirection === 'TB' ? RFPosition.Bottom : RFPosition.Right,
-    targetPosition: flowDirection === 'TB' ? RFPosition.Top : RFPosition.Left,
+      flowDirection === flowDirectionEnum.vertical
+        ? RFPosition.Bottom
+        : RFPosition.Right,
+    targetPosition:
+      flowDirection === flowDirectionEnum.vertical
+        ? RFPosition.Top
+        : RFPosition.Left,
   };
 };

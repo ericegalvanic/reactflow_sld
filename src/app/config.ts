@@ -5,5 +5,5 @@ export const config = {
   appVersion: '0.0.0',
   appEnvironment: import.meta.env.VITE_APP_ENVIRONMENT ?? 'local',
   apiUrl: import.meta.env.VITE_API_URL ?? '',
-  historyDeepness: 1024,
+  historyDeepness: 256,
 } as const satisfies AppConfig;

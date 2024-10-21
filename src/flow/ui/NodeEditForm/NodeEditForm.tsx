@@ -1,5 +1,10 @@
 import { RFNode } from '@/common/entities';
-import { FormStyled, SaveButtonStyled } from './NodeEditForm.styles';
+import {
+  ClassCodeStyled,
+  FormStyled,
+  MenuItemStyled,
+  SaveButtonStyled,
+} from './NodeEditForm.styles';
 import {
   ChangeEventHandler,
   MouseEventHandler,
@@ -11,22 +16,46 @@ import { NodeEditFormUpdateHandle } from './NodeEditForm.types';
 import TextField from '@/common/ui/TextField';
 import {
   children,
+  displayNode,
   isParent,
   isSubNode,
+  isTextAssetClass,
+  nodeClassCode,
   nodeColor,
   nodeName,
+  nodeWithName,
   parent,
   renamedNode,
-} from '@/common/utils';
+  node as createNode,
+  isImplicitClassType,
+  hasImplicitClassType,
+} from '@/flow/utils';
 import ColorPicker, { ColorPickerProps } from '@/common/ui/ColorPicker';
-import { node as createNode } from '@/common/utils';
 import { useFlow } from '@/flow/context';
+import Select, { SelectProps } from '@/common/ui/Select';
+import { nodeClass } from '@/flow/utils/nodeClass';
+import {
+  NodeClassCode,
+  nodeClassCodeNameMap,
+  nodeClassCodeShortNameMap,
+  nodeClassNodeTypeMap,
+  NodeType,
+  nodeType,
+  SubLevelNodeClassCode,
+  subLevelNodeClasses,
+  subLevelNodeCodeClassMap,
+  TopLevelNodeClassCode,
+  topLevelNodeClasses,
+  topLevelNodeCodeNodeClassMap,
+} from '@/flow/entities';
+import { nodeImageMap } from '@/flow/data/nodeImageMap';
 
 export type NodeEditFormProps = {
   node: RFNode;
   onSave?: NodeEditFormUpdateHandle;
   onNodeNameChange?: NodeEditFormUpdateHandle;
   onNodeColorChange?: NodeEditFormUpdateHandle;
+  onNodeClassCodeChange?: NodeEditFormUpdateHandle;
 };
 
 const NodeEditForm: React.FC<NodeEditFormProps> = ({
@@ -34,17 +63,25 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
   onSave,
   onNodeNameChange,
   onNodeColorChange,
+  onNodeClassCodeChange,
 }) => {
   const { nodes: existingNodes, setNodes } = useFlow();
-  const [name, setName] = useState(nodeName(node) ?? '');
-  const [color, setColor] = useState(nodeColor(node) ?? '');
-
-  const hasParent = isSubNode(node);
-  const nodeParent = parent(node, existingNodes);
-  const hasChildren = isParent(node, existingNodes);
+  const [name, setName] = useState(() => nodeName(node) ?? '');
+  const [color, setColor] = useState(() => nodeColor(node).background ?? '');
+  const [code, setCode] = useState(() => nodeClassCode(node));
   const [nodeChildren, setNodeChildren] = useState(() =>
     children(node, existingNodes)
   );
+
+  const hasParent = useMemo(() => isSubNode(node), [node]);
+  const isTopLevelNode = useMemo(() => !hasParent, [hasParent]);
+
+  const heterogenousClass = nodeClass(node);
+  const isWithImplicitClass = hasImplicitClassType(node);
+  const hasName = nodeWithName(node);
+  const nodeParent = parent(node, existingNodes);
+  const hasChildren = isParent(node, existingNodes);
+  const parentNodeInputLabel = hasName ? 'Parent name' : 'Parent id';
 
   useEffect(() => {
     setNodeChildren(children(node, existingNodes));
@@ -66,7 +103,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     () =>
       existingNodes.some(
         (existingNode) =>
-          nodeName(existingNode)?.trim() === name.trim() &&
+          displayNode(existingNode)?.trim() === name.trim() &&
           existingNode.id !== node.id
       ),
     [existingNodes, name, node]
@@ -77,7 +114,20 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     onNodeNameChange?.(
       createNode({
         ...node,
-        data: { ...(node.style ?? {}), label: event.target.value.trim() },
+        data: { ...node.data, label: event.target.value.trim() },
+      })
+    );
+  };
+
+  const handleNodeClassCodeChange: NonNullable<
+    SelectProps<string>['onChange']
+  > = (event) => {
+    const classCode = event.target.value as NodeClassCode;
+    setCode(classCode);
+    onNodeClassCodeChange?.(
+      createNode({
+        ...node,
+        data: { ...node.data, code: classCode },
       })
     );
   };
@@ -87,17 +137,50 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
     onNodeColorChange?.(
       createNode({
         ...node,
-        style: { ...(node.style ?? {}), background: newColor },
+        data: { ...node.data, background: newColor },
       })
     );
   };
 
   const handleSave: MouseEventHandler<HTMLButtonElement> = () => {
+    const savingAsTextAsset = isTextAssetClass(heterogenousClass);
+    const topLevelNodeClass =
+      topLevelNodeCodeNodeClassMap[code as TopLevelNodeClassCode];
+    const subLevelNodeClass =
+      subLevelNodeCodeClassMap[code as SubLevelNodeClassCode];
+
+    const newClass = !savingAsTextAsset
+      ? isTopLevelNode
+        ? topLevelNodeClass
+        : subLevelNodeClass
+      : null;
+
+    const newNodeType: NodeType = savingAsTextAsset
+      ? isTopLevelNode
+        ? nodeType.ResizableNode
+        : nodeType.ResizableSubNode
+      : isTopLevelNode
+      ? isImplicitClassType(topLevelNodeClass)
+        ? nodeClassNodeTypeMap[topLevelNodeClass]
+        : nodeType.ImageNode
+      : isImplicitClassType(subLevelNodeClass)
+      ? nodeClassNodeTypeMap[subLevelNodeClass]
+      : nodeType.ImageSubNode;
+
     onSave?.(
       createNode({
         ...node,
-        data: { ...node.data, label: name.trim() },
-        style: { ...(node.style ?? {}), background: color },
+        type: newNodeType,
+        data: savingAsTextAsset
+          ? { ...node.data, label: name.trim(), background: color }
+          : {
+              ...node.data,
+              class: newClass ?? heterogenousClass,
+              image: nodeImageMap[newClass ?? heterogenousClass],
+              code: code,
+              background: color,
+              ...(isWithImplicitClass ? { label: name.trim() } : {}),
+            },
       })
     );
 
@@ -118,28 +201,58 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
 
   const nameHelperText = nameExistsAlready ? 'This node exists already' : '';
 
+  const nodeClassCodeDisplayList = useMemo(
+    () =>
+      (isTopLevelNode ? topLevelNodeClasses : subLevelNodeClasses).map(
+        (classCode) => {
+          return (
+            <MenuItemStyled key={classCode} value={classCode}>
+              {nodeClassCodeNameMap[classCode]}
+              <ClassCodeStyled>
+                {nodeClassCodeShortNameMap[classCode]}
+              </ClassCodeStyled>
+            </MenuItemStyled>
+          );
+        }
+      ),
+    [isTopLevelNode]
+  );
+
   return (
     <FormStyled>
-      <TextField
-        value={name}
-        onChange={handleNameChange}
-        label="Node Name"
+      <Select
+        label="Node Class Code"
+        inputLabel="Node Class Code"
+        value={code}
+        onChange={handleNodeClassCodeChange}
         size="small"
-        error={nameExistsAlready}
-        helperText={nameHelperText}
-      />
-      <ColorPicker
-        value={color}
-        onChange={handleColorChange}
-        label="Node Color"
-        size="small"
-      />
+      >
+        {nodeClassCodeDisplayList}
+      </Select>
+      {isWithImplicitClass && isTopLevelNode && (
+        <TextField
+          value={name}
+          onChange={handleNameChange}
+          label="Node Name"
+          size="small"
+          error={nameExistsAlready}
+          helperText={nameHelperText}
+        />
+      )}
+      {isTopLevelNode && (
+        <ColorPicker
+          value={color}
+          onChange={handleColorChange}
+          label="Node Color"
+          size="small"
+        />
+      )}
       {hasParent && nodeParent && (
         <TextField
           disabled
-          label="Parent name"
+          label={parentNodeInputLabel}
           size="small"
-          value={`${nodeName(nodeParent)}`}
+          value={`${displayNode(nodeParent)}`}
         />
       )}
       {hasChildren &&
@@ -148,7 +261,7 @@ const NodeEditForm: React.FC<NodeEditFormProps> = ({
             key={child.id}
             label={`Subcomponent ${index + 1} `}
             size="small"
-            value={nodeName(child)}
+            value={displayNode(child)}
             onChange={handleChildNameChange(child)}
           />
         ))}

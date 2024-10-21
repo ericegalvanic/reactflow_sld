@@ -9,6 +9,7 @@ import { ReactNode } from 'react';
 import { FlowContextProvider, PaneDrawerContextProvider } from '@/flow/context';
 import OverrideStyles from '../OverrideStyles';
 import { ModalProvider } from '@/common/context';
+import { ReactFlowProvider } from '@xyflow/react';
 
 export type AppContainerProps = {
   bootstrapped: boolean;
@@ -37,16 +38,18 @@ const AppContainer: React.FC<AppContainerProps> = ({
     <AppConfigProvider config={config}>
       <AppServicesContext.Provider value={services}>
         <ThemeProvider theme={theme}>
-          <FlowContextProvider>
-            <PaneDrawerContextProvider>
-              <ModalProvider>
-                <OverrideStyles>
-                  <CssBaseline />
-                  {children}
-                </OverrideStyles>
-              </ModalProvider>
-            </PaneDrawerContextProvider>
-          </FlowContextProvider>
+          <ReactFlowProvider>
+            <FlowContextProvider>
+              <PaneDrawerContextProvider>
+                <ModalProvider>
+                  <OverrideStyles>
+                    <CssBaseline />
+                    {children}
+                  </OverrideStyles>
+                </ModalProvider>
+              </PaneDrawerContextProvider>
+            </FlowContextProvider>
+          </ReactFlowProvider>
         </ThemeProvider>
       </AppServicesContext.Provider>
     </AppConfigProvider>

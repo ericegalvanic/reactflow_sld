@@ -1,30 +1,40 @@
 import { memo } from 'react';
-import { Handle, NodeResizeControl } from '@xyflow/react';
-import { defaultControlStyle } from '@/flow/constants';
-import { NodeCoreStyled } from './ResizableSubNode.styles';
-import { useNodeHandlePosition } from '@/flow/hooks';
+import { NodeCoreStyled, NodeRotatableBase } from './ResizableSubNode.styles';
+import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
+import { usePopupAnchor } from '@/common/hooks';
+import { NodeProps } from '@/flow/entities';
 
-export type ResizableSubNodeProps = {
+export type ResizableSubNodeData = {
   data: {
     label: string;
   };
 };
 
-const ResizableSubNode: React.FC<ResizableSubNodeProps> = ({ data }) => {
-  const { targetPosition, sourceNodePosition } = useNodeHandlePosition();
+export type ResizableSubNodeProps = NodeProps<ResizableSubNodeData>;
 
-  return (
-    <>
-      <NodeResizeControl
-        style={defaultControlStyle}
-        minWidth={48}
-        minHeight={48}
-      ></NodeResizeControl>
-      <Handle type="target" position={targetPosition} />
-      <NodeCoreStyled>{data.label}</NodeCoreStyled>
-      <Handle type="source" position={sourceNodePosition} />
-    </>
-  );
-};
+const ResizableSubNode = NodeComponent<ResizableSubNodeProps>(
+  ({
+    data,
+    parentRotation,
+    handleNodeBaseHover,
+    handleNodeBaseMouseLeave,
+    setPopupAnchor,
+    nodeColor,
+  }) => {
+    const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
+
+    return (
+      <NodeRotatableBase
+        ref={nodeBaseRef}
+        rotation={parentRotation ?? 0}
+        onMouseEnter={handleNodeBaseHover}
+        onMouseLeave={handleNodeBaseMouseLeave}
+        {...nodeColor}
+      >
+        <NodeCoreStyled>{data.label}</NodeCoreStyled>
+      </NodeRotatableBase>
+    );
+  }
+);
 
 export default memo(ResizableSubNode);

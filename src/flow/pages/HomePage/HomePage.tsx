@@ -13,36 +13,54 @@ import {
   useAddSubNode,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
-import { addEdge } from '@xyflow/react';
+import { addEdge, NodeTypes } from '@xyflow/react';
 import {
   EdgeContextMenu,
   NodeContextMenu,
   PaneContextMenu,
+  flowDirection,
+  flowEditMode,
   flowViewMode,
-  nodeType,
   nodeTypeMap,
+  subNodeArchetype,
 } from '@/flow/entities';
 import { Nullable } from '@/common/types';
-import { snapGrid } from '@/flow/constants';
 import PaneDrawer from '@/flow/ui/PaneDrawer';
 import NodeEditForm, { NodeEditFormProps } from '@/flow/ui/NodeEditForm';
 import { EdgeEditModalProps, useEdgeEditModal } from '@/flow/ui/EdgeEditModal';
 import { useFlow } from '@/flow/context';
-import { RFNode } from '@/common/entities';
-import { getDownstreamNodePosition } from '@/flow/utils';
-import { isSubNode } from '@/common/utils';
+import { EdgeType, FlowSave, RFNode } from '@/common/entities';
+import {
+  generateFlowSaveName,
+  getDownstreamNodePosition,
+  isSubNode,
+} from '@/flow/utils';
+import { assertIsFlowSave, downloadFile } from '@/common/utils';
+import { JSON_MIME_TYPE } from '@/common/constants';
+import {
+  defaultSubLevelNodeCode,
+  defaultSubLevelNodeType,
+  defaultTopLevelNodeCode,
+  defaultTopLevelNodeType,
+} from '@/flow/constants';
 
 const HomePage: React.FC = () => {
   const {
     nodes: appNodes,
     edges: appEdges,
     viewMode: appViewMode,
+    editMode: appEditMode,
+    horizontalHelperLine,
+    verticalHelperLine,
+    changesEnabled,
     setNodes,
     setEdges,
     setViewMode,
+    setEditMode,
     onNodesChange: onAppNodesChange,
     onEdgesChange: onAppEdgesChange,
     onLayout,
+    takeSnapshot,
   } = useFlow();
   const [paneMenu, setPaneMenu] = useState<Nullable<PaneContextMenu>>(null);
   const [nodeMenu, setNodeMenu] = useState<Nullable<NodeContextMenu>>(null);
@@ -85,33 +103,52 @@ const HomePage: React.FC = () => {
   const createSubNode = useAddSubNode(setNodes);
 
   const handleNodeCreate = () => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
+      takeSnapshot();
       const node = createNode(paneMenu.position);
       closePaneMenu();
       openDrawer(node);
     }
   };
 
-  const handleSubNodeCreate = (parentNode: RFNode) => {
-    if (nodeMenu) {
-      const subNode = createSubNode(parentNode);
+  const handleLineSideSubNodeCreate = (parentNode: RFNode) => {
+    if (nodeMenu && changesEnabled) {
+      takeSnapshot();
+      const subNode = createSubNode(parentNode, {
+        data: { archetype: subNodeArchetype.lineSide },
+      });
+      closeNodeMenu();
+      openDrawer(subNode);
+    }
+  };
+
+  const handleLoadSideSubNodeCreate = (parentNode: RFNode) => {
+    if (nodeMenu && changesEnabled) {
+      takeSnapshot();
+      const subNode = createSubNode(parentNode, {
+        data: { archetype: subNodeArchetype.loadSide },
+      });
       closeNodeMenu();
       openDrawer(subNode);
     }
   };
 
   const handleCreateDownstreamAsset = (upstreamNode: RFNode) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
+      takeSnapshot();
       const isUpstreamASubNode = isSubNode(upstreamNode);
 
       const downstreamNode = createNode(
-        getDownstreamNodePosition(upstreamNode.position),
+        getDownstreamNodePosition(upstreamNode),
         {
           type: isUpstreamASubNode
-            ? nodeType.ResizableSubNode
-            : nodeType.ResizableNode,
+            ? defaultSubLevelNodeType
+            : defaultTopLevelNodeType,
           data: {
-            label: `SC ${appNodes.length + 1}`,
+            label: `ASSET ${appNodes.length + 1}`,
+            code: isUpstreamASubNode
+              ? defaultSubLevelNodeCode
+              : defaultTopLevelNodeCode,
           },
         }
       );
@@ -122,34 +159,36 @@ const HomePage: React.FC = () => {
   };
 
   const handleNodeDelete = (nodeId: string) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
+      takeSnapshot();
       deleteNode(nodeId);
       closeNodeMenu();
     }
   };
 
   const handleEdgeDelete = (edgeId: string) => {
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
+      takeSnapshot();
       deleteEdge(edgeId);
       closeEdgeMenu();
     }
   };
 
   const handlePaneClick = () => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
       closePaneMenu();
     }
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       closeNodeMenu();
     }
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
       closeEdgeMenu();
     }
     closeDrawer();
   };
 
   const handlePaneContextMenu: typeof openPaneMenu = (event) => {
-    if (nodeMenu) {
+    if (nodeMenu && changesEnabled) {
       closeNodeMenu();
       return;
     }
@@ -157,7 +196,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleNodeContextMenu: typeof openNodeMenu = (event, node) => {
-    if (paneMenu) {
+    if (paneMenu && changesEnabled) {
       closePaneMenu();
       return;
     }
@@ -165,7 +204,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleEdgeContextMenu: typeof openEdgeMenu = (event, edge) => {
-    if (edgeMenu) {
+    if (edgeMenu && changesEnabled) {
       closeEdgeMenu();
       return;
     }
@@ -175,11 +214,21 @@ const HomePage: React.FC = () => {
   const handleNodeEditSave: NonNullable<NodeEditFormProps['onSave']> = (
     updatedNode
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
+    takeSnapshot();
     updateNode(updatedNode);
     closeDrawer();
   };
 
   const handleEdgeEditSave: EdgeEditModalProps['onSave'] = (edge) => {
+    if (!changesEnabled) {
+      return;
+    }
+
+    takeSnapshot();
     updateEdge(edge);
     closeEdgeEditModal();
   };
@@ -188,6 +237,10 @@ const HomePage: React.FC = () => {
     event,
     node
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     openDrawer(node);
   };
 
@@ -195,15 +248,19 @@ const HomePage: React.FC = () => {
     event,
     edge
   ) => {
+    if (!changesEnabled) {
+      return;
+    }
+
     invokeEdgeEditModal({ edge, onSave: handleEdgeEditSave });
   };
 
   const onVerticalClick = () => {
-    onLayout('TB');
+    onLayout(flowDirection.vertical);
   };
 
   const onHorizontalClick = () => {
-    onLayout('LR');
+    onLayout(flowDirection.vertical);
   };
 
   const toggleViewMode: NonNullable<FlowPaneProps['onToggleViewMode']> = () => {
@@ -216,19 +273,98 @@ const HomePage: React.FC = () => {
     });
   };
 
+  const handleExportFlow: NonNullable<FlowPaneProps['onExportFlow']> = () => {
+    const preparedToBeExported: FlowSave = {
+      nodes: appNodes,
+      edges: appEdges,
+    };
+
+    const preparedJson = JSON.stringify(preparedToBeExported);
+
+    const flowBlob = new Blob([preparedJson], { type: JSON_MIME_TYPE });
+
+    const temporaryDownloadUrl = URL.createObjectURL(flowBlob);
+
+    downloadFile(temporaryDownloadUrl, { filename: generateFlowSaveName() });
+
+    URL.revokeObjectURL(temporaryDownloadUrl);
+  };
+
+  const handleImportFlow: NonNullable<FlowPaneProps['onImportFlow']> = (
+    event
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file || file.type !== JSON_MIME_TYPE) {
+      return alert('Please upload a JSON file');
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (readEvent) => {
+      const readFile = readEvent.target?.result;
+
+      if (!readFile) {
+        return alert('Failed to read the file');
+      }
+
+      if (typeof readFile !== 'string') {
+        return alert('File is not a string');
+      }
+
+      const importedFlow = JSON.parse(readFile);
+
+      assertIsFlowSave(importedFlow);
+
+      setNodes(importedFlow.nodes);
+      setEdges(importedFlow.edges);
+    };
+
+    reader.readAsText(file);
+  };
+
+  const handleNodeDragStart: NonNullable<
+    FlowPaneProps['onNodeDragStart']
+  > = () => {
+    takeSnapshot();
+  };
+
+  const handleNodeConnectStart: NonNullable<
+    FlowPaneProps['onConnectStart']
+  > = () => {
+    takeSnapshot();
+  };
+
+  const handleToggleEditMode: NonNullable<
+    FlowPaneProps['onToggleEditMode']
+  > = () => {
+    setEditMode((previous) => {
+      if (previous === flowEditMode.locked) {
+        return flowEditMode.unlocked;
+      }
+
+      return flowEditMode.locked;
+    });
+  };
+
   return (
     <>
       <FlowPane
+        nodesDraggable={changesEnabled}
+        edgesReconnectable={changesEnabled}
         ref={paneRef}
         nodes={appNodes}
         edges={appEdges}
         viewMode={appViewMode}
+        editMode={appEditMode}
         setNodes={setNodes}
         setEdges={setEdges}
+        horizontalHelperLine={horizontalHelperLine}
+        verticalHelperLine={verticalHelperLine}
         onNodesChange={onAppNodesChange}
         onEdgesChange={onAppEdgesChange}
         onConnect={onAppEdgesConnect}
-        nodeTypes={nodeTypeMap}
+        nodeTypes={nodeTypeMap as unknown as NodeTypes}
         onContextMenu={handlePaneContextMenu}
         onNodeContextMenu={handleNodeContextMenu}
         onEdgeContextMenu={handleEdgeContextMenu}
@@ -242,15 +378,23 @@ const HomePage: React.FC = () => {
         onEdgeDelete={handleEdgeDelete}
         onEdgeClick={handleEdgeClick}
         onCreateDownstreamAsset={handleCreateDownstreamAsset}
-        onSubNodeCreate={handleSubNodeCreate}
-        snapToGrid
-        snapGrid={snapGrid}
+        onLineSideSubNodeCreate={handleLineSideSubNodeCreate}
+        onLoadSideSubNodeCreate={handleLoadSideSubNodeCreate}
         onVerticalClick={onVerticalClick}
         onHorizontalClick={onHorizontalClick}
         onToggleViewMode={toggleViewMode}
+        onExportFlow={handleExportFlow}
+        onImportFlow={handleImportFlow}
+        onNodeDragStart={handleNodeDragStart}
+        onConnectStart={handleNodeConnectStart}
+        onToggleEditMode={handleToggleEditMode}
+        connectionLineType={EdgeType.Step}
+        defaultEdgeOptions={{
+          type: EdgeType.Step,
+        }}
       />
       <PaneDrawer className="nowheel nodrag nopan" open={drawerOpen}>
-        {nodeToEdit && (
+        {nodeToEdit && changesEnabled && (
           <NodeEditForm node={nodeToEdit} onSave={handleNodeEditSave} />
         )}
       </PaneDrawer>

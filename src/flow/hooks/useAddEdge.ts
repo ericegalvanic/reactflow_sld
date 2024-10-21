@@ -1,7 +1,7 @@
 import { RFEdge, RFNode } from '@/common/entities';
 import { SetState } from '@/common/types';
 import { useCallback } from 'react';
-import { edge } from '@/common/utils';
+import { edge } from '@/flow/utils';
 
 export const useAddEdge = (setEdges: SetState<RFEdge[]>) => {
   return useCallback(

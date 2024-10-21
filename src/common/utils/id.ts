@@ -6,7 +6,7 @@ export const id = (options?: IdOptions) => v4(options);
 
 export const formattedId = (v4id: string) => {
   if (!validate(v4id)) {
-    return undefined;
+    return v4id;
   }
 
   const splitted = v4id.split('-');

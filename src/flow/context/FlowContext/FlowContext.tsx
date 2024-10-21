@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createContext,
   ReactNode,
@@ -7,7 +8,7 @@ import {
 } from 'react';
 import { FlowContextData } from './FlowContext.entities';
 import { initialNodes, initialEdges } from './FlowContext.data';
-import { useFlowState } from '@/flow/hooks';
+import { useCopyPaste, useFlowState, useShortcut } from '@/flow/hooks';
 import { useHotKey } from '@/common/hooks';
 import dagre from '@dagrejs/dagre';
 import { RFEdge, RFNode } from '@/common/entities';
@@ -16,6 +17,7 @@ import {
   flowDirection as flowDirectionEnum,
   FlowDirection,
   flowViewMode,
+  flowEditMode as flowEditMode,
 } from '@/flow/entities';
 
 export const FlowContext = createContext<FlowContextData>({
@@ -23,13 +25,21 @@ export const FlowContext = createContext<FlowContextData>({
   edges: initialEdges,
   flowDirection: flowDirectionEnum.vertical,
   viewMode: flowViewMode.enhanced,
+  editMode: flowEditMode.unlocked,
+  changesEnabled: false,
+  horizontalHelperLine: undefined,
+  verticalHelperLine: undefined,
   setNodes: () => {},
   setEdges: () => {},
   setFlowDirection: () => {},
   setViewMode: () => {},
+  setEditMode: () => {},
+  setHorizontalHelperLine: () => {},
+  setVerticalHelperLine: () => {},
   onNodesChange: () => {},
   onEdgesChange: () => {},
   onLayout: () => {},
+  takeSnapshot: () => {},
 });
 
 export type FlowContextProviderProps = {
@@ -91,16 +101,36 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
     nodeState: [nodes, setNodes, onNodesChange],
     edgeState: [edges, setEdges, onEdgesChange],
     viewModeState: [viewMode, setViewMode],
-    history: { back: prevState, forward: nextState },
+    editModeState: [editMode, setEditMode],
+    horizontalHelperLineState: [horizontalHelperLine, setHorizontalHelperLine],
+    verticalHelperLineState: [verticalHelperLine, setVerticalHelperLine],
+    history: { undo: prevState, redo: nextState, takeSnapshot },
   } = useFlowState({
     nodes: layoutedNodes,
     edges: layoutedEdges,
     viewMode: flowViewMode.enhanced,
+    editMode: flowEditMode.unlocked,
     stateId: 'initial-state',
   });
   const [flowDirection, setFlowDirection] = useState<FlowDirection>(
     flowDirectionEnum.vertical
   );
+
+  const { cut, copy, paste } = useCopyPaste();
+
+  const decoratedCut = (...args: Parameters<typeof cut>) => {
+    takeSnapshot();
+    cut(...args);
+  };
+
+  const decoratedPaste = (...args: Parameters<typeof paste>) => {
+    takeSnapshot();
+    paste(...args);
+  };
+
+  useShortcut(['Meta+x', 'Control+x'], decoratedCut);
+  useShortcut(['Meta+c', 'Control+c'], copy);
+  useShortcut(['Meta+v', 'Control+v'], decoratedPaste);
 
   const onLayout = useCallback(
     (direction: FlowDirection) => {
@@ -117,31 +147,52 @@ export const FlowContextProvider: React.FC<FlowContextProviderProps> = ({
   useHotKey(['Ctrl', 'Z'], prevState);
   useHotKey(['Ctrl', 'Y'], nextState);
 
+  const changesEnabled = useMemo(
+    () => editMode === flowEditMode.unlocked,
+    [editMode]
+  );
+
   const providerValue = useMemo(
     (): FlowContextData => ({
       nodes,
       edges,
       flowDirection,
       viewMode,
+      editMode,
+      horizontalHelperLine,
+      verticalHelperLine,
       setNodes,
       setEdges,
       setFlowDirection,
       setViewMode,
+      setEditMode,
+      setHorizontalHelperLine,
+      setVerticalHelperLine,
       onNodesChange,
       onEdgesChange,
       onLayout,
+      takeSnapshot,
+      changesEnabled,
     }),
     [
       nodes,
       edges,
       flowDirection,
       viewMode,
+      editMode,
+      horizontalHelperLine,
+      verticalHelperLine,
       setNodes,
       setEdges,
       setViewMode,
+      setEditMode,
+      setHorizontalHelperLine,
+      setVerticalHelperLine,
       onNodesChange,
       onEdgesChange,
       onLayout,
+      takeSnapshot,
+      changesEnabled,
     ]
   );
 

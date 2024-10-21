@@ -1,9 +1,9 @@
 import { useModal } from '@/common/context/hooks';
-import { Retype } from '@/common/types';
+import { Retyped } from '@/common/types';
 import { EdgeEditModalProps } from './EdgeEditModal';
 import { ModalContextData, OpenDelegated } from '@/common/context';
 
-type UseEdgeEditModalReturn = Retype<
+type UseEdgeEditModalReturn = Retyped<
   ModalContextData,
   'invokeModal',
   (payload: OpenDelegated<EdgeEditModalProps>) => void

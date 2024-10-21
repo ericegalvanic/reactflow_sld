@@ -1,15 +1,22 @@
 import type { Node } from '@xyflow/react';
 import { NodeType } from '@/flow/entities';
-import { Optional, Retype } from '../types';
-import { HasName } from './HasName';
+import { MadeOptional, Retyped } from '../types';
+import { PossibleNodeData } from './PossibleNodeData';
+import { MandatoryNodeData } from './MandatoryNodeData';
 
 export type NativeNode = Node;
 
-export type RFNode = Retype<Node, 'type', NodeType> & HasName;
+export type RFNode = Retyped<Node, 'type', NodeType> &
+  PossibleNodeData &
+  MandatoryNodeData;
 
-export type ManualNode = Retype<RFNode, 'type', NodeType>;
+export type ManualNode = Retyped<RFNode, 'type', NodeType>;
 
-export type CreateRFNodeDTO = Optional<
-  Retype<Optional<RFNode, 'id'>, 'type', NodeType, true>,
-  'data'
+export type CreateRFNodeDTO = Retyped<
+  Retyped<MadeOptional<RFNode, 'id'>, 'type', NodeType, true>,
+  'data',
+  PossibleNodeData['data'] & Partial<MandatoryNodeData['data']>,
+  true
 >;
+
+export type UpdateRFNodeDTO = RFNode;

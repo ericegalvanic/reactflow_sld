@@ -24,3 +24,4 @@ export * from './useRotatableNode';
 export * from './useNode';
 export * from './useParentNode';
 export * from './useParentRotation';
+export * from './useInvisibleEdge';

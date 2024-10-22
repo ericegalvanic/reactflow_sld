@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { NodeCoreStyled, NodeRotatableBase } from './ResizableNode.styles';
 import NodeComponent from '@/common/ui/NodeComponent/NodeComponent';
 import { usePopupAnchor } from '@/common/hooks';
@@ -16,9 +16,9 @@ export type ResizableNodeProps = NodeProps<ResizableNodeData>;
 const ResizableNode = NodeComponent<ResizableNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

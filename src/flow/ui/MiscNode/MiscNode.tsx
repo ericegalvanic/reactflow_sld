@@ -1,9 +1,6 @@
 import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
-import {
-  NodeClassCode,
-  NodeProps,
-} from '@/flow/entities';
+import { NodeClassCode, NodeProps } from '@/flow/entities';
 import {
   NodeClassCodeStyled,
   NodeCoreStyled,
@@ -12,7 +9,7 @@ import {
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
 } from './MiscNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './MiscNode.data';
 import { memo } from 'react';
 
@@ -30,9 +27,9 @@ const { src, alt, width, height } = switchNodeImage;
 const MiscNode = NodeComponent<MiscNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

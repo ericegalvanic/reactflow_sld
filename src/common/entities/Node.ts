@@ -10,8 +10,6 @@ export type RFNode = Retyped<Node, 'type', NodeType> &
   PossibleNodeData &
   MandatoryNodeData;
 
-export type ManualNode = Retyped<RFNode, 'type', NodeType>;
-
 export type CreateRFNodeDTO = Retyped<
   Retyped<MadeOptional<RFNode, 'id'>, 'type', NodeType, true>,
   'data',

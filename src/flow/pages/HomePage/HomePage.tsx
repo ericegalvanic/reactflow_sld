@@ -11,6 +11,7 @@ import {
   useDeleteEdge,
   useAddEdge,
   useAddSubNode,
+  useInvisibleEdge,
 } from '@/flow/hooks';
 import { ElementRef, useCallback, useRef, useState } from 'react';
 import { addEdge, NodeTypes } from '@xyflow/react';
@@ -101,6 +102,8 @@ const HomePage: React.FC = () => {
   const createEdge = useAddEdge(setEdges);
   const deleteEdge = useDeleteEdge(setEdges);
   const createSubNode = useAddSubNode(setNodes);
+  const instantiateInvisibleEdgeBetweenParentAndSubcomponent =
+    useInvisibleEdge(setEdges);
 
   const handleNodeCreate = () => {
     if (paneMenu && changesEnabled) {
@@ -117,6 +120,11 @@ const HomePage: React.FC = () => {
       const subNode = createSubNode(parentNode, {
         data: { archetype: subNodeArchetype.lineSide },
       });
+      instantiateInvisibleEdgeBetweenParentAndSubcomponent(
+        subNode,
+        appNodes,
+        appEdges
+      );
       closeNodeMenu();
       openDrawer(subNode);
     }
@@ -128,6 +136,11 @@ const HomePage: React.FC = () => {
       const subNode = createSubNode(parentNode, {
         data: { archetype: subNodeArchetype.loadSide },
       });
+      instantiateInvisibleEdgeBetweenParentAndSubcomponent(
+        subNode,
+        appNodes,
+        appEdges
+      );
       closeNodeMenu();
       openDrawer(subNode);
     }

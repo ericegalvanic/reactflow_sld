@@ -22,3 +22,4 @@ export * from './SubLevelNodeClassCode';
 export * from './topLevelNodeCodeNodeClassMap';
 export * from './subLevelNodeCodeClassMap';
 export * from './SubNodeArchetype';
+export * from './NodeData';

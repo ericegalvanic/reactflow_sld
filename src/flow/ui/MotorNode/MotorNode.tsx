@@ -11,7 +11,7 @@ import {
   NodeTextDataStyled,
   topHandleStyles,
 } from './MotorNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './MotorNode.data';
 import { memo } from 'react';
 
@@ -29,9 +29,9 @@ const { src, alt, width, height } = switchNodeImage;
 const MotorNode = NodeComponent<MotorNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

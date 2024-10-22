@@ -1,6 +1,6 @@
 import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
-import { NodeProps, subNodeArchetype, SubNodeArchetype } from '@/flow/entities';
+import { NodeProps, subNodeArchetype } from '@/flow/entities';
 import {
   bottomHandleStyles,
   NodeCoreStyled,
@@ -8,15 +8,13 @@ import {
   NodeRotatableBaseStyled,
   topHandleStyles,
 } from './CircuitBreakerNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './CircuitBreakerNode.data';
 import { memo } from 'react';
+import InvisibleHandle from '@/common/ui/InvisibleHandle';
+import { SubNodeData } from '@/common/entities';
 
-export type CircuitBreakerNodeData = {
-  data: {
-    archetype: SubNodeArchetype;
-  };
-};
+export type CircuitBreakerNodeData = SubNodeData;
 
 export type CircuitBreakerNodeProps = NodeProps<CircuitBreakerNodeData>;
 
@@ -25,9 +23,9 @@ const { src, alt, width, height } = switchNodeImage;
 const CircuitBreakerNode = NodeComponent<CircuitBreakerNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
@@ -46,8 +44,14 @@ const CircuitBreakerNode = NodeComponent<CircuitBreakerNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        {hasTopHandle && (
+        {hasTopHandle ? (
           <Handle
+            type="target"
+            position={targetPosition}
+            style={topHandleStyles}
+          />
+        ) : (
+          <InvisibleHandle
             type="target"
             position={targetPosition}
             style={topHandleStyles}
@@ -62,8 +66,14 @@ const CircuitBreakerNode = NodeComponent<CircuitBreakerNodeProps>(
             height={height}
           />
         </NodeCoreStyled>
-        {hasBottomHandle && (
+        {hasBottomHandle ? (
           <Handle
+            type="source"
+            position={sourceNodePosition}
+            style={bottomHandleStyles}
+          />
+        ) : (
+          <InvisibleHandle
             type="source"
             position={sourceNodePosition}
             style={bottomHandleStyles}

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import {
   NodeClassCodeWrapperStyled,
   NodeCoreStyled,
@@ -27,9 +27,9 @@ export type ImageNodeProps = NodeProps<ImageNodeData>;
 const ImageNode = NodeComponent<ImageNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

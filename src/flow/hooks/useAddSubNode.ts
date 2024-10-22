@@ -1,4 +1,4 @@
-import { CreateRFNodeDTO, RFNode } from '@/common/entities';
+import { CreateRFNodeDTO, RFNode, SubNode } from '@/common/entities';
 import { MadeOptional, SetState } from '@/common/types';
 import { useCallback } from 'react';
 import { node, parentNodeCenter } from '@/flow/utils';
@@ -36,7 +36,7 @@ export const useAddSubNode = (setNodes: SetState<RFNode[]>) => {
           overriddenData?.archetype ?? defaultSubLevelNodeArchetype;
         return [...nodes, newNode];
       });
-      return newNode;
+      return newNode as SubNode;
     },
     [setNodes]
   );

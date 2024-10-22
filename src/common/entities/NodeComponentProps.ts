@@ -3,6 +3,7 @@ import { SetState } from '../types';
 import { MouseEventHandler } from 'react';
 import { PopupAnchor } from './PopupAnchor';
 import { Colorable } from './Colorable';
+import { FlowContextData } from '@/flow/context';
 
 export type NodeComponentProps<P extends Record<string, unknown> = {}> =
   ReturnType<typeof useNodeHandlePosition> &
@@ -15,4 +16,5 @@ export type NodeComponentProps<P extends Record<string, unknown> = {}> =
       handleNodeBaseHover: MouseEventHandler<HTMLElement>;
       handleNodeBaseMouseLeave: MouseEventHandler<HTMLElement>;
       nodeColor: Colorable;
+      flow: FlowContextData;
     } & P;

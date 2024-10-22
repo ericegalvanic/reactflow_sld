@@ -12,7 +12,7 @@ import {
   NodeRotatableBaseStyled,
   NodeTextDataStyled,
 } from './CapacitorNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './CapacitorNode.data';
 import { memo } from 'react';
 
@@ -30,9 +30,9 @@ const { src, alt, width, height } = switchNodeImage;
 const CapacitorNode = NodeComponent<CapacitorNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

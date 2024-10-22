@@ -42,9 +42,11 @@ const NodeComponent = <P = {},>(
   OriginalNodeComponent: NodeFC<P & HasId>
 ): IsNodeComponent<P & HasId> =>
   createNodeComponent((props) => {
-    const { changesEnabled, nodes, edges } = useFlow();
+    const flow = useFlow();
     const [showPopup, setShowPopup, invokePopup, hidePopup] = useBoolean();
     const [popupAnchor, setPopupAnchor] = useState<PopupAnchor>(null);
+
+    const { changesEnabled, nodes, edges } = flow;
 
     const nodeHandlePositionHookData = useNodeHandlePosition();
     const rotatableNodeHookData = useRotatableNode(props.id, {
@@ -91,6 +93,7 @@ const NodeComponent = <P = {},>(
           handleNodeBaseHover={handleNodeBaseHover}
           handleNodeBaseMouseLeave={handleNodeBaseMouseLeave}
           nodeColor={theNodeColor}
+          flow={flow}
         />
         <Popup
           id={popupId}

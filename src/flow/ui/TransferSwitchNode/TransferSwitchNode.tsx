@@ -11,7 +11,7 @@ import {
   NodeTextDataStyled,
   rightTargetHandleStyles,
 } from './TransferSwitchNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './TransferSwitchNode.data';
 import { memo } from 'react';
 
@@ -29,9 +29,9 @@ const { src, alt, width, height } = switchNodeImage;
 const TransferSwitchNode = NodeComponent<TransferSwitchNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,

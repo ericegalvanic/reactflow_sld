@@ -16,6 +16,7 @@ import {
 import { NodeResizeControl } from '@xyflow/react';
 import { memo } from 'react';
 import { defaultControlStyle } from '@/flow/constants';
+import InvisibleHandle from '@/common/ui/InvisibleHandle';
 
 export type ElectricalPanelNodeData = {
   data: {
@@ -26,43 +27,47 @@ export type ElectricalPanelNodeData = {
 
 export type ElectricalPanelNodeProps = NodeProps<ElectricalPanelNodeData>;
 
-const ElectricalPanelNode = NodeComponent<ElectricalPanelNodeProps>(
-  ({
+const ElectricalPanelNode = NodeComponent<ElectricalPanelNodeProps>((props) => {
+  const {
     data,
     rotation,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
     nodeColor,
-  }) => {
-    const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
-    const label = data.label;
-    const code = data.code;
+    targetHandlePosition,
+    sourceHandlePosition,
+  } = props;
 
-    return (
-      <NodeRotatableBaseStyled
-        ref={nodeBaseRef}
-        rotation={rotation}
-        onMouseEnter={handleNodeBaseHover}
-        onMouseLeave={handleNodeBaseMouseLeave}
-        {...nodeColor}
-      >
-        <NodeResizeControl
-          style={defaultControlStyle}
-          minWidth={280}
-          minHeight={60}
-          variant={ResizeControlVariant.Line}
-        ></NodeResizeControl>
-        <NodeCoreStyled>
-          <NodeTextDataStyled>
-            <NodeLabelStyled>{label}</NodeLabelStyled>
-            <NodeClassCodeStyled>{code}</NodeClassCodeStyled>
-          </NodeTextDataStyled>
-          <PanelLineStyled />
-        </NodeCoreStyled>
-      </NodeRotatableBaseStyled>
-    );
-  }
-);
+  const nodeBaseRef = usePopupAnchor<HTMLDivElement>(setPopupAnchor);
+  const label = data.label;
+  const code = data.code;
+
+  return (
+    <NodeRotatableBaseStyled
+      ref={nodeBaseRef}
+      rotation={rotation}
+      onMouseEnter={handleNodeBaseHover}
+      onMouseLeave={handleNodeBaseMouseLeave}
+      {...nodeColor}
+    >
+      <InvisibleHandle position={targetHandlePosition} type="target" />
+      <NodeResizeControl
+        style={defaultControlStyle}
+        minWidth={280}
+        minHeight={60}
+        variant={ResizeControlVariant.Line}
+      ></NodeResizeControl>
+      <NodeCoreStyled>
+        <NodeTextDataStyled>
+          <NodeLabelStyled>{label}</NodeLabelStyled>
+          <NodeClassCodeStyled>{code}</NodeClassCodeStyled>
+        </NodeTextDataStyled>
+        <PanelLineStyled />
+      </NodeCoreStyled>
+      <InvisibleHandle position={sourceHandlePosition} type="source" />
+    </NodeRotatableBaseStyled>
+  );
+});
 
 export default memo(ElectricalPanelNode);

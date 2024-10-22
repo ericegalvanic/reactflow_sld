@@ -1,6 +1,6 @@
 import { usePopupAnchor } from '@/common/hooks';
 import NodeComponent from '@/common/ui/NodeComponent';
-import { NodeProps, subNodeArchetype, SubNodeArchetype } from '@/flow/entities';
+import { NodeProps, subNodeArchetype } from '@/flow/entities';
 import {
   bottomHandleStyles,
   NodeCoreStyled,
@@ -8,15 +8,13 @@ import {
   NodeRotatableBaseStyled,
   topHandleStyles,
 } from './FuseNode.styles';
-import { Handle } from '@xyflow/react';
+import Handle from '@/common/ui/Handle';
 import { switchNodeImage } from './FuseNode.data';
 import { memo } from 'react';
+import InvisibleHandle from '@/common/ui/InvisibleHandle';
+import { SubNodeData } from '@/common/entities';
 
-export type FuseNodeData = {
-  data: {
-    archetype: SubNodeArchetype;
-  };
-};
+export type FuseNodeData = SubNodeData;
 
 export type FuseNodeProps = NodeProps<FuseNodeData>;
 
@@ -25,9 +23,9 @@ const { src, alt, width, height } = switchNodeImage;
 const FuseNode = NodeComponent<FuseNodeProps>(
   ({
     data,
-    targetPosition,
+    targetHandlePosition: targetPosition,
     rotation,
-    sourceNodePosition,
+    sourceHandlePosition: sourceNodePosition,
     handleNodeBaseHover,
     handleNodeBaseMouseLeave,
     setPopupAnchor,
@@ -46,8 +44,14 @@ const FuseNode = NodeComponent<FuseNodeProps>(
         onMouseLeave={handleNodeBaseMouseLeave}
         {...nodeColor}
       >
-        {hasTopHandle && (
+        {hasTopHandle ? (
           <Handle
+            type="target"
+            position={targetPosition}
+            style={topHandleStyles}
+          />
+        ) : (
+          <InvisibleHandle
             type="target"
             position={targetPosition}
             style={topHandleStyles}
@@ -62,8 +66,14 @@ const FuseNode = NodeComponent<FuseNodeProps>(
             height={height}
           />
         </NodeCoreStyled>
-        {hasBottomHandle && (
+        {hasBottomHandle ? (
           <Handle
+            type="source"
+            position={sourceNodePosition}
+            style={bottomHandleStyles}
+          />
+        ) : (
+          <InvisibleHandle
             type="source"
             position={sourceNodePosition}
             style={bottomHandleStyles}
